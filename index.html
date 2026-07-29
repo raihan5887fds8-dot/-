@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>বন্ধু ঐক্য সমবায় সমিতি</title>
+
+<meta name="theme-color" content="#0B3D3B">
+
+<!-- PWA: "Add to Home Screen" করলে যেন নিজস্ব আইকন-সহ স্বতন্ত্র অ্যাপের মতো খোলে -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="বন্ধু ঐক্য">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F7F3EA;
+  --card:#FFFDF6;
+  --ink:#0B3D3B;
+  --ink-deep:#082B29;
+  --brass:#BB6B3A;
+  --brass-soft:#EFD3B4;
+  --rule:#DED4BC;
+  --sage:#4F7942;
+  --sage-soft:#E3EEDD;
+  --terracotta:#B1502F;
+  --terracotta-soft:#F3E1D8;
+  --text:#2B2A22;
+  --muted:#847E6C;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Hind Siliguri',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:74px;}
+
+/* ---------- header ---------- */
+header{
+  background:linear-gradient(155deg,var(--ink-deep),var(--ink) 75%);
+  color:#F3EFE1;
+  padding:20px 18px 16px;
+  position:relative;
+  overflow:hidden;
+}
+header::before{
+  content:"";
+  position:absolute;inset:0;
+  background-image: radial-gradient(circle at 85% 0%, rgba(187,107,58,.22) 0, transparent 45%);
+  pointer-events:none;
+}
+.header-row{display:flex;align-items:center;gap:12px;position:relative;}
+.seal{
+  flex:none;width:46px;height:46px;border-radius:50%;
+  border:2px solid var(--brass-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo Da 2',sans-serif;font-weight:700;font-size:15px;
+  color:var(--brass-soft);
+  background:rgba(0,0,0,.15);
+  letter-spacing:.5px;
+}
+.header-title h1{
+  font-family:'Baloo Da 2',sans-serif;
+  font-size:19px;font-weight:700;margin:0;letter-spacing:.2px;
+}
+.header-title p{margin:2px 0 0;font-size:11.5px;color:var(--brass-soft);font-family:'Hind Siliguri',sans-serif;}
+.header-user{
+  margin-top:12px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;padding:8px 10px;font-size:12.5px;
+}
+.role-pill{
+  font-size:10.5px;padding:2px 8px;border-radius:8px;background:var(--brass);color:#2B1B0F;font-weight:700;
+}
+.logout-link{background:none;border:none;color:#E9DFCB;font-size:12px;text-decoration:underline;cursor:pointer;padding:0;font-family:'Hind Siliguri',sans-serif;}
+
+main{padding:16px 14px 24px;}
+.card{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-left:4px solid var(--brass);
+  border-radius:8px;
+  padding:15px 15px 13px;
+  margin-bottom:14px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.card h2{font-family:'Baloo Da 2',sans-serif;font-size:16.5px;margin:0 0 10px;color:var(--ink);}
+.card h2 small{font-family:'Hind Siliguri',sans-serif;font-weight:500;color:var(--muted);font-size:11.5px;}
+
+label{display:block;font-size:12.5px;color:var(--muted);margin:9px 0 4px;}
+input[type=text],input[type=number],input[type=date],input[type=tel],input[type=password],select,textarea{
+  width:100%;padding:9px 10px;border:1px solid var(--rule);border-radius:6px;
+  background:#fff;font-family:'Hind Siliguri',sans-serif;font-size:14px;color:var(--text);
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--brass);outline-offset:1px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.check-row{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:13px;color:var(--text);}
+.check-row input{width:auto;}
+
+.btn{
+  display:inline-block;background:var(--ink);color:#fff;border:none;padding:10px 16px;
+  border-radius:6px;font-weight:600;font-size:13.5px;cursor:pointer;margin-top:12px;
+  font-family:'Hind Siliguri',sans-serif;
+  transition:transform .1s ease, box-shadow .1s ease, opacity .1s ease;
+}
+.btn:active:not(:disabled){transform:scale(0.95);box-shadow:inset 0 1px 4px rgba(0,0,0,.25);}
+.btn:hover{background:var(--ink-deep);}
+.btn.ghost{background:none;border:1px solid var(--rule);color:var(--text);}
+.btn.danger{background:var(--terracotta);}
+.btn.gold{background:var(--brass);color:#2B1B0F;}
+.btn.small{padding:6px 11px;font-size:12px;margin-top:0;}
+.btn.full{width:100%;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.row-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+
+.list-item{padding:11px 0;border-bottom:1px dashed var(--rule);}
+.list-item:last-child{border-bottom:none;}
+.li-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.li-name{font-weight:600;font-size:14px;}
+.li-meta{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+.amt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14.5px;}
+.amt.pos{color:var(--sage);}
+.amt.neg{color:var(--terracotta);}
+
+.badge{font-size:10.5px;padding:2px 8px;border-radius:8px;white-space:nowrap;font-weight:600;}
+.badge.pending{background:var(--terracotta-soft);color:var(--terracotta);}
+.badge.verified{background:var(--sage-soft);color:var(--sage);}
+.badge.approved{background:var(--sage-soft);color:var(--sage);}
+.badge.rejected{background:var(--terracotta-soft);color:var(--terracotta);}
+.badge.running{background:var(--brass-soft);color:#6B4322;}
+.badge.closed{background:#E7E3D6;color:var(--muted);}
+.stamp{
+  display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--sage);
+  border:1.5px solid var(--sage);border-radius:10px;padding:1px 8px;transform:rotate(-4deg);
+}
+
+.summary-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.summary-chip{flex:1 1 30%;min-width:90px;text-align:center;padding:10px 5px;border-radius:8px;background:#fff;border:1px solid var(--rule);}
+.summary-chip .lbl{font-size:10.5px;color:var(--muted);}
+.summary-chip .val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--ink);}
+
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:18px 0;}
+.notice-card{border-left:4px solid var(--sage);}
+.notice-card.urgent{border-left:4px solid var(--terracotta);}
+.notice-card.urgent h3::before{content:"⚠️ ";}
+.notice-card h3{margin:0 0 4px;font-family:'Baloo Da 2',sans-serif;font-size:14.5px;color:var(--ink);}
+.notice-card p{margin:0;font-size:13px;line-height:1.5;}
+.notice-card time{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+.poll-options{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.poll-opt{
+  border:1px solid var(--rule);border-radius:6px;padding:9px 11px;cursor:pointer;font-size:13.5px;
+  display:flex;justify-content:space-between;background:#fff;
+  transition:transform .1s ease, opacity .1s ease;
+}
+.poll-opt:active{transform:scale(0.97);}
+.poll-opt.busy{pointer-events:none;opacity:.6;}
+.poll-opt:hover{border-color:var(--brass);}
+.poll-opt .bar{height:5px;border-radius:3px;background:var(--sage-soft);margin-top:6px;overflow:hidden;}
+.poll-opt .bar i{display:block;height:100%;background:var(--sage);}
+
+.status-msg{margin-top:8px;font-size:12.5px;}
+.status-msg.ok{color:var(--sage);}
+.status-msg.err{color:var(--terracotta);}
+
+.auth-wrap{padding:34px 20px;}
+.auth-brand{text-align:center;margin-bottom:22px;}
+.auth-brand .seal{margin:0 auto 10px;width:58px;height:58px;font-size:19px;border-color:var(--brass);color:var(--ink);background:var(--brass-soft);}
+.auth-brand h1{font-family:'Baloo Da 2',sans-serif;color:var(--ink);font-size:21px;margin:0;}
+.auth-brand p{color:var(--muted);font-size:12.5px;margin:4px 0 0;}
+.auth-toggle{display:flex;background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.auth-toggle button{flex:1;border:none;background:none;padding:11px;font-weight:600;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:'Hind Siliguri',sans-serif;}
+.auth-toggle button.active{background:var(--ink);color:#fff;}
+
+.progress-track{height:6px;border-radius:4px;background:var(--terracotta-soft);margin-top:8px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--sage);border-radius:4px;transition:width .3s;}
+
+.banner{background:var(--brass-soft);border:1px solid var(--brass);border-radius:8px;padding:12px;font-size:13px;color:#5C3B1E;margin-bottom:14px;}
+.principle-box{background:var(--sage-soft);border:1px solid var(--sage);border-radius:8px;padding:12px 13px;font-size:12.5px;line-height:1.6;color:#2E4A22;margin-bottom:14px;}
+
+/* ---------- bottom tab bar ---------- */
+nav.tabs{
+  position:fixed;left:0;right:0;bottom:0;
+  max-width:480px;margin:0 auto;
+  display:flex;background:var(--ink-deep);
+  box-shadow:0 -2px 10px rgba(0,0,0,.18);
+  z-index:30;
+}
+nav.tabs button{
+  flex:1;background:none;border:none;color:rgba(243,239,225,.5);
+  font-family:'Hind Siliguri',sans-serif;font-size:11px;font-weight:600;
+  padding:9px 2px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+nav.tabs button .ic{font-size:16px;}
+nav.tabs button.active{color:var(--brass-soft);}
+
+.toast{
+  position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink-deep);color:#fff;padding:9px 16px;border-radius:20px;font-size:13px;
+  opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:88%;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+::-webkit-scrollbar{width:0;height:0;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   বন্ধু ঐক্য সমবায় সমিতি — Frontend
+   ========================================================================= */
+
+const ORG_NAME = 'বন্ধু ঐক্য সমবায় সমিতি';
+const TAGLINE = 'একতা, সমৃদ্ধি ও সুদমুক্ত সমবায় ব্যবস্থা';
+const ROLES = { MANAGER:'ম্যানেজার', CASHIER:'ক্যাশিয়ার', FIELD:'ফিল্ড_পরিচালক', MEMBER:'সদস্য' };
+const ROLE_LABEL = { 'ম্যানেজার':'ম্যানেজার', 'ক্যাশিয়ার':'ক্যাশিয়ার', 'ফিল্ড_পরিচালক':'ফিল্ড পরিচালক', 'সদস্য':'সদস্য' };
+
+let API_URL = null;
+let session = null; // logged-in user object
+let cache = { users:[], contrib:[], invest:[], investUpdate:[], investInstallment:[], custodians:[], babies:[], babyUpdate:[], expense:[], notice:[], poll:[], votes:[], transaction:[], rules:[] };
+let activeTab = null;
+let focusInvestId = null; // "লাভ/ক্ষতি" পেজ থেকে কোনো নির্দিষ্ট ইনভেস্টমেন্টে সরাসরি যাওয়ার জন্য
+let prefillTxn = null; // {type:'কিস্তি আদায়'|'ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা', investId} — ইনভেস্ট ট্যাব থেকে "লেনদেন"-এ সরাসরি একটা নির্দিষ্ট ইনভেস্টমেন্ট প্রি-সিলেক্ট করে পাঠানোর জন্য
+
+/* ---------- storage abstraction: works inside Claude artifact preview or standalone ---------- */
+const hasClaudeStorage = (typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function');
+async function localGet(key, fallback){
+  try{
+    if(hasClaudeStorage){
+      const r = await window.storage.get('bes:'+key, false);
+      return r ? JSON.parse(r.value) : fallback;
+    } else {
+      const v = localStorage.getItem('bes_'+key);
+      return v ? JSON.parse(v) : fallback;
+    }
+  }catch(e){ return fallback; }
+}
+async function localSet(key, value){
+  try{
+    if(hasClaudeStorage){ await window.storage.set('bes:'+key, JSON.stringify(value), false); }
+    else{ localStorage.setItem('bes_'+key, JSON.stringify(value)); }
+  }catch(e){}
+}
+
+async function loadConfig(){
+  API_URL = await localGet('apiUrl', null);
+  session = await localGet('session', null);
+}
+async function saveApiUrl(url){ await localSet('apiUrl', url); API_URL = url; }
+async function saveSession(user){ await localSet('session', user); session = user; }
+async function clearSession(){ await localSet('session', null); session = null; }
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ---------- API ---------- */
+async function apiGet(sheet){
+  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
+  let res;
+  try{ res = await fetch(API_URL + '?sheet=' + encodeURIComponent(sheet)); }
+  catch(e){ throw new Error('সংযোগ ব্যর্থ (ইন্টারনেট/URL চেক করুন)'); }
+  let json;
+  try{ json = await res.json(); }
+  catch(e){ throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি — Web App "Anyone" এক্সেসে Deploy হয়েছে কিনা চেক করুন'); }
+  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
+  return json.data;
+}
+async function apiPost(action, opts){
+  opts = opts || {};
+  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
+  const body = Object.assign({action}, opts, { actorRole: session ? session['রোল'] : null });
+  let res;
+  try{
+    res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(body) });
+  }catch(e){ throw new Error('সংযোগ ব্যর্থ (ইন্টারনেট/URL চেক করুন)'); }
+  let json;
+  try{ json = await res.json(); }
+  catch(e){ throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি'); }
+  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
+  return json;
+}
+
+async function refreshAll(){
+  if(!API_URL) return;
+  const sheets = ['ইউজার','চাঁদা','ইনভেস্টমেন্ট','ইনভেস্টমেন্ট_আপডেট','ইনভেস্টমেন্ট_কিস্তি','আদাল','বাচ্চা','বাচ্চা_আপডেট','খরচ','নোটিশ','ভোট','ভোট_ফলাফল','লেনদেন','নিয়মাবলী'];
+  const keys = ['users','contrib','invest','investUpdate','investInstallment','custodians','babies','babyUpdate','expense','notice','poll','votes','transaction','rules'];
+  const results = await Promise.allSettled(sheets.map(apiGet));
+  results.forEach((r,i)=>{ if(r.status==='fulfilled') cache[keys[i]] = r.value; });
+}
+
+/* ---------- helpers ---------- */
+function money(n){ n = Number(n)||0; return n.toLocaleString('bn-BD'); }
+
+/* সিলেক্ট করা ছবি আপলোডের আগে ছোট/কমপ্রেস করে base64 data URL বানায়,
+   যাতে আপলোড দ্রুত হয় এবং শিট/Drive-এ বেশি জায়গা না নেয় */
+function resizeImageToDataUrl_(file, maxDim, quality){
+  maxDim = maxDim || 1024;
+  quality = quality || 0.72;
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.width, h = img.height;
+        if(w > maxDim || h > maxDim){
+          if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+          else { w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('ছবি পড়া যায়নি'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('ছবি পড়া যায়নি'));
+    reader.readAsDataURL(file);
+  });
+}
+function fmtDate(d){
+  if(!d) return '';
+  const s = String(d);
+  const dt = new Date(s.includes('T') ? s : s + 'T00:00:00');
+  if(isNaN(dt.getTime())) return s.slice(0,10);
+  const dateStr = dt.toLocaleDateString('bn-BD', {year:'numeric', month:'long', day:'numeric'});
+  // "T00:00:00" মানে সময় নেই (শুধু তারিখ), তাই সেক্ষেত্রে সময় দেখানোর দরকার নেই
+  const hasTime = /T(?!00:00:00(\.0+)?$)/.test(s);
+  if(!hasTime) return dateStr;
+  const timeStr = dt.toLocaleTimeString('bn-BD', {hour:'numeric', minute:'2-digit', hour12:true});
+  return dateStr + ', ' + timeStr;
+}
+function currentMonth(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+
+/* ---------------- ROOT RENDER ---------------- */
+const app = document.getElementById('app');
+
+function render(){
+  if(!API_URL){ renderConnectScreen(); return; }
+  if(!session){ renderAuthScreen(); return; }
+  renderShell();
+}
+
+/* ---------------- CONNECT (first run) ---------------- */
+function renderConnectScreen(){
+  app.innerHTML = `
+    <div class="auth-wrap">
+      <div class="auth-brand">
+        <div class="seal">ব ঐ স</div>
+        <h1>${ORG_NAME}</h1>
+        <p>${TAGLINE}</p>
+      </div>
+      <div class="card">
+        <h2>সার্ভার লিংক যুক্ত করুন</h2>
+        <label>Apps Script Web App URL</label>
+        <input type="text" id="urlInput" placeholder="https://script.google.com/macros/s/.../exec">
+        <button class="btn full" id="connectBtn">সংযুক্ত করুন</button>
+        <div class="status-msg" id="connMsg"></div>
+      </div>
+    </div>`;
+  document.getElementById('connectBtn').addEventListener('click', async ()=>{
+    const url = document.getElementById('urlInput').value.trim();
+    const msg = document.getElementById('connMsg');
+    if(!url){ msg.textContent='URL দিন'; msg.className='status-msg err'; return; }
+    await saveApiUrl(url);
+    try{ await refreshAll(); msg.textContent='সংযুক্ত হয়েছে ✓'; msg.className='status-msg ok'; render(); }
+    catch(e){ msg.textContent='সংযোগ ব্যর্থ — URL চেক করুন'; msg.className='status-msg err'; }
+  });
+}
+
+/* ---------------- AUTH (login/register) ---------------- */
+let authMode = 'login';
+function renderAuthScreen(){
+  app.innerHTML = `
+    <div class="auth-wrap">
+      <div class="auth-brand">
+        <div class="seal">ব ঐ স</div>
+        <h1>${ORG_NAME}</h1>
+        <p>${TAGLINE}</p>
+      </div>
+      <div class="auth-toggle">
+        <button id="tglLogin" class="${authMode==='login'?'active':''}">লগইন</button>
+        <button id="tglReg" class="${authMode==='register'?'active':''}">নতুন অ্যাকাউন্ট</button>
+      </div>
+      <div class="card" id="authCard"></div>
+    </div>`;
+  document.getElementById('tglLogin').addEventListener('click', ()=>{ authMode='login'; renderAuthScreen(); });
+  document.getElementById('tglReg').addEventListener('click', ()=>{ authMode='register'; renderAuthScreen(); });
+  const card = document.getElementById('authCard');
+  if(authMode==='login'){
+    card.innerHTML = `
+      <h2>লগইন করুন</h2>
+      <label>ইউজারনেম</label>
+      <input type="text" id="lUser" placeholder="ইউজারনেম">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="lPass">
+      <button class="btn full" id="loginBtn">লগইন</button>
+      <div class="status-msg" id="authMsg"></div>`;
+    document.getElementById('loginBtn').addEventListener('click', async ()=>{
+      const username = document.getElementById('lUser').value.trim();
+      const pass = document.getElementById('lPass').value;
+      const msg = document.getElementById('authMsg');
+      if(!username || !pass){ msg.textContent='ইউজারনেম ও পাসওয়ার্ড দিন'; msg.className='status-msg err'; return; }
+      try{
+        const res = await apiPostRaw('login', {ইউজারনেম:username, পাসওয়ার্ড:pass});
+        await saveSession(res.data);
+        await refreshAll();
+        toast('স্বাগতম, ' + res.data['নাম']);
+        activeTab = defaultTabFor(res.data['রোল']);
+        render();
+      }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+    });
+  } else {
+    card.innerHTML = `
+      <h2>নতুন অ্যাকাউন্ট খুলুন</h2>
+      <label>ইউজারনেম</label>
+      <input type="text" id="rUser" placeholder="লগইনের জন্য ইউজারনেম">
+      <label>আপনার নাম</label>
+      <input type="text" id="rName">
+      <label>ফোন নম্বর</label>
+      <input type="tel" id="rPhone" placeholder="01xxxxxxxxx">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="rPass">
+      <button class="btn full" id="regBtn">আবেদন পাঠান</button>
+      <div class="status-msg" id="authMsg"></div>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:10px;">নতুন অ্যাকাউন্ট সরাসরি সক্রিয় হবে না — ম্যানেজার অনুমোদনের পর লগইন করতে পারবেন।</p>`;
+    document.getElementById('regBtn').addEventListener('click', async ()=>{
+      const username = document.getElementById('rUser').value.trim();
+      const name = document.getElementById('rName').value.trim();
+      const phone = document.getElementById('rPhone').value.trim();
+      const pass = document.getElementById('rPass').value;
+      const msg = document.getElementById('authMsg');
+      if(!username || !name || !phone || !pass){ msg.textContent='সব ঘর পূরণ করুন'; msg.className='status-msg err'; return; }
+      try{
+        await apiPostRaw('register', {ইউজারনেম:username, নাম:name, ফোন:phone, পাসওয়ার্ড:pass});
+        msg.textContent='আবেদন জমা হয়েছে। ম্যানেজারের অনুমোদনের অপেক্ষায় থাকুন।'; msg.className='status-msg ok';
+        authMode='login';
+        setTimeout(renderAuthScreen, 1300);
+      }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+    });
+  }
+}
+/* auth calls happen before a session exists, so actorRole is simply omitted */
+async function apiPostRaw(action, data, id){
+  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
+  let res;
+  try{
+    res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action, data, id}) });
+  }catch(e){ throw new Error('সংযোগ ব্যর্থ'); }
+  const json = await res.json();
+  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
+  return json;
+}
+
+function defaultTabFor(role){
+  if(role===ROLES.MANAGER) return 'dashboard';
+  if(role===ROLES.CASHIER) return 'contrib';
+  if(role===ROLES.FIELD) return 'invest';
+  return 'home';
+}
+
+/* ---------------- SHELL (header + tabs + content) ---------------- */
+function tabsFor(role){
+  if(role===ROLES.MANAGER) return [
+    {id:'dashboard', ic:'📊', label:'সারাংশ'},
+    {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'members',   ic:'👥', label:'সদস্য'},
+    {id:'transaction', ic:'📥', label:'লেনদেন'},
+    {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
+    {id:'poll',      ic:'🗳️', label:'ভোট'},
+    {id:'notice',    ic:'📢', label:'নোটিশ'},
+    {id:'settings',  ic:'⚙️', label:'সেটিংস'}
+  ];
+  if(role===ROLES.CASHIER) return [
+    {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'contrib',   ic:'💰', label:'চাঁদা যাচাই'},
+    {id:'transaction', ic:'📥', label:'লেনদেন যাচাই'},
+    {id:'expense',   ic:'🧾', label:'খরচ'},
+    {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
+    {id:'poll',      ic:'🗳️', label:'ভোট'},
+    {id:'notice',    ic:'📢', label:'নোটিশ'},
+    {id:'settings',  ic:'⚙️', label:'সেটিংস'}
+  ];
+  if(role===ROLES.FIELD) return [
+    {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'transaction', ic:'📥', label:'লেনদেন'},
+    {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
+    {id:'poll',      ic:'🗳️', label:'ভোট'},
+    {id:'notice',    ic:'📢', label:'নোটিশ'},
+    {id:'settings',  ic:'⚙️', label:'সেটিংস'}
+  ];
+  return [
+    {id:'home',      ic:'🏠', label:'হোম'},
+    {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
+    {id:'poll',      ic:'🗳️', label:'ভোট'},
+    {id:'notice',    ic:'📢', label:'নোটিশ'},
+    {id:'settings',  ic:'⚙️', label:'সেটিংস'}
+  ];
+}
+
+function renderShell(){
+  if(!activeTab) activeTab = defaultTabFor(session['রোল']);
+  const tabs = tabsFor(session['রোল']);
+  app.innerHTML = `
+    <header>
+      <div class="header-row">
+        <div class="seal">ব ঐ স</div>
+        <div class="header-title">
+          <h1>${ORG_NAME}</h1>
+          <p>${TAGLINE}</p>
+        </div>
+      </div>
+      <div class="header-user">
+        <span>${session['নাম']} <span class="role-pill">${ROLE_LABEL[session['রোল']]}</span></span>
+        <button class="logout-link" id="logoutBtn">লগআউট</button>
+      </div>
+    </header>
+    <main id="main"></main>
+    <nav class="tabs" id="tabs">
+      ${tabs.map(t=>`<button data-tab="${t.id}" class="${activeTab===t.id?'active':''}"><span class="ic">${t.ic}</span>${t.label}</button>`).join('')}
+    </nav>`;
+  document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await clearSession(); render(); });
+  document.getElementById('tabs').addEventListener('click', e=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    activeTab = btn.dataset.tab; renderShell();
+  });
+  renderTab();
+}
+
+function renderTab(){
+  const main = document.getElementById('main');
+  const role = session['রোল'];
+  if(activeTab==='dashboard') return renderDashboard(main);
+  if(activeTab==='members') return renderMembers(main);
+  if(activeTab==='contrib') return renderContrib(main);
+  if(activeTab==='contribSummary') return renderContribSummary(main);
+  if(activeTab==='transaction') return renderTransaction(main, role);
+  if(activeTab==='expense') return renderExpense(main);
+  if(activeTab==='invest') return renderInvest(main, role);
+  if(activeTab==='plDetail') return renderProfitLossDetail(main);
+  if(activeTab==='handcash') return renderHandCash(main);
+  if(activeTab==='poll') return renderPoll(main, role);
+  if(activeTab==='notice') return renderNotice(main, role);
+  if(activeTab==='rules') return renderRules(main, role);
+  if(activeTab==='home') return renderHome(main);
+  if(activeTab==='settings') return renderSettings(main);
+}
+
+async function withRefreshThen(fn){
+  try{ await refreshAll(); }catch(e){}
+  fn();
+}
+
+/* ---------------- SHARED: org-wide summary bar (সদস্য/মোট জমা/বিনিয়োগ/লাভ-ক্ষতি/হ্যান্ড ক্যাশ) ----------------
+   ম্যানেজার, ক্যাশিয়ার, ফিল্ড পরিচালক ও সাধারণ সদস্য — সবাই এই সংখ্যাগুলো দেখতে পারবে।
+   বিনিয়োগ ও লাভ/ক্ষতি চিপে ক্লিক করলে ইনভেস্টের বিস্তারিত তালিকায় নিয়ে যাবে।
+   হ্যান্ড ক্যাশ = ভেরিফাইড চাঁদা - খরচ - ইনভেস্টমেন্টে দেওয়া টাকা + সব ইনভেস্টমেন্ট থেকে
+   এ পর্যন্ত ফেরত-আসা নগদ (বাকি বিক্রয়ের কিস্তি, লভ্যাংশ, বিক্রয়মূল্য, উদ্ধারকৃত টাকা — সবই
+   'পরিশোধিত_টাকা' কলামে জমা থাকে, তাই এক জায়গা থেকেই যোগফল বের করা যায়)। */
+function orgSummaryBarHtml_(role){
+  const totalMembers = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত').length;
+  const totalContrib = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const totalInvest = cache.invest.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const totalPL = cache.invest.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
+  const totalExpense = cache.expense.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
+  const totalCashReturned = cache.invest.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
+  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned;
+  // পাঁচটা চিপই সবার জন্য ক্লিকযোগ্য — প্রতিটা নিজস্ব বিস্তারিত পেজে নিয়ে যায়,
+  // রোলের ট্যাব-তালিকায় সেই আইডি আছে কিনা তার উপর নির্ভর করে না
+  return `
+    <div class="summary-bar" id="orgSummaryBar">
+      <div class="summary-chip" data-nav="members"><div class="lbl">সদস্য</div><div class="val">${money(totalMembers)}</div></div>
+      <div class="summary-chip" data-nav="contribSummary"><div class="lbl">মোট জমা</div><div class="val">৳${money(totalContrib)}</div></div>
+      <div class="summary-chip" data-nav="invest"><div class="lbl">বিনিয়োগ</div><div class="val">৳${money(totalInvest)}</div></div>
+      <div class="summary-chip" data-nav="plDetail"><div class="lbl">লাভ/ক্ষতি</div><div class="val" style="color:${totalPL>=0?'var(--sage)':'var(--terracotta)'}">৳${money(totalPL)}</div></div>
+      <div class="summary-chip" data-nav="handcash"><div class="lbl">হ্যান্ড ক্যাশ</div><div class="val" style="color:${handCash>=0?'var(--sage)':'var(--terracotta)'}">৳${money(handCash)}</div></div>
+    </div>`;
+}
+function bindOrgSummaryNav_(){
+  const bar = document.getElementById('orgSummaryBar');
+  if(!bar) return;
+  bar.querySelectorAll('[data-nav]').forEach(chip=>{
+    chip.style.cursor = 'pointer';
+    chip.addEventListener('click', ()=>{ activeTab = chip.dataset.nav; renderShell(); });
+  });
+}
+
+/* ---------------- MANAGER: dashboard ---------------- */
+function renderDashboard(main){
+  const pending = cache.users.filter(u=>u['স্ট্যাটাস']==='পেন্ডিং');
+  const notices = [...cache.notice].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))).slice(0,3);
+
+  main.innerHTML = `
+    ${orgSummaryBarHtml_(session['রোল'])}
+    <div class="card">
+      <h2>নতুন আবেদন <small>(${pending.length}টি অপেক্ষমাণ)</small></h2>
+      <div id="pendingList">${pending.length? '' : '<div class="empty">কোনো নতুন আবেদন নেই</div>'}</div>
+    </div>
+    <div class="card">
+      <h2>সাম্প্রতিক নোটিশ</h2>
+      ${notices.length? notices.map(n=>`
+        <div class="notice-card ${n['জরুরি']?'urgent':''}" style="margin-bottom:8px;">
+          <h3>${n['শিরোনাম']}</h3><p>${n['বিস্তারিত']}</p><time>${fmtDate(n['তারিখ'])}</time>
+        </div>`).join('') : '<div class="empty">কোনো নোটিশ নেই</div>'}
+    </div>`;
+  bindOrgSummaryNav_();
+
+  const list = document.getElementById('pendingList');
+  pending.forEach(u=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${u['নাম']}</div><div class="li-meta">@${u['ইউজারনেম']} · ${u['ফোন']}</div></div>
+        <span class="badge pending">পেন্ডিং</span>
+      </div>
+      <div class="row-actions">
+        <button class="btn small" data-act="approve">অনুমোদন করুন</button>
+        <button class="btn small danger" data-act="reject">বাতিল করুন</button>
+      </div>`;
+    row.querySelector('[data-act="approve"]').addEventListener('click', async ()=>{
+      try{ await apiPost('approveUser', {id:u['ID']}); toast('অনুমোদন করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+      catch(e){ toast(e.message); }
+    });
+    row.querySelector('[data-act="reject"]').addEventListener('click', async ()=>{
+      try{ await apiPost('rejectUser', {id:u['ID']}); toast('বাতিল করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+      catch(e){ toast(e.message); }
+    });
+    list.appendChild(row);
+  });
+}
+
+/* ---------------- MANAGER: members ---------------- */
+function renderMembers(main){
+  const isManager = session['রোল']===ROLES.MANAGER;
+  // ম্যানেজার সব সদস্য (পেন্ডিং/বাতিলসহ) দেখেন ও এডিট করতে পারেন; অন্য সবাই শুধু
+  // অনুমোদিত সদস্যদের নাম, পোষ্ট (রোল) ও ফোন নম্বর দেখতে পান — এডিট অপশন ছাড়া
+  const users = (isManager ? [...cache.users] : cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত'))
+    .sort((a,b)=> isManager ? String(a['স্ট্যাটাস']).localeCompare(String(b['স্ট্যাটাস'])) : String(a['নাম']).localeCompare(String(b['নাম'])));
+  main.innerHTML = `<div class="card"><h2>সদস্য তালিকা <small>(${users.length}জন)</small></h2><div id="memberList"></div></div>`;
+  const list = document.getElementById('memberList');
+  if(!users.length){ list.innerHTML='<div class="empty">কোনো সদস্য নেই</div>'; return; }
+  users.forEach(u=>{
+    const row = document.createElement('div'); row.className='list-item';
+    const statusBadge = u['স্ট্যাটাস']==='অনুমোদিত'?'approved':(u['স্ট্যাটাস']==='বাতিল'?'rejected':'pending');
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${u['নাম']}</div><div class="li-meta">@${u['ইউজারনেম']} · ${u['ফোন']}${!isManager? ' · '+(ROLE_LABEL[u['রোল']]||u['রোল']) : ''}</div></div>
+        ${isManager? `<span class="badge ${statusBadge}">${u['স্ট্যাটাস']}</span>` : `<span class="role-pill">${ROLE_LABEL[u['রোল']]||u['রোল']}</span>`}
+      </div>
+      ${isManager? `
+      <div class="row-actions">
+        <select data-role style="width:auto;padding:5px 8px;font-size:12px;">
+          ${Object.values(ROLES).map(r=>`<option value="${r}" ${u['রোল']===r?'selected':''}>${ROLE_LABEL[r]}</option>`).join('')}
+        </select>
+        ${u['স্ট্যাটাস']==='পেন্ডিং' ? `<button class="btn small" data-act="approve">অনুমোদন</button><button class="btn small danger" data-act="reject">বাতিল</button>` : ''}
+      </div>` : ''}`;
+    if(isManager){
+      row.querySelector('[data-role]').addEventListener('change', async (e)=>{
+        try{ await apiPost('changeRole', {id:u['ID'], data:{'রোল': e.target.value}}); toast('রোল পরিবর্তিত হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(err){ toast(err.message); }
+      });
+      const ap = row.querySelector('[data-act="approve"]');
+      if(ap) ap.addEventListener('click', async ()=>{ try{ await apiPost('approveUser',{id:u['ID']}); toast('অনুমোদন করা হয়েছে'); withRefreshThen(()=>renderTab()); }catch(e){toast(e.message);} });
+      const rj = row.querySelector('[data-act="reject"]');
+      if(rj) rj.addEventListener('click', async ()=>{ try{ await apiPost('rejectUser',{id:u['ID']}); toast('বাতিল করা হয়েছে'); withRefreshThen(()=>renderTab()); }catch(e){toast(e.message);} });
+    }
+    list.appendChild(row);
+  });
+}
+
+/* ---------------- CASHIER (+ manager view): contributions ---------------- */
+function renderContrib(main){
+  const canVerify = session['রোল']===ROLES.CASHIER || session['রোল']===ROLES.MANAGER;
+  const pending = cache.contrib.filter(c=>c['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+  const verified = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
+
+  const approvedMembers = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত');
+  const month = currentMonth();
+  // মাস কলামের ভ্যালু মাঝেমধ্যে পুরো তারিখ হিসেবে সেভ হয়ে যেতে পারে (যেমন
+  // "２০২６-０৭-０১T00:00:00"), তাই প্রথম ৭ অক্ষর (yyyy-MM অংশ) দিয়ে তুলনা করা হয়
+  // — এতে কে এই মাসে ইতিমধ্যে জমা দিয়েছেন তা সঠিকভাবে বাদ পড়ে
+  const submittedIds = new Set(cache.contrib.filter(c=>String(c['মাস']).slice(0,7)===month && c['স্ট্যাটাস']!=='বাতিল').map(c=>String(c['সদস্য_ID'])));
+  const due = approvedMembers.filter(u=>!submittedIds.has(String(u['ID'])));
+
+  main.innerHTML = `
+    <div class="card">
+      <h2>যাচাইয়ের অপেক্ষায় <small>(${pending.length}টি)</small></h2>
+      <div id="pendingContrib">${pending.length? '' : '<div class="empty">কোনো পেন্ডিং চাঁদা নেই</div>'}</div>
+    </div>
+    <div class="card">
+      <h2>এই মাসে বকেয়া <small>(${month})</small></h2>
+      ${due.length? due.map(u=>`<div class="list-item"><div class="li-name">${u['নাম']}</div><div class="li-meta">@${u['ইউজারনেম']} · ${u['ফোন']}</div></div>`).join('') : '<div class="empty">সবাই এই মাসের চাঁদা জমা দিয়েছেন 🎉</div>'}
+    </div>
+    <div class="card">
+      <h2>যাচাইকৃত চাঁদা</h2>
+      <div id="verifiedContrib">${verified.length? '' : '<div class="empty">এখনো কোনো যাচাই হয়নি</div>'}</div>
+    </div>`;
+
+  const pList = document.getElementById('pendingContrib');
+  pending.forEach(c=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${c['সদস্যের_নাম']} <span class="li-meta">· ${c['মাস']}</span></div>
+        <div class="li-meta">${c['মাধ্যম']||''} ${c['ট্রানজেকশন_আইডি']?'· TxID: '+c['ট্রানজেকশন_আইডি']:''}</div></div>
+        <span class="amt">৳${money(c['পরিমাণ'])}</span>
+      </div>
+      ${canVerify? `<div class="row-actions"><button class="btn small gold" data-act="verify">যাচাই করে অনুমোদন দিন</button><button class="btn small danger" data-act="reject">রিকুয়েস্ট বাতিল করুন</button></div>` : ''}`;
+    const vb = row.querySelector('[data-act="verify"]');
+    if(vb) vb.addEventListener('click', async ()=>{
+      try{ await apiPost('verifyContribution', {id:c['ID'], data:{'যাচাইকারী': session['নাম']}}); toast('যাচাই সম্পন্ন হয়েছে'); withRefreshThen(()=>renderTab()); }
+      catch(e){ toast(e.message); }
+    });
+    const rb = row.querySelector('[data-act="reject"]');
+    if(rb) rb.addEventListener('click', async ()=>{
+      if(!confirm('এই চাঁদার রিকুয়েস্টটি বাতিল করতে চান?')) return;
+      try{ await apiPost('rejectContribution', {id:c['ID'], data:{'যাচাইকারী': session['নাম']}}); toast('রিকুয়েস্ট বাতিল করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+      catch(e){ toast(e.message); }
+    });
+    pList.appendChild(row);
+  });
+
+  const vList = document.getElementById('verifiedContrib');
+  verified.slice(0,20).forEach(c=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${c['সদস্যের_নাম']} <span class="li-meta">· ${c['মাস']}</span></div>
+        <div class="li-meta">যাচাই: ${c['যাচাইকারী']||''} · ${fmtDate(c['যাচাইয়ের_তারিখ'])}</div></div>
+        <span class="amt pos">৳${money(c['পরিমাণ'])} <span class="stamp">✓ ভেরিফাইড</span></span>
+      </div>`;
+    vList.appendChild(row);
+  });
+}
+
+/* ---------------- ফিল্ড পরিচালক/ম্যানেজার → ক্যাশিয়ার: লেনদেন ----------------
+   ফিল্ড পরিচালক/ম্যানেজার হাতে টাকা রাখতে পারেন না। এই ট্যাব শুধুমাত্র
+   ইনভেস্টমেন্ট/কিস্তি সংক্রান্ত টাকার জন্য — তাই এখানে ধরন ফ্রি-টেক্সট নয়,
+   বরং নির্দিষ্ট দুটো ক্যাটাগরির একটা বেছে নিয়ে (কিস্তি আদায় / ইনভেস্টমেন্ট
+   থেকে প্রাপ্ত টাকা) ঠিক কোন ইনভেস্টমেন্টের সাথে সম্পর্কিত তা তালিকা থেকে
+   বেছে নিতে হয়। শুধু ক্যাশিয়ার যাচাই/অনুমোদন করলে তবেই সেটা কার্যকর ধরা হয়
+   এবং সংশ্লিষ্ট ইনভেস্টমেন্টের হিসাবে যোগ হয়। ক্যাশিয়ার বাতিল করলে কারণসহ
+   সাবমিটকারীর কাছে ফেরত আসে — সেখান থেকে সাবমিটকারী চাইলে আবেদনটি একেবারে
+   মুছে দিতে পারেন (যেন কখনো হয়ইনি), অথবা তথ্য সংশোধন করে আবার পাঠাতে পারেন। */
+const TXN_TYPE_INSTALLMENT = 'কিস্তি আদায়';
+const TXN_TYPE_INVEST_CASH = 'ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা';
+
+function txnInvestOptions_(type){
+  if(type===TXN_TYPE_INSTALLMENT){
+    // শুধু "বাকি বিক্রয়" জাতীয় ইনভেস্টমেন্ট, যেগুলোর কিস্তি এখনো বাকি আছে
+    return cache.invest.filter(iv=>iv['ধরন']===SALE_TYPE && iv['অবস্থা']!=='পরিশোধিত');
+  }
+  // ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা (বিক্রয়/লভ্যাংশ/উদ্ধারকৃত ইত্যাদি) — শুধু চলমান
+  // ইনভেস্টমেন্ট (যেগুলো থেকে এখনো টাকা আদায়ের সম্ভাবনা আছে); সমাপ্ত হয়ে যাওয়া
+  // ইনভেস্টমেন্ট থেকে আবার নতুন করে টাকা আসার কিছু নেই, তাই তালিকায় দেখানো হয় না
+  return cache.invest.filter(iv=>iv['অবস্থা']==='চলমান');
+}
+function txnInvestOptionLabel_(iv, type){
+  if(type===TXN_TYPE_INSTALLMENT) return `${iv['শিরোনাম']} — বাকি ৳${money(iv['বাকি_টাকা'])}`;
+  return `${iv['শিরোনাম']} (${iv['ধরন']})`;
+}
+
+function renderTransaction(main, role){
+  const canSubmit = role===ROLES.FIELD || role===ROLES.MANAGER;
+  const canVerify = role===ROLES.CASHIER; // অনুমোদন/বাতিল করার ক্ষমতা শুধু ক্যাশিয়ারের — ম্যানেজার/ফিল্ড পরিচালক শুধু সাবমিট করতে পারবেন
+  const mine = cache.transaction.filter(t=>String(t['সাবমিটকারী_ID'])===String(session['ID']));
+  const pending = cache.transaction.filter(t=>t['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+  // "মূল্য হালনাগাদ" অনুরোধের কোনো ইতিহাস রাখা হয় না — অনুমোদন বা বাতিল দুই
+  // ক্ষেত্রেই সরাসরি মুছে ফেলা হয়, তাই সতর্কতাবশত এখানেও বাদ দেওয়া হলো
+  const rejectedMine = mine.filter(t=>t['স্ট্যাটাস']==='বাতিল' && t['ধরন']!=='মূল্য হালনাগাদ').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
+  const verified = cache.transaction.filter(t=>t['স্ট্যাটাস']==='ভেরিফাইড' && t['ধরন']!=='মূল্য হালনাগাদ').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
+
+  main.innerHTML = `
+    ${canSubmit? `
+    <div class="card">
+      <h2>ইনভেস্টমেন্ট/কিস্তি থেকে প্রাপ্ত টাকা সাবমিট করুন <small>(ক্যাশিয়ারের অনুমোদনের জন্য)</small></h2>
+      <label>ধরন</label>
+      <select id="tType">
+        <option value="${TXN_TYPE_INSTALLMENT}">${TXN_TYPE_INSTALLMENT} (বাকি বিক্রয়ের কিস্তি)</option>
+        <option value="${TXN_TYPE_INVEST_CASH}">${TXN_TYPE_INVEST_CASH} (বিক্রয়মূল্য/লভ্যাংশ/উদ্ধারকৃত)</option>
+      </select>
+      <label>কোন ইনভেস্টমেন্ট</label>
+      <select id="tInvest"></select>
+      <div class="status-msg" id="tInvestHint"></div>
+      <label>পরিমাণ (৳)</label>
+      <input type="number" id="tAmount">
+      <label>বিস্তারিত বিবরণ</label>
+      <textarea id="tDesc" rows="3" placeholder="কার কাছ থেকে, কবে, কীভাবে টাকা পেয়েছেন তা লিখুন"></textarea>
+      <label>প্রমাণ/রসিদের ছবি (একাধিক ছবি দেওয়া যাবে, ঐচ্ছিক)</label>
+      <input type="file" id="tProofFile" accept="image/*" multiple>
+      <div id="tProofPreviewWrap" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+      <div class="li-meta" style="margin-top:2px;">এখানে দেওয়া ছবি অনুমোদনের পর সংশ্লিষ্ট ইনভেস্টমেন্টের হিস্টোরিতে সংরক্ষিত থাকবে</div>
+      <button class="btn full gold" id="submitTxnBtn">ক্যাশিয়ারের কাছে পাঠান</button>
+      <div class="status-msg" id="tMsg"></div>
+    </div>` : ''}
+
+    ${rejectedMine.length? `
+    <div class="card">
+      <h2>ক্যাশিয়ার কর্তৃক বাতিল <small>(${rejectedMine.length}টি — সংশোধন করুন অথবা মুছে ফেলুন)</small></h2>
+      <div id="rejectedMineList"></div>
+    </div>` : ''}
+
+    ${canVerify? `
+    <div class="card">
+      <h2>যাচাইয়ের অপেক্ষায় <small>(${pending.length}টি)</small></h2>
+      <div id="pendingTxnList">${pending.length? '' : '<div class="empty">কোনো পেন্ডিং লেনদেন নেই</div>'}</div>
+    </div>` : ''}
+
+    <div class="card">
+      <h2>যাচাইকৃত লেনদেন</h2>
+      <div id="verifiedTxnList">${verified.length? '' : '<div class="empty">এখনো কোনো যাচাই হয়নি</div>'}</div>
+    </div>`;
+
+  if(canSubmit){
+    const typeSel = document.getElementById('tType');
+    const investSel = document.getElementById('tInvest');
+    const investHint = document.getElementById('tInvestHint');
+    const syncInvestOptions = (preselectId)=>{
+      const opts = txnInvestOptions_(typeSel.value);
+      investSel.innerHTML = opts.length
+        ? `<option value="">-- বাছাই করুন --</option>` + opts.map(iv=>`<option value="${iv['ID']}" ${String(iv['ID'])===String(preselectId)?'selected':''}>${txnInvestOptionLabel_(iv, typeSel.value)}</option>`).join('')
+        : `<option value="">কোনো উপযুক্ত ইনভেস্টমেন্ট নেই</option>`;
+      investHint.textContent = opts.length ? '' : 'এই ধরনের জন্য এখন কোনো ইনভেস্টমেন্ট তালিকায় নেই';
+      investHint.className = 'status-msg';
+    };
+    typeSel.addEventListener('change', ()=>syncInvestOptions(null));
+
+    // ইনভেস্ট ট্যাব থেকে "কিস্তি জমা সাবমিট করুন" / "প্রাপ্ত টাকা সাবমিট করুন" চেপে এলে
+    // ধরন ও ইনভেস্টমেন্ট আগে থেকেই বেছে দেওয়া থাকবে
+    if(prefillTxn){
+      typeSel.value = prefillTxn.type;
+      syncInvestOptions(prefillTxn.investId);
+      prefillTxn = null;
+    } else {
+      syncInvestOptions(null);
+    }
+
+    const tProofFile = document.getElementById('tProofFile');
+    const tProofPreviewWrap = document.getElementById('tProofPreviewWrap');
+    tProofFile.addEventListener('change', ()=>{
+      tProofPreviewWrap.innerHTML = '';
+      Array.from(tProofFile.files).forEach(f=>{
+        const reader = new FileReader();
+        reader.onload = e=>{
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = 'width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
+          tProofPreviewWrap.appendChild(img);
+        };
+        reader.readAsDataURL(f);
+      });
+    });
+
+    document.getElementById('submitTxnBtn').addEventListener('click', async ()=>{
+      const category = typeSel.value;
+      const investId = investSel.value;
+      const amount = document.getElementById('tAmount').value;
+      const desc = document.getElementById('tDesc').value.trim();
+      const msg = document.getElementById('tMsg');
+      if(!investId){ msg.textContent='কোন ইনভেস্টমেন্টের সাথে সম্পর্কিত তা বাছাই করুন'; msg.className='status-msg err'; return; }
+      if(amount===''|| Number(amount)<0 || isNaN(Number(amount)) || !desc){ msg.textContent='পরিমাণ ও বিস্তারিত বিবরণ দিন'; msg.className='status-msg err'; return; }
+      const iv = cache.invest.find(x=>String(x['ID'])===String(investId));
+      try{
+        const proofUrls = await uploadMultiplePhotos_(tProofFile.files, 'txn_'+category, msg);
+        await apiPost('submitTransaction', {data:{
+          'ধরন':category, 'পরিমাণ':amount, 'বিবরণ':desc, 'ছবি_লিংক':proofUrls.join(','),
+          'ইনভেস্টমেন্ট_ID':investId, 'ইনভেস্টমেন্টের_শিরোনাম': iv? iv['শিরোনাম'] : '',
+          'সাবমিটকারী_ID':session['ID'], 'সাবমিটকারীর_নাম':session['নাম'], 'সাবমিটকারীর_পদ':session['রোল']
+        }});
+        toast('লেনদেন ক্যাশিয়ারের কাছে পাঠানো হয়েছে');
+        withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+
+  if(rejectedMine.length){
+    const el = document.getElementById('rejectedMineList');
+    rejectedMine.forEach(t=>{
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">${t['ধরন']}</div>
+          ${t['ইনভেস্টমেন্টের_শিরোনাম']? `<div class="li-meta">সংশ্লিষ্ট: ${t['ইনভেস্টমেন্টের_শিরোনাম']}</div>`:''}
+          <div class="li-meta">${t['বিবরণ']}</div>
+          <div class="li-meta" style="color:var(--terracotta);">বাতিলের কারণ: ${t['বাতিলের_কারণ']||''}</div></div>
+          <div style="text-align:right;"><span class="amt">৳${money(t['পরিমাণ'])}</span><br><span class="badge rejected">বাতিল</span></div>
+        </div>
+        ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}
+        <div class="row-actions">
+          <button class="btn small ghost" data-act="revise">সংশোধন করুন</button>
+          <button class="btn small danger" data-act="del">আবেদনটি মুছে ফেলুন</button>
+        </div>
+        <div data-form style="display:none;margin-top:8px;">
+          <label>ধরন</label>
+          <select data-f="ধরন">
+            <option value="${TXN_TYPE_INSTALLMENT}" ${t['ধরন']===TXN_TYPE_INSTALLMENT?'selected':''}>${TXN_TYPE_INSTALLMENT}</option>
+            <option value="${TXN_TYPE_INVEST_CASH}" ${t['ধরন']===TXN_TYPE_INVEST_CASH?'selected':''}>${TXN_TYPE_INVEST_CASH}</option>
+          </select>
+          <label>কোন ইনভেস্টমেন্ট</label>
+          <select data-f-invest></select>
+          <label>পরিমাণ (৳)</label><input type="number" data-f="পরিমাণ" value="${t['পরিমাণ']}">
+          <label>বিস্তারিত বিবরণ</label><textarea data-f="বিবরণ" rows="3">${t['বিবরণ']}</textarea>
+          <label>নতুন ছবি যুক্ত করুন (ঐচ্ছিক)</label>
+          <input type="file" data-f-photo accept="image/*" multiple>
+          <div data-f-photo-preview style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+          <button class="btn small gold" data-act="resubmit">সংশোধিত আবেদন আবার পাঠান</button>
+        </div>`;
+      const form = row.querySelector('[data-form]');
+      const rTypeSel = form.querySelector('[data-f="ধরন"]');
+      const rInvestSel = form.querySelector('[data-f-invest]');
+      const syncRInvest = ()=>{
+        const opts = txnInvestOptions_(rTypeSel.value);
+        rInvestSel.innerHTML = opts.length
+          ? opts.map(iv=>`<option value="${iv['ID']}" ${String(iv['ID'])===String(t['ইনভেস্টমেন্ট_ID'])?'selected':''}>${txnInvestOptionLabel_(iv, rTypeSel.value)}</option>`).join('')
+          : `<option value="">কোনো উপযুক্ত ইনভেস্টমেন্ট নেই</option>`;
+      };
+      rTypeSel.addEventListener('change', syncRInvest);
+      syncRInvest();
+      row.querySelectorAll('[data-proof-url]').forEach(img=>{
+        img.addEventListener('click', ()=>{ window.open(img.getAttribute('data-proof-url'),'_blank'); });
+      });
+      const rPhotoFile = form.querySelector('[data-f-photo]');
+      const rPhotoPreview = form.querySelector('[data-f-photo-preview]');
+      rPhotoFile.addEventListener('change', ()=>{
+        rPhotoPreview.innerHTML = '';
+        Array.from(rPhotoFile.files).forEach(f=>{
+          const reader = new FileReader();
+          reader.onload = e=>{
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
+            rPhotoPreview.appendChild(img);
+          };
+          reader.readAsDataURL(f);
+        });
+      });
+      row.querySelector('[data-act="revise"]').addEventListener('click', ()=>{
+        form.style.display = form.style.display==='none'? 'block':'none';
+      });
+      row.querySelector('[data-act="del"]').addEventListener('click', async ()=>{
+        if(!confirm('আবেদনটি একেবারে মুছে ফেলতে চান? এটি আর ফেরত আনা যাবে না, যেন এটি কখনো হয়ইনি।')) return;
+        try{ await apiPost('deleteTransaction', {id:t['ID']}); toast('আবেদনটি মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      row.querySelector('[data-act="resubmit"]').addEventListener('click', async ()=>{
+        const category = rTypeSel.value;
+        const investId = rInvestSel.value;
+        const amount = form.querySelector('[data-f="পরিমাণ"]').value;
+        const desc = form.querySelector('[data-f="বিবরণ"]').value.trim();
+        if(!investId || !amount || !desc){ toast('সব তথ্য পূরণ করুন'); return; }
+        const iv = cache.invest.find(x=>String(x['ID'])===String(investId));
+        try{
+          const existingPhotos = String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
+          const newPhotos = await uploadMultiplePhotos_(rPhotoFile.files, 'txn_'+category);
+          const allPhotos = existingPhotos.concat(newPhotos);
+          await apiPost('reviseTransaction', {id:t['ID'], data:{
+            'ধরন':category,'পরিমাণ':amount,'বিবরণ':desc,'ছবি_লিংক':allPhotos.join(','),
+            'ইনভেস্টমেন্ট_ID':investId, 'ইনভেস্টমেন্টের_শিরোনাম': iv? iv['শিরোনাম'] : ''
+          }});
+          toast('সংশোধিত আবেদন আবার ক্যাশিয়ারের কাছে পাঠানো হয়েছে'); withRefreshThen(()=>renderTab());
+        }catch(e){ toast(e.message); }
+      });
+      el.appendChild(row);
+    });
+  }
+
+  if(canVerify){
+    const el = document.getElementById('pendingTxnList');
+    pending.forEach(t=>{
+      const isValUpd = t['ধরন']==='মূল্য হালনাগাদ';
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">${t['ধরন']}</div>
+          <div class="li-meta">সাবমিট: ${t['সাবমিটকারীর_নাম']} (${ROLE_LABEL[t['সাবমিটকারীর_পদ']]||t['সাবমিটকারীর_পদ']}) · ${fmtDate(t['জমার_তারিখ'])}</div>
+          ${t['ইনভেস্টমেন্টের_শিরোনাম']? `<div class="li-meta">সংশ্লিষ্ট: ${t['ইনভেস্টমেন্টের_শিরোনাম']}</div>`:''}
+          <div class="li-meta">${t['বিবরণ']}</div></div>
+          <span class="amt">৳${money(t['পরিমাণ'])}</span>
+        </div>
+        ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}
+        <div class="row-actions">
+          <button class="btn small gold" data-act="verify">${isValUpd? 'অনুমোদন করে কার্যকর করুন' : 'যাচাই করে অনুমোদন দিন'}</button>
+          <button class="btn small danger" data-act="reject">বাতিল করুন</button>
+        </div>
+        ${isValUpd? '' : `
+        <div data-rform style="display:none;margin-top:8px;">
+          <label>বাতিলের কারণ</label>
+          <textarea data-reason rows="2" placeholder="কেন বাতিল করছেন লিখুন — এটি সাবমিটকারীকে দেখানো হবে"></textarea>
+          <button class="btn small danger" data-act="confirmReject">বাতিল নিশ্চিত করুন</button>
+        </div>`}`;
+      row.querySelector('[data-act="verify"]').addEventListener('click', async ()=>{
+        if(isValUpd){
+          if(!confirm('এই হালনাগাদ অনুমোদন করে কার্যকর করতে চান? এটি সংশ্লিষ্ট ইনভেস্টমেন্টের মূল্য/অবস্থা সরাসরি বদলে দেবে।')) return;
+          try{
+            await apiPost('edit', {sheet:'ইনভেস্টমেন্ট', id:t['ইনভেস্টমেন্ট_ID'], data:{
+              'বর্তমান_মূল্য': t['নতুন_বর্তমান_মূল্য'], 'পরিশোধিত_টাকা': t['নতুন_পরিশোধিত_টাকা'],
+              'লাভ_ক্ষতি': t['নতুন_লাভ_ক্ষতি'], 'অবস্থা': t['নতুন_অবস্থা']
+            }});
+            await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+              'ইনভেস্টমেন্ট_ID': t['ইনভেস্টমেন্ট_ID'], 'নোট': t['বিবরণ'],
+              'সদস্য_ID': t['সাবমিটকারী_ID'], 'সদস্যের_নাম': t['সাবমিটকারীর_নাম'], 'সদস্যের_ফোন': ''
+            }});
+            await apiPost('deleteTransaction', {id:t['ID']});
+            toast('হালনাগাদ অনুমোদিত ও কার্যকর হয়েছে'); withRefreshThen(()=>renderTab());
+          }catch(e){ toast(e.message); }
+          return;
+        }
+        if(!confirm('এই লেনদেনটি যাচাই করে কার্যকর করতে চান? এটি সংশ্লিষ্ট ইনভেস্টমেন্টের হিসাবে যোগ হয়ে যাবে।')) return;
+        try{
+          await apiPost('verifyTransaction', {id:t['ID'], data:{'যাচাইকারী':session['নাম']}});
+          // সাবমিটকারী যে ছবি দিয়েছিলেন তা সংশ্লিষ্ট ইনভেস্টমেন্টের হিস্টোরিতে (ইনভেস্টমেন্ট_আপডেট) সংরক্ষণ করা হয়,
+          // যাতে পরে সেই ইনভেস্টমেন্টের বিস্তারিত অংশে গিয়ে ছবিসহ প্রমাণটা দেখা যায়
+          if(t['ইনভেস্টমেন্ট_ID']){
+            await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+              'ইনভেস্টমেন্ট_ID': t['ইনভেস্টমেন্ট_ID'],
+              'ছবি_লিংক': t['ছবি_লিংক']||'',
+              'নোট': `${t['ধরন']} — ৳${money(t['পরিমাণ'])} — ${t['বিবরণ']||''}`,
+              'সদস্য_ID': t['সাবমিটকারী_ID'], 'সদস্যের_নাম': t['সাবমিটকারীর_নাম'], 'সদস্যের_ফোন': ''
+            }});
+          }
+          toast('যাচাই সম্পন্ন হয়েছে'); withRefreshThen(()=>renderTab());
+        }
+        catch(e){ toast(e.message); }
+      });
+      row.querySelector('[data-act="reject"]').addEventListener('click', async ()=>{
+        if(isValUpd){
+          // কোনো ইতিহাস রাখা হয় না — সরাসরি মুছে ফেলা হয়, যেন অনুরোধটা কখনো হয়ইনি
+          if(!confirm('এই হালনাগাদের অনুরোধ বাতিল করতে চান? এটি স্থায়ীভাবে মুছে যাবে, কোনো ইতিহাস থাকবে না।')) return;
+          try{ await apiPost('deleteTransaction', {id:t['ID']}); toast('অনুরোধ বাতিল করে মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
+          catch(e){ toast(e.message); }
+          return;
+        }
+        const f = row.querySelector('[data-rform]'); f.style.display = f.style.display==='none'? 'block':'none';
+      });
+      row.querySelectorAll('[data-proof-url]').forEach(img=>{
+        img.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(img.getAttribute('data-proof-url'),'_blank'); });
+      });
+      const confirmRejectBtn = row.querySelector('[data-act="confirmReject"]');
+      if(confirmRejectBtn) confirmRejectBtn.addEventListener('click', async ()=>{
+        const reason = row.querySelector('[data-reason]').value.trim();
+        if(!reason){ toast('বাতিলের কারণ লিখুন'); return; }
+        try{
+          await apiPost('rejectTransaction', {id:t['ID'], data:{'যাচাইকারী':session['নাম'], 'বাতিলের_কারণ':reason}});
+          toast('বাতিল করা হয়েছে, কারণসহ সাবমিটকারীর কাছে ফেরত পাঠানো হয়েছে'); withRefreshThen(()=>renderTab());
+        }catch(e){ toast(e.message); }
+      });
+      el.appendChild(row);
+    });
+  }
+
+  const vEl = document.getElementById('verifiedTxnList');
+  verified.slice(0,30).forEach(t=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${t['ধরন']}</div>
+        <div class="li-meta">সাবমিট: ${t['সাবমিটকারীর_নাম']} (${ROLE_LABEL[t['সাবমিটকারীর_পদ']]||t['সাবমিটকারীর_পদ']}) · যাচাই: ${t['যাচাইকারী']||''} · ${fmtDate(t['যাচাইয়ের_তারিখ'])}</div>
+        ${t['ইনভেস্টমেন্টের_শিরোনাম']? `<div class="li-meta">সংশ্লিষ্ট: ${t['ইনভেস্টমেন্টের_শিরোনাম']}</div>`:''}
+        <div class="li-meta">${t['বিবরণ']}</div></div>
+        <span class="amt pos">৳${money(t['পরিমাণ'])} <span class="stamp">✓ ভেরিফাইড</span></span>
+      </div>
+      ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}`;
+    row.querySelectorAll('[data-proof-url]').forEach(img=>{
+      img.addEventListener('click', ()=>{ window.open(img.getAttribute('data-proof-url'),'_blank'); });
+    });
+    vEl.appendChild(row);
+  });
+}
+
+/* ---------------- SHARED: "মোট জমা" চিপ থেকে — সদস্যভিত্তিক জমার সারাংশ ----------------
+   ভেরিফাইড চাঁদা সদস্য অনুযায়ী যোগ করে বেশি জমাদাতা থেকে সাজিয়ে দেখানো হয়।
+   কোনো সদস্যের রো ট্যাপ করলে তার জমার সম্পূর্ণ ইতিহাস (তারিখ, মাধ্যম, স্ট্যাটাসসহ) খুলে যায়। */
+function renderContribSummary(main){
+  const byMember = {};
+  cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').forEach(c=>{
+    const id = c['সদস্য_ID'];
+    if(!byMember[id]) byMember[id] = {name:c['সদস্যের_নাম'], total:0};
+    byMember[id].total += Number(c['পরিমাণ']||0);
+  });
+  const rows = Object.entries(byMember).map(([id,v])=>({id, name:v.name, total:v.total})).sort((a,b)=>b.total-a.total);
+  const totalContrib = rows.reduce((s,r)=>s+r.total,0);
+
+  main.innerHTML = `
+    <div class="summary-bar">
+      <div class="summary-chip"><div class="lbl">মোট জমা</div><div class="val">৳${money(totalContrib)}</div></div>
+      <div class="summary-chip"><div class="lbl">জমাদাতা সদস্য</div><div class="val">${money(rows.length)}</div></div>
+    </div>
+    <div class="card">
+      <h2>সদস্যভিত্তিক মোট জমা</h2>
+      <div class="li-meta" style="margin-bottom:4px;">যেকোনো সদস্যের নামে ট্যাপ করলে তার জমার বিস্তারিত ইতিহাস দেখা যাবে</div>
+      <div id="contribByMember">${rows.length? '' : '<div class="empty">এখনো কোনো ভেরিফাইড চাঁদা নেই</div>'}</div>
+    </div>`;
+
+  const el = document.getElementById('contribByMember');
+  rows.forEach(r=>{
+    const history = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(r.id))
+      .sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <div class="list-item" data-act="toggleHead" style="cursor:pointer;padding-bottom:8px;">
+        <div class="li-top">
+          <div class="li-name">${r.name}</div>
+          <span class="amt pos">৳${money(r.total)}</span>
+        </div>
+        <div class="li-meta" style="margin-top:4px;color:var(--muted);">বিস্তারিত দেখতে ট্যাপ করুন <span data-act="toggleArrow">▾</span></div>
+      </div>
+      <div data-act="detailWrap" style="display:none;margin:-6px 0 8px 4px;padding-bottom:6px;border-bottom:1px dashed var(--rule);"></div>`;
+    const detailWrap = wrap.querySelector('[data-act="detailWrap"]');
+    if(!history.length){
+      detailWrap.innerHTML = '<div class="empty">কোনো এন্ট্রি নেই</div>';
+    } else {
+      history.forEach(c=>{
+        const isV = c['স্ট্যাটাস']==='ভেরিফাইড';
+        const isR = c['স্ট্যাটাস']==='বাতিল';
+        const hrow = document.createElement('div');
+        hrow.innerHTML = `
+          <div class="li-top" style="padding:5px 0;">
+            <div><div class="li-name" style="font-size:13px;">${c['মাস']}</div><div class="li-meta">${c['মাধ্যম']||''} · ${fmtDate(c['জমার_তারিখ'])}</div></div>
+            <div style="text-align:right;">
+              <div class="amt ${isV?'pos':''}" style="font-size:13px;">৳${money(c['পরিমাণ'])}</div>
+              <span class="badge ${isV?'verified':(isR?'rejected':'pending')}">${c['স্ট্যাটাস']}</span>
+            </div>
+          </div>`;
+        detailWrap.appendChild(hrow);
+      });
+    }
+    wrap.querySelector('[data-act="toggleHead"]').addEventListener('click', ()=>{
+      const open = detailWrap.style.display !== 'none';
+      detailWrap.style.display = open ? 'none' : 'block';
+      wrap.querySelector('[data-act="toggleArrow"]').textContent = open ? '▾' : '▴';
+    });
+    el.appendChild(wrap);
+  });
+}
+
+/* ---------------- SHARED: "লাভ/ক্ষতি" চিপ থেকে — এন্ট্রি-ভিত্তিক লাভ-ক্ষতির বিবরণ ----------------
+   'ধরন' অনুযায়ী যোগফল না দেখিয়ে প্রতিটা ইনভেস্টমেন্ট এন্ট্রি আলাদাভাবে দেখানো হয়
+   (শিরোনাম-সহ, যাতে বোঝা যায় ঠিক কোনটার লাভ/ক্ষতি — কার ছাগল, কোন গ্রাহকের বাকি
+   বিক্রয় ইত্যাদি)। যেকোনো এন্ট্রিতে ট্যাপ করলে সাথে সাথে ইনভেস্ট ট্যাবে সেই
+   নির্দিষ্ট এন্ট্রিটার বিস্তারিত অংশ খুলে দেখানো হয়। */
+function renderProfitLossDetail(main){
+  const rows = cache.invest.map(iv=>({
+    id: iv['ID'], title: iv['শিরোনাম'], type: iv['ধরন'], pl: Number(iv['লাভ_ক্ষতি']||0)
+  }));
+  const profits = rows.filter(r=>r.pl>=0).sort((a,b)=>b.pl-a.pl);
+  const losses = rows.filter(r=>r.pl<0).sort((a,b)=>a.pl-b.pl);
+  const totalProfit = profits.reduce((s,r)=>s+r.pl,0);
+  const totalLoss = losses.reduce((s,r)=>s+r.pl,0);
+  const totalPL = totalProfit + totalLoss;
+
+  main.innerHTML = `
+    <div class="summary-bar">
+      <div class="summary-chip"><div class="lbl">মোট লাভ/ক্ষতি</div><div class="val" style="color:${totalPL>=0?'var(--sage)':'var(--terracotta)'}">৳${money(totalPL)}</div></div>
+      <div class="summary-chip"><div class="lbl">মোট লাভ</div><div class="val" style="color:var(--sage)">৳${money(totalProfit)}</div></div>
+      <div class="summary-chip"><div class="lbl">মোট ক্ষতি</div><div class="val" style="color:var(--terracotta)">৳${money(Math.abs(totalLoss))}</div></div>
+    </div>
+    <div class="card">
+      <h2>এন্ট্রিভিত্তিক লাভ/ক্ষতি</h2>
+      <div class="li-meta" style="margin-bottom:6px;">যেকোনো এন্ট্রিতে ট্যাপ করলে সরাসরি সেই ইনভেস্টমেন্টের বিস্তারিত দেখাবে</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div>
+          <div style="font-weight:700;color:var(--sage);font-size:13px;margin-bottom:6px;">লাভ</div>
+          <div id="plProfitList">${profits.length? '' : '<div class="empty">কোনো লাভজনক এন্ট্রি নেই</div>'}</div>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--terracotta);font-size:13px;margin-bottom:6px;">ক্ষতি</div>
+          <div id="plLossList">${losses.length? '' : '<div class="empty">কোনো ক্ষতিগ্রস্ত এন্ট্রি নেই</div>'}</div>
+        </div>
+      </div>
+    </div>`;
+
+  const goToInvest = (id)=>{ focusInvestId = id; activeTab = 'invest'; renderShell(); };
+
+  const pList = document.getElementById('plProfitList');
+  profits.forEach(r=>{
+    const item = document.createElement('div'); item.className='list-item'; item.style.cssText='padding:8px 0;cursor:pointer;';
+    item.innerHTML = `
+      <div class="li-name" style="font-size:12.5px;">${r.title}</div>
+      <div class="li-meta" style="margin-bottom:2px;">${r.type}</div>
+      <div class="amt pos" style="font-size:13.5px;">৳${money(r.pl)}</div>`;
+    item.addEventListener('click', ()=>goToInvest(r.id));
+    pList.appendChild(item);
+  });
+  const lList = document.getElementById('plLossList');
+  losses.forEach(r=>{
+    const item = document.createElement('div'); item.className='list-item'; item.style.cssText='padding:8px 0;cursor:pointer;';
+    item.innerHTML = `
+      <div class="li-name" style="font-size:12.5px;">${r.title}</div>
+      <div class="li-meta" style="margin-bottom:2px;">${r.type}</div>
+      <div class="amt neg" style="font-size:13.5px;">৳${money(r.pl)}</div>`;
+    item.addEventListener('click', ()=>goToInvest(r.id));
+    lList.appendChild(item);
+  });
+}
+
+/* ---------------- SHARED: "হ্যান্ড ক্যাশ" চিপ থেকে — হ্যান্ড ক্যাশের সম্পূর্ণ হিসাব ----------------
+   হ্যান্ড ক্যাশ = ভেরিফাইড চাঁদা − খরচ − ইনভেস্টমেন্টে দেওয়া টাকা + ইনভেস্টমেন্ট থেকে ফেরত আসা টাকা।
+   এই চারটা উপাদানের প্রতিটার আলাদা আলাদা আইটেম-ভিত্তিক তালিকা এখানে দেখানো হয়। */
+function renderHandCash(main){
+  const verified = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড')
+    .sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+  const totalContrib = verified.reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const expenses = [...cache.expense].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  const totalExpense = expenses.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
+  const invests = [...cache.invest].sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
+  const totalInvest = invests.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const cashBackList = invests.filter(i=>Number(i['পরিশোধিত_টাকা']||0) > 0);
+  const totalCashReturned = invests.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
+  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned;
+
+  main.innerHTML = `
+    <div class="card">
+      <h2>হ্যান্ড ক্যাশের হিসাব</h2>
+      <div class="li-meta">সমিতির হাতে এই মুহূর্তে থাকা নগদ টাকার হিসাব নিচের ৪টি অংশ মিলিয়ে বের হয়েছে</div>
+      <div style="margin-top:10px;font-size:13.5px;line-height:2.1;">
+        <div>➕ সদস্যদের মোট টাকা &nbsp; <b class="amt pos">৳${money(totalContrib)}</b></div>
+        <div>➖ খরচ &nbsp; <b class="amt neg">৳${money(totalExpense)}</b></div>
+        <div>➖ ইনভেস্টমেন্টে দেওয়া টাকা &nbsp; <b class="amt neg">৳${money(totalInvest)}</b></div>
+        <div>➕ ইনভেস্টমেন্ট থেকে ফেরত আসা টাকা &nbsp; <b class="amt pos">৳${money(totalCashReturned)}</b></div>
+        <div style="border-top:1px solid var(--rule);margin-top:6px;padding-top:8px;">
+          = হ্যান্ড ক্যাশ &nbsp; <b class="amt ${handCash>=0?'pos':'neg'}" style="font-size:17px;">৳${money(handCash)}</b>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>সদস্যদের মোট টাকা <small>(মোট ৳${money(totalContrib)})</small></h2>
+      <div id="hcContribList">${verified.length? '' : '<div class="empty">কোনো এন্ট্রি নেই</div>'}</div>
+    </div>
+    <div class="card">
+      <h2>খরচ <small>(মোট ৳${money(totalExpense)})</small></h2>
+      <div id="hcExpenseList">${expenses.length? '' : '<div class="empty">কোনো এন্ট্রি নেই</div>'}</div>
+    </div>
+    <div class="card">
+      <h2>ইনভেস্টমেন্টে দেওয়া টাকা <small>(মোট ৳${money(totalInvest)})</small></h2>
+      <div id="hcInvestList">${invests.length? '' : '<div class="empty">কোনো এন্ট্রি নেই</div>'}</div>
+    </div>
+    <div class="card">
+      <h2>ইনভেস্টমেন্ট থেকে ফেরত আসা টাকা <small>(মোট ৳${money(totalCashReturned)})</small></h2>
+      <div id="hcCashbackList">${cashBackList.length? '' : '<div class="empty">এখনো কোনো টাকা ফেরত আসেনি</div>'}</div>
+    </div>`;
+
+  const cList = document.getElementById('hcContribList');
+  verified.forEach(c=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${c['সদস্যের_নাম']}</div><div class="li-meta">${c['মাস']} · ${fmtDate(c['জমার_তারিখ'])}</div></div>
+        <span class="amt pos">৳${money(c['পরিমাণ'])}</span>
+      </div>`;
+    cList.appendChild(row);
+  });
+  const eList = document.getElementById('hcExpenseList');
+  expenses.forEach(x=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${x['শিরোনাম']}</div><div class="li-meta">${fmtDate(x['তারিখ'])} · ${x['এন্ট্রিকারী']||''}</div></div>
+        <span class="amt neg">-৳${money(x['পরিমাণ'])}</span>
+      </div>`;
+    eList.appendChild(row);
+  });
+  const iList = document.getElementById('hcInvestList');
+  invests.forEach(iv=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${iv['শিরোনাম']}</div><div class="li-meta">${iv['ধরন']} · ${fmtDate(iv['শুরুর_তারিখ'])}</div></div>
+        <span class="amt neg">-৳${money(iv['বিনিয়োগ_টাকা'])}</span>
+      </div>`;
+    iList.appendChild(row);
+  });
+  const cbList = document.getElementById('hcCashbackList');
+  cashBackList.forEach(iv=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${iv['শিরোনাম']}</div><div class="li-meta">${iv['ধরন']}</div></div>
+        <span class="amt pos">৳${money(iv['পরিশোধিত_টাকা'])}</span>
+      </div>`;
+    cbList.appendChild(row);
+  });
+}
+
+/* ---------------- CASHIER: expenses ---------------- */
+function renderExpense(main){
+  const canAdd = session['রোল']===ROLES.CASHIER || session['রোল']===ROLES.MANAGER;
+  const list = [...cache.expense].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  main.innerHTML = `
+    ${canAdd? `
+    <div class="card">
+      <h2>নতুন খরচ যোগ করুন</h2>
+      <label>বিবরণ (কী খাতে খরচ)</label>
+      <input type="text" id="exTitle">
+      <div class="row2">
+        <div><label>পরিমাণ (৳)</label><input type="number" id="exAmt"></div>
+        <div><label>তারিখ</label><input type="date" id="exDate" value="${new Date().toISOString().slice(0,10)}"></div>
+      </div>
+      <label>নোট (ঐচ্ছিক)</label>
+      <textarea id="exNote" rows="2"></textarea>
+      <button class="btn full gold" id="addExBtn">খরচ যোগ করুন</button>
+      <div class="status-msg" id="exMsg"></div>
+    </div>` : ''}
+    <div class="card">
+      <h2>খরচের তালিকা</h2>
+      <div id="expenseList">${list.length? '' : '<div class="empty">কোনো খরচ নেই</div>'}</div>
+    </div>`;
+  if(canAdd){
+    document.getElementById('addExBtn').addEventListener('click', async ()=>{
+      const title = document.getElementById('exTitle').value.trim();
+      const amt = document.getElementById('exAmt').value;
+      const date = document.getElementById('exDate').value;
+      const note = document.getElementById('exNote').value.trim();
+      const msg = document.getElementById('exMsg');
+      if(!title || !amt){ msg.textContent='বিবরণ ও পরিমাণ দিন'; msg.className='status-msg err'; return; }
+      try{
+        await apiPost('add', {sheet:'খরচ', data:{'শিরোনাম':title,'পরিমাণ':amt,'তারিখ':date,'এন্ট্রিকারী':session['নাম'],'বিবরণ':note}});
+        toast('খরচ যোগ হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+  const el = document.getElementById('expenseList');
+  list.forEach(x=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${x['শিরোনাম']}</div><div class="li-meta">${fmtDate(x['তারিখ'])} · ${x['এন্ট্রিকারী']||''}</div></div>
+        <span class="amt neg">-৳${money(x['পরিমাণ'])}</span>
+      </div>${x['বিবরণ']?`<div class="li-meta" style="margin-top:4px;">${x['বিবরণ']}</div>`:''}`;
+    el.appendChild(row);
+  });
+}
+
+/* ---------------- INVESTMENTS (field director add/update, others view) ---------------- */
+const SALE_TYPE = 'বাকি বিক্রয় (মুরাবাহা)';
+
+function renderInvest(main, role){
+  const canManage = role===ROLES.FIELD || role===ROLES.MANAGER;
+  // কিস্তি বা ইনভেস্টমেন্ট থেকে হাতে পাওয়া টাকা সরাসরি এখানে বসানো যাবে শুধু
+  // ক্যাশিয়ারের জন্য — ফিল্ড পরিচালক/ম্যানেজার হাতে টাকা পেলে তা অবশ্যই
+  // "লেনদেন" ট্যাব থেকে সাবমিট করে ক্যাশিয়ারের অনুমোদন নিতে হবে
+  const canCollect = role===ROLES.CASHIER;
+  const goToTxnFor = (type, investId)=>{ prefillTxn = {type, investId}; activeTab = 'transaction'; renderShell(); };
+  const list = [...cache.invest].sort((a,b)=>String(b['সর্বশেষ_আপডেট']).localeCompare(String(a['সর্বশেষ_আপডেট'])));
+  const totalInvest = cache.invest.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const totalPL = cache.invest.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
+  const totalDue = cache.invest.filter(i=>i['ধরন']===SALE_TYPE).reduce((s,i)=>s+Number(i['বাকি_টাকা']||0),0);
+
+  main.innerHTML = `
+    <div class="summary-bar">
+      <div class="summary-chip"><div class="lbl">মোট বিনিয়োগ</div><div class="val">৳${money(totalInvest)}</div></div>
+      <div class="summary-chip"><div class="lbl">মোট লাভ/ক্ষতি</div><div class="val" style="color:${totalPL>=0?'var(--sage)':'var(--terracotta)'}">৳${money(totalPL)}</div></div>
+      <div class="summary-chip"><div class="lbl">বিক্রয় বকেয়া</div><div class="val" style="color:var(--terracotta)">৳${money(totalDue)}</div></div>
+    </div>
+    ${canManage? `
+    <div class="card">
+      <h2>নতুন ইনভেস্টমেন্ট যোগ করুন</h2>
+      <label>শিরোনাম (যেমন: ছাগল ক্রয় - রহিম মিয়ার কাছে আধি)</label>
+      <input type="text" id="ivTitle">
+      <div class="row2">
+        <div><label>ধরন</label>
+          <select id="ivType"><option>গরু</option><option>ছাগল</option><option>শেয়ার ব্যবসা</option><option>${SALE_TYPE}</option><option>অন্যান্য</option></select>
+        </div>
+        <div><label id="ivAmtLabel">বিনিয়োগ (৳)</label><input type="number" id="ivAmt"></div>
+      </div>
+      <div id="ivOtherWrap" style="display:none;">
+        <label>ধরন লিখুন</label>
+        <input type="text" id="ivOtherType" placeholder="যেমন: মুরগি পালন">
+      </div>
+      <div id="ivSaleWrap" style="display:none;padding-top:2px;border-top:1px dashed var(--rule);margin-top:8px;">
+        <div class="principle-box" style="margin:10px 0 4px;">🌿 মুরাবাহা নীতি: ক্রয়মূল্যের সাথে সুনির্দিষ্ট লাভ যোগ করে অগ্রিম-ঘোষিত একটাই মোট বিক্রয়মূল্য ঠিক হয়, কোনো সুদ ছাড়াই কয়েক কিস্তিতে তা আদায় হয়।</div>
+        <label>বিক্রয়মূল্য (৳, লাভসহ)</label>
+        <input type="number" id="ivSalePrice">
+        <div class="li-meta" id="ivProfitHint" style="margin-top:2px;">লাভ: ৳০</div>
+        <label>গ্রাহকের নাম</label>
+        <input type="text" id="ivCustName">
+        <div class="row2">
+          <div><label>গ্রাহকের ফোন (ঐচ্ছিক)</label><input type="tel" id="ivCustPhone"></div>
+          <div><label>মোট কিস্তি সংখ্যা</label><input type="number" id="ivInstCount" value="1" min="1"></div>
+        </div>
+        <label>গ্রাহকের ঠিকানা (ঐচ্ছিক)</label>
+        <input type="text" id="ivCustAddr">
+      </div>
+      <label>শুরুর তারিখ</label>
+      <input type="date" id="ivDate" value="${new Date().toISOString().slice(0,10)}">
+      <label>প্রমাণ/ভাউচার ছবি (একাধিক ছবি দেওয়া যাবে, ঐচ্ছিক)</label>
+      <input type="file" id="ivProofFile" accept="image/*" multiple>
+      <div id="ivProofPreviewWrap" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+      <label>বিবরণ (ঐচ্ছিক)</label>
+      <textarea id="ivNote" rows="2"></textarea>
+      <button class="btn full gold" id="addIvBtn">যোগ করুন</button>
+      <div class="status-msg" id="ivMsg"></div>
+    </div>` : ''}
+    <div class="card"><h2>ইনভেস্টমেন্টের তালিকা</h2>
+      <div id="invList">${list.length? '' : '<div class="empty">কোনো ইনভেস্টমেন্ট এন্ট্রি নেই</div>'}</div>
+    </div>`;
+
+  if(canManage){
+    const typeSel = document.getElementById('ivType');
+    const otherWrap = document.getElementById('ivOtherWrap');
+    const saleWrap = document.getElementById('ivSaleWrap');
+    const amtLabel = document.getElementById('ivAmtLabel');
+    const salePriceEl = document.getElementById('ivSalePrice');
+    const amtEl = document.getElementById('ivAmt');
+    const profitHint = document.getElementById('ivProfitHint');
+    const syncType = ()=>{
+      const isSale = typeSel.value === SALE_TYPE;
+      otherWrap.style.display = typeSel.value === 'অন্যান্য' ? '' : 'none';
+      saleWrap.style.display = isSale ? '' : 'none';
+      amtLabel.textContent = isSale ? 'ক্রয়মূল্য (৳)' : 'বিনিয়োগ (৳)';
+    };
+    typeSel.addEventListener('change', syncType);
+    const updateProfitHint = ()=>{
+      const profit = (Number(salePriceEl.value)||0) - (Number(amtEl.value)||0);
+      profitHint.textContent = 'লাভ: ৳' + money(profit);
+      profitHint.style.color = profit>=0 ? 'var(--sage)' : 'var(--terracotta)';
+    };
+    amtEl.addEventListener('input', updateProfitHint);
+    salePriceEl.addEventListener('input', updateProfitHint);
+
+    const proofFile = document.getElementById('ivProofFile');
+    const proofPreviewWrap = document.getElementById('ivProofPreviewWrap');
+    proofFile.addEventListener('change', ()=>{
+      proofPreviewWrap.innerHTML = '';
+      Array.from(proofFile.files).forEach(f=>{
+        const reader = new FileReader();
+        reader.onload = e=>{
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = 'width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
+          proofPreviewWrap.appendChild(img);
+        };
+        reader.readAsDataURL(f);
+      });
+    });
+    document.getElementById('addIvBtn').addEventListener('click', async ()=>{
+      const title = document.getElementById('ivTitle').value.trim();
+      let type = typeSel.value;
+      const isSale = type === SALE_TYPE;
+      const amt = amtEl.value;
+      const date = document.getElementById('ivDate').value;
+      const note = document.getElementById('ivNote').value.trim();
+      const msg = document.getElementById('ivMsg');
+      if(type === 'অন্যান্য'){
+        const custom = document.getElementById('ivOtherType').value.trim();
+        if(!custom){ msg.textContent='ধরন লিখুন'; msg.className='status-msg err'; return; }
+        type = custom;
+      }
+      if(!title || !amt){ msg.textContent='শিরোনাম ও বিনিয়োগের পরিমাণ দিন'; msg.className='status-msg err'; return; }
+      const extra = {};
+      if(isSale){
+        const salePrice = salePriceEl.value;
+        const custName = document.getElementById('ivCustName').value.trim();
+        if(!salePrice || !custName){ msg.textContent='বিক্রয়মূল্য ও গ্রাহকের নাম দিন'; msg.className='status-msg err'; return; }
+        if(Number(salePrice) < Number(amt)){ msg.textContent='বিক্রয়মূল্য ক্রয়মূল্যের চেয়ে কম হতে পারে না'; msg.className='status-msg err'; return; }
+        extra['বিক্রয়মূল্য'] = salePrice;
+        extra['গ্রাহকের_নাম'] = custName;
+        extra['গ্রাহকের_ফোন'] = document.getElementById('ivCustPhone').value.trim();
+        extra['গ্রাহকের_ঠিকানা'] = document.getElementById('ivCustAddr').value.trim();
+        extra['মোট_কিস্তি'] = document.getElementById('ivInstCount').value || 1;
+      }
+      try{
+        const proofUrls = await uploadMultiplePhotos_(proofFile.files, title||'investment', msg);
+        await apiPost('addInvestment', {data: Object.assign({
+          'শিরোনাম':title,'ধরন':type,'বিনিয়োগ_টাকা':amt,
+          'শুরুর_তারিখ':date,'পরিচালক':session['নাম'],'প্রমাণ_লিংক':proofUrls.join(','),'বিবরণ':note
+        }, extra)});
+        toast('ইনভেস্টমেন্ট যোগ হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+
+  const el = document.getElementById('invList');
+  list.forEach(iv=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.dataset.investId = iv['ID'];
+    const isSale = iv['ধরন']===SALE_TYPE;
+    const isShare = iv['ধরন']==='শেয়ার ব্যবসা';
+    const isLivestock = !isSale && !isShare; // গরু/ছাগল/অন্যান্য — বাড়ে, কমে, মরেও যেতে পারে
+    const pl = Number(iv['লাভ_ক্ষতি']||0);
+    const photos = String(iv['প্রমাণ_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const updates = cache.investUpdate
+      .filter(u=>String(u['ইনভেস্টমেন্ট_ID'])===String(iv['ID']))
+      .sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+    const badgeClass = isSale ? (iv['অবস্থা']==='পরিশোধিত'?'verified':'pending') : (iv['অবস্থা']==='চলমান'?'running':'closed');
+
+    // এই ইনভেস্টমেন্টের (মা প্রাণীর) বাচ্চাদের তালিকা — শুধু এখনো "সক্রিয়"
+    // (অর্থাৎ আদালকে দেওয়া/বিক্রিত/মৃত না-হওয়া) বাচ্চাগুলোই এখানে দেখানো হয়
+    const allBabiesOfInvest = cache.babies.filter(b=>String(b['ইনভেস্টমেন্ট_ID'])===String(iv['ID']));
+    const activeBabies = allBabiesOfInvest.filter(b=>b['অবস্থা']==='সক্রিয়')
+      .sort((a,b)=>Number(a['ক্রম']||0)-Number(b['ক্রম']||0));
+    const babyCount = Number(iv['বাচ্চা_সংখ্যা']||0);
+
+    // summaryHtml: তালিকায় সবসময় দেখা যাবে (শুধু মূল সংখ্যাগুলো)
+    // detailExtraHtml: ক্লিক করলে বিস্তারিত অংশে দেখা যাবে (গ্রাহক/ঠিকানা/অগ্রগতি)
+    let summaryHtml, detailExtraHtml = '';
+    if(isSale){
+      const total = Number(iv['বিক্রয়মূল্য']||0);
+      const paid = Number(iv['পরিশোধিত_টাকা']||0);
+      const due = Number(iv['বাকি_টাকা']||0);
+      const pct = total>0 ? Math.min(100, Math.round((paid/total)*100)) : 0;
+      summaryHtml = `
+        <div style="display:flex;gap:14px;margin-top:6px;font-size:12.5px;flex-wrap:wrap;">
+          <span>ক্রয়মূল্য: <b class="amt">৳${money(iv['বিনিয়োগ_টাকা'])}</b></span>
+          <span>বিক্রয়মূল্য: <b class="amt">৳${money(total)}</b></span>
+          <span>পরিশোধিত: <b class="amt pos">৳${money(paid)}</b></span>
+          <span>বাকি: <b class="amt ${due>0?'neg':'pos'}">৳${money(due)}</b></span>
+          <span>লাভ: <b class="amt pos">৳${money(pl)}</b></span>
+        </div>`;
+      detailExtraHtml = `
+        <div class="li-meta" style="margin-top:4px;">গ্রাহক: ${iv['গ্রাহকের_নাম']||''}${iv['গ্রাহকের_ফোন']?' · '+iv['গ্রাহকের_ফোন']:''} · কিস্তি: ${iv['পরিশোধিত_কিস্তি']||0} / ${iv['মোট_কিস্তি']||1}</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+        ${iv['গ্রাহকের_ঠিকানা']?`<div class="li-meta" style="margin-top:4px;">ঠিকানা: ${iv['গ্রাহকের_ঠিকানা']}</div>`:''}`;
+    } else {
+      const cashBack = Number(iv['পরিশোধিত_টাকা']||0);
+      summaryHtml = `
+        <div style="display:flex;gap:14px;margin-top:6px;font-size:12.5px;flex-wrap:wrap;">
+          <span>বিনিয়োগ: <b class="amt">৳${money(iv['বিনিয়োগ_টাকা'])}</b></span>
+          <span>বর্তমান মূল্য: <b class="amt">৳${money(iv['বর্তমান_মূল্য'])}</b></span>
+          ${cashBack>0?`<span>নগদ ফেরত: <b class="amt pos">৳${money(cashBack)}</b></span>`:''}
+          <span>লাভ/ক্ষতি: <b class="amt ${pl>=0?'pos':'neg'}">৳${money(pl)}</b></span>
+        </div>`;
+    }
+
+    const insts = isSale ? cache.investInstallment
+      .filter(k=>String(k['ইনভেস্টমেন্ট_ID'])===String(iv['ID']))
+      .sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))) : [];
+
+    row.innerHTML = `
+      <div data-act="toggleHead" style="cursor:pointer;">
+        <div class="li-top">
+          <div class="li-name">${iv['শিরোনাম']}</div>
+          <span class="badge ${badgeClass}">${iv['অবস্থা']}</span>
+        </div>
+        ${summaryHtml}
+      </div>
+      <div class="li-meta" data-act="toggleHint" style="margin-top:6px;text-align:center;cursor:pointer;color:var(--muted);">বিস্তারিত দেখতে ট্যাপ করুন <span data-act="toggleArrow">▾</span></div>
+      <div data-act="detailWrap" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
+        <div class="li-meta">${iv['ধরন']} · ${iv['পরিচালক']||''} · শুরু: ${fmtDate(iv['শুরুর_তারিখ'])}</div>
+        ${iv['আদাল_ID']? `<div class="li-meta" style="margin-top:2px;">আদাল: ${iv['আদালের_নাম']||''}${iv['আদালের_ফোন']?' · '+iv['আদালের_ফোন']:''}${iv['আদালের_ঠিকানা']?' · '+iv['আদালের_ঠিকানা']:''}</div>` : ''}
+        ${detailExtraHtml}
+        ${iv['বিবরণ']?`<div class="li-meta" style="margin-top:4px;">${iv['বিবরণ']}</div>`:''}
+        ${photos.length? `<div class="row-actions" data-act="proofWrap">${photos.map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:80px;max-height:80px;border-radius:8px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>`:''}
+        <div class="row-actions">
+          ${(isSale && canCollect && iv['অবস্থা']!=='পরিশোধিত')? `<button class="btn small ghost" data-act="addInst">কিস্তি জমা নিন</button>`:''}
+          ${(isSale && canManage && iv['অবস্থা']!=='পরিশোধিত')? `<button class="btn small ghost" data-act="goTxnInst">কিস্তি জমা সাবমিট করুন</button>`:''}
+          ${(canManage)? `<button class="btn small ghost" data-act="goTxnCash">প্রাপ্ত টাকা সাবমিট করুন</button>`:''}
+          <button class="btn small ghost" data-act="addNote">তথ্য/ছবি যুক্ত করুন</button>
+        </div>
+        ${(isSale && canManage && iv['অবস্থা']!=='পরিশোধিত')? `<div class="li-meta" style="margin-top:4px;">হাতে কিস্তির টাকা পেলে সরাসরি বসানো যাবে না — "কিস্তি জমা সাবমিট করুন" চেপে "লেনদেন" ট্যাব থেকে ক্যাশিয়ারের অনুমোদনের জন্য পাঠান</div>`:''}
+        ${isLivestock? `
+        <div data-act="babyWrap" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
+          <div class="li-meta" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>বাচ্চা (সক্রিয়: ${activeBabies.length})</span>
+            ${canManage? `<button class="btn small ghost" data-act="babyAddToggle">বাচ্চা যুক্ত করুন</button>`:''}
+          </div>
+          ${canManage? `
+          <div data-act="babyAddForm" style="display:none;margin-top:8px;">
+            <div class="row2">
+              <div><label>সংখ্যা</label><input type="number" data-act="babyAddCount" value="1" min="1"></div>
+              <div><label>লিঙ্গ</label>
+                <select data-act="babyAddGender">
+                  <option value="অজানা">অজানা/মিশ্র</option>
+                  <option value="পুরুষ">পুরুষ (মদ্দা)</option>
+                  <option value="মেয়ে">মেয়ে (মাদী)</option>
+                </select>
+              </div>
+            </div>
+            <label>ছবি (ঐচ্ছিক)</label>
+            <input type="file" accept="image/*" multiple data-act="babyAddFile">
+            <div data-act="babyAddPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+            <label>নোট (ঐচ্ছিক)</label>
+            <input type="text" data-act="babyAddNote" placeholder="যেমন: ২টা বাচ্চা হয়েছে">
+            <button class="btn small gold" data-act="babyAddSubmit" style="margin-top:8px;">যুক্ত করুন</button>
+            <div class="status-msg" data-act="babyAddMsg"></div>
+          </div>` : ''}
+          <div data-act="babyList" style="margin-top:8px;"></div>
+        </div>` : ''}
+        ${isSale? `
+        <div data-act="instForm" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
+          <label>কিস্তির পরিমাণ (৳) <span style="color:var(--muted);">— বাকি ৳${money(iv['বাকি_টাকা'])}</span></label>
+          <input type="number" data-act="instAmt" value="${Number(iv['বাকি_টাকা']||0)>0? Math.round(Number(iv['বাকি_টাকা']||0)/Math.max(1,(Number(iv['মোট_কিস্তি']||1)-Number(iv['পরিশোধিত_কিস্তি']||0)))) : 0}">
+          <div class="row2">
+            <div><label>মাধ্যম</label>
+              <select data-act="instMethod"><option>নগদ</option><option>বিকাশ</option><option>নগদ (মোবাইল)</option><option>রকেট</option></select>
+            </div>
+            <div><label>আদায়কারী</label><input type="text" data-act="instBy" value="${session['নাম']}"></div>
+          </div>
+          <button class="btn small gold" data-act="instSubmit" style="margin-top:8px;">জমা নিশ্চিত করুন</button>
+          <div class="status-msg" data-act="instMsg"></div>
+        </div>
+        <div data-act="instHistory" style="margin-top:8px;">
+          ${insts.length? `<div class="li-meta" style="margin-bottom:4px;">কিস্তি জমার ইতিহাস (${insts.length})</div>` : ''}
+          ${insts.map(k=>`<div style="padding:6px 0;border-top:1px dashed var(--rule);display:flex;justify-content:space-between;font-size:12.5px;">
+              <span>কিস্তি #${k['কিস্তি_নম্বর']} · ${k['মাধ্যম']||''} · ${k['আদায়কারী']||''} · ${fmtDate(k['তারিখ'])}</span>
+              <b class="amt pos">৳${money(k['পরিমাণ'])}</b>
+            </div>`).join('')}
+        </div>` : ''}
+        <div data-act="updForm" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
+          <label>ছবি (একাধিক দেওয়া যাবে, ঐচ্ছিক)</label>
+          <input type="file" accept="image/*" multiple data-act="updFile">
+          <div data-act="updPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+          <label>নোট</label>
+          <textarea rows="2" data-act="updNote" placeholder="আজকের অবস্থা/মন্তব্য লিখুন"></textarea>
+          <button class="btn small gold" data-act="updSubmit" style="margin-top:8px;">সাবমিট করুন</button>
+          <div class="status-msg" data-act="updMsg"></div>
+        </div>
+        <div data-act="updHistory" style="margin-top:8px;">
+          ${updates.length? `<div class="li-meta" style="margin-bottom:4px;">তথ্য হালনাগাদের ইতিহাস (${updates.length})</div>` : ''}
+          ${updates.map(u=>{
+            const uPhotos = String(u['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
+            return `<div style="padding:7px 0;border-top:1px dashed var(--rule);">
+              <div class="li-meta">${u['সদস্যের_নাম']||''}${u['সদস্যের_ফোন']?' · '+u['সদস্যের_ফোন']:''} · ${fmtDate(u['তারিখ'])}</div>
+              ${u['নোট']?`<div style="font-size:13px;margin-top:3px;">${u['নোট']}</div>`:''}
+              ${uPhotos.length? `<div class="row-actions">${uPhotos.map(p=>`<img src="${p}" alt="ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>`:''}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+
+    const detailWrap = row.querySelector('[data-act="detailWrap"]');
+    const toggleArrow = row.querySelector('[data-act="toggleArrow"]');
+    const toggleHint = row.querySelector('[data-act="toggleHint"]');
+    const toggleDetail = ()=>{
+      const willShow = detailWrap.style.display === 'none';
+      detailWrap.style.display = willShow ? '' : 'none';
+      toggleArrow.textContent = willShow ? '▴' : '▾';
+      toggleHint.firstChild.textContent = willShow ? 'বিস্তারিত লুকান ' : 'বিস্তারিত দেখতে ট্যাপ করুন ';
+    };
+    row.querySelector('[data-act="toggleHead"]').addEventListener('click', toggleDetail);
+    toggleHint.addEventListener('click', toggleDetail);
+
+    row.querySelectorAll('[data-proof-url]').forEach(img=>{
+      img.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(img.getAttribute('data-proof-url'),'_blank'); });
+    });
+
+    /* ---------------- বাচ্চা (offspring) সেকশন ---------------- */
+    const babyAddToggleBtn = row.querySelector('[data-act="babyAddToggle"]');
+    const babyAddForm = row.querySelector('[data-act="babyAddForm"]');
+    if(babyAddToggleBtn) babyAddToggleBtn.addEventListener('click', ()=>{
+      babyAddForm.style.display = babyAddForm.style.display==='none' ? '' : 'none';
+    });
+    const babyAddFile = row.querySelector('[data-act="babyAddFile"]');
+    const babyAddPreview = row.querySelector('[data-act="babyAddPreview"]');
+    if(babyAddFile) babyAddFile.addEventListener('change', ()=>{
+      babyAddPreview.innerHTML = '';
+      Array.from(babyAddFile.files).forEach(f=>{
+        const reader = new FileReader();
+        reader.onload = e=>{
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
+          babyAddPreview.appendChild(img);
+        };
+        reader.readAsDataURL(f);
+      });
+    });
+    const babyAddSubmitBtn = row.querySelector('[data-act="babyAddSubmit"]');
+    if(babyAddSubmitBtn) babyAddSubmitBtn.addEventListener('click', async ()=>{
+      const countN = Math.max(1, Number(row.querySelector('[data-act="babyAddCount"]').value||1));
+      const gender = row.querySelector('[data-act="babyAddGender"]').value;
+      const note = row.querySelector('[data-act="babyAddNote"]').value.trim();
+      const msg = row.querySelector('[data-act="babyAddMsg"]');
+      try{
+        const urls = await uploadMultiplePhotos_(babyAddFile.files, (iv['শিরোনাম']||'baby')+'_baby', msg);
+        const photoStr = urls.join(',');
+        let startSeq = allBabiesOfInvest.length;
+        for(let i=0;i<countN;i++){
+          startSeq += 1;
+          await apiPost('add', {sheet:'বাচ্চা', data:{
+            'ইনভেস্টমেন্ট_ID': iv['ID'], 'ক্রম': startSeq, 'লিঙ্গ': gender,
+            'ছবি_লিংক': photoStr, 'নোট': note, 'অবস্থা': 'সক্রিয়'
+          }});
+        }
+        await apiPost('edit', {sheet:'ইনভেস্টমেন্ট', id:iv['ID'], data:{
+          'বাচ্চা_সংখ্যা': babyCount + countN
+        }});
+        await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+          'ইনভেস্টমেন্ট_ID': iv['ID'], 'নোট': `${countN}টা বাচ্চা যুক্ত হয়েছে${note?' — '+note:''}`,
+          'সদস্য_ID': session['ID'], 'সদস্যের_নাম': session['নাম'], 'সদস্যের_ফোন': session['ফোন']||''
+        }});
+        toast('বাচ্চা যুক্ত হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+
+    const babyListEl = row.querySelector('[data-act="babyList"]');
+    if(babyListEl){
+      activeBabies.forEach(baby=>{
+        const bCard = document.createElement('div');
+        bCard.style.cssText = 'padding:8px 0;border-top:1px dashed var(--rule);';
+        const bUpdates = cache.babyUpdate.filter(u=>String(u['বাচ্চা_ID'])===String(baby['ID']))
+          .sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+        const bPhotos = String(baby['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
+        const custodians = cache.custodians;
+        bCard.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="li-meta"><b>বাচ্চা #${baby['ক্রম']}</b> · ${baby['লিঙ্গ']||'অজানা'}</div>
+          </div>
+          ${bPhotos.length? `<div class="row-actions">${bPhotos.map(p=>`<img src="${p}" alt="বাচ্চার ছবি" data-proof-url="${p}" style="max-width:60px;max-height:60px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>`:''}
+          ${baby['নোট']?`<div style="font-size:12.5px;margin-top:3px;">${baby['নোট']}</div>`:''}
+          <div class="row-actions" style="margin-top:4px;">
+            <button class="btn small ghost" data-act="babyNoteToggle">তথ্য/ছবি যুক্ত করুন</button>
+            ${canManage? `<button class="btn small ghost" data-act="babyGiveToggle">আদালকে দিন</button>`:''}
+            ${canManage? `<button class="btn small ghost" data-act="babySellToggle">বিক্রি করুন</button>`:''}
+          </div>
+          <div data-act="babyNoteForm" style="display:none;margin-top:6px;">
+            <input type="file" accept="image/*" multiple data-act="babyNoteFile">
+            <input type="text" data-act="babyNoteText" placeholder="নোট লিখুন" style="margin-top:4px;">
+            <button class="btn small gold" data-act="babyNoteSubmit" style="margin-top:6px;">সাবমিট করুন</button>
+            <div class="status-msg" data-act="babyNoteMsg"></div>
+          </div>
+          ${canManage? `
+          <div data-act="babyGiveForm" style="display:none;margin-top:6px;">
+            <label>আদাল বাছাই করুন</label>
+            <select data-act="babyCustSelect">
+              <option value="">-- বাছাই করুন --</option>
+              ${custodians.map(c=>`<option value="${c['ID']}">${c['নাম']}${c['ফোন']?' · '+c['ফোন']:''}</option>`).join('')}
+              <option value="__new__">+ নতুন আদাল</option>
+            </select>
+            <div data-act="babyNewCustWrap" style="display:none;margin-top:6px;">
+              <label>আদালের নাম</label><input type="text" data-act="babyNewCustName">
+              <label>ফোন</label><input type="tel" data-act="babyNewCustPhone">
+              <label>ঠিকানা</label><input type="text" data-act="babyNewCustAddr">
+            </div>
+            <button class="btn small gold" data-act="babyGiveSubmit" style="margin-top:6px;">নিশ্চিত করুন</button>
+            <div class="status-msg" data-act="babyGiveMsg"></div>
+          </div>` : ''}
+          ${canManage? `
+          <div data-act="babySellForm" style="display:none;margin-top:6px;">
+            <label>বিক্রয়মূল্য (৳)</label>
+            <input type="number" data-act="babySellAmt" value="0">
+            <button class="btn small gold" data-act="babySellSubmit" style="margin-top:6px;">বিক্রি নিশ্চিত করুন</button>
+            <div class="status-msg" data-act="babySellMsg"></div>
+          </div>` : ''}
+          <div data-act="babyUpdHistory" style="margin-top:4px;">
+            ${bUpdates.map(u=>{
+              const uPhotos = String(u['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
+              return `<div style="padding:4px 0;border-top:1px dashed var(--rule);">
+                <div class="li-meta">${u['সদস্যের_নাম']||''} · ${fmtDate(u['তারিখ'])}</div>
+                ${u['নোট']?`<div style="font-size:12.5px;margin-top:2px;">${u['নোট']}</div>`:''}
+                ${uPhotos.length? `<div class="row-actions">${uPhotos.map(p=>`<img src="${p}" alt="ছবি" data-proof-url="${p}" style="max-width:55px;max-height:55px;border-radius:6px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>`:''}
+              </div>`;
+            }).join('')}
+          </div>`;
+
+        bCard.querySelectorAll('[data-proof-url]').forEach(img=>{
+          img.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(img.getAttribute('data-proof-url'),'_blank'); });
+        });
+
+        // --- তথ্য/ছবি যুক্ত করুন (যে কেউ পারবে) ---
+        const noteToggle = bCard.querySelector('[data-act="babyNoteToggle"]');
+        const noteForm = bCard.querySelector('[data-act="babyNoteForm"]');
+        noteToggle.addEventListener('click', ()=>{ noteForm.style.display = noteForm.style.display==='none' ? '' : 'none'; });
+        bCard.querySelector('[data-act="babyNoteSubmit"]').addEventListener('click', async ()=>{
+          const noteFile = bCard.querySelector('[data-act="babyNoteFile"]');
+          const noteText = bCard.querySelector('[data-act="babyNoteText"]').value.trim();
+          const noteMsg = bCard.querySelector('[data-act="babyNoteMsg"]');
+          if(!noteText && noteFile.files.length===0){ noteMsg.textContent='অন্তত একটা নোট বা ছবি দিন'; noteMsg.className='status-msg err'; return; }
+          try{
+            const urls = await uploadMultiplePhotos_(noteFile.files, 'baby_'+baby['ID'], noteMsg);
+            await apiPost('add', {sheet:'বাচ্চা_আপডেট', data:{
+              'বাচ্চা_ID': baby['ID'], 'ছবি_লিংক': urls.join(','), 'নোট': noteText,
+              'সদস্য_ID': session['ID'], 'সদস্যের_নাম': session['নাম'], 'সদস্যের_ফোন': session['ফোন']||''
+            }});
+            toast('তথ্য যোগ হয়েছে'); withRefreshThen(()=>renderTab());
+          }catch(e){ noteMsg.textContent=e.message; noteMsg.className='status-msg err'; }
+        });
+
+        // --- আদালকে দিন (শুধু ম্যানেজার/ফিল্ড পরিচালক) ---
+        const giveToggle = bCard.querySelector('[data-act="babyGiveToggle"]');
+        const giveForm = bCard.querySelector('[data-act="babyGiveForm"]');
+        if(giveToggle) giveToggle.addEventListener('click', ()=>{ giveForm.style.display = giveForm.style.display==='none' ? '' : 'none'; });
+        const custSelect = bCard.querySelector('[data-act="babyCustSelect"]');
+        const newCustWrap = bCard.querySelector('[data-act="babyNewCustWrap"]');
+        if(custSelect) custSelect.addEventListener('change', ()=>{
+          newCustWrap.style.display = custSelect.value==='__new__' ? '' : 'none';
+        });
+        const giveSubmitBtn = bCard.querySelector('[data-act="babyGiveSubmit"]');
+        if(giveSubmitBtn) giveSubmitBtn.addEventListener('click', async ()=>{
+          const giveMsg = bCard.querySelector('[data-act="babyGiveMsg"]');
+          const selVal = custSelect.value;
+          if(!selVal){ giveMsg.textContent='আদাল বাছাই করুন'; giveMsg.className='status-msg err'; return; }
+          try{
+            let custId = selVal, custName, custPhone, custAddr;
+            if(selVal === '__new__'){
+              custName = bCard.querySelector('[data-act="babyNewCustName"]').value.trim();
+              custPhone = bCard.querySelector('[data-act="babyNewCustPhone"]').value.trim();
+              custAddr = bCard.querySelector('[data-act="babyNewCustAddr"]').value.trim();
+              if(!custName){ giveMsg.textContent='আদালের নাম দিন'; giveMsg.className='status-msg err'; return; }
+              const res = await apiPost('add', {sheet:'আদাল', data:{'নাম':custName,'ফোন':custPhone,'ঠিকানা':custAddr}});
+              custId = res.id;
+            } else {
+              const c = custodians.find(c=>String(c['ID'])===String(selVal));
+              custName = c? c['নাম'] : ''; custPhone = c? (c['ফোন']||'') : ''; custAddr = c? (c['ঠিকানা']||'') : '';
+            }
+            // নতুন ইনভেস্টমেন্ট তৈরি — ক্রয়মূল্য ০ ধরে, একই ধরনের প্রাণী হিসেবে
+            const newInvRes = await apiPost('add', {sheet:'ইনভেস্টমেন্ট', data:{
+              'শিরোনাম': `${iv['শিরোনাম']} এর বাচ্চা — আদাল: ${custName}`,
+              'ধরন': iv['ধরন'], 'বিনিয়োগ_টাকা': 0, 'বর্তমান_মূল্য': 0, 'লাভ_ক্ষতি': 0,
+              'অবস্থা': 'চলমান', 'শুরুর_তারিখ': new Date().toISOString().slice(0,10),
+              'পরিচালক': session['নাম'], 'বিবরণ': `${iv['শিরোনাম']} থেকে জন্ম নেওয়া বাচ্চা, আদাল ${custName}-কে আদি দেওয়া হয়েছে`,
+              'লিঙ্গ': baby['লিঙ্গ']||'', 'আদাল_ID': custId, 'আদালের_নাম': custName,
+              'আদালের_ফোন': custPhone, 'আদালের_ঠিকানা': custAddr, 'উৎস_বাচ্চা_ID': baby['ID']
+            }});
+            await apiPost('edit', {sheet:'বাচ্চা', id: baby['ID'], data:{
+              'অবস্থা': 'আদালকে_দেওয়া', 'নতুন_ইনভেস্টমেন্ট_ID': newInvRes.id
+            }});
+            await apiPost('edit', {sheet:'ইনভেস্টমেন্ট', id: iv['ID'], data:{
+              'বাচ্চা_সংখ্যা': Math.max(0, babyCount - 1)
+            }});
+            await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+              'ইনভেস্টমেন্ট_ID': iv['ID'], 'নোট': `বাচ্চা #${baby['ক্রম']} আদাল ${custName}-কে আদি দেওয়া হয়েছে`,
+              'সদস্য_ID': session['ID'], 'সদস্যের_নাম': session['নাম'], 'সদস্যের_ফোন': session['ফোন']||''
+            }});
+            toast('আদালকে দেওয়া হয়েছে'); withRefreshThen(()=>renderTab());
+          }catch(e){ giveMsg.textContent=e.message; giveMsg.className='status-msg err'; }
+        });
+
+        // --- বিক্রি করুন (শুধু ম্যানেজার/ফিল্ড পরিচালক) ---
+        const sellToggle = bCard.querySelector('[data-act="babySellToggle"]');
+        const sellForm = bCard.querySelector('[data-act="babySellForm"]');
+        if(sellToggle) sellToggle.addEventListener('click', ()=>{ sellForm.style.display = sellForm.style.display==='none' ? '' : 'none'; });
+        const sellSubmitBtn = bCard.querySelector('[data-act="babySellSubmit"]');
+        if(sellSubmitBtn) sellSubmitBtn.addEventListener('click', async ()=>{
+          const sellMsg = bCard.querySelector('[data-act="babySellMsg"]');
+          const amt = Number(bCard.querySelector('[data-act="babySellAmt"]').value||0);
+          if(amt<0){ sellMsg.textContent='সঠিক পরিমাণ দিন'; sellMsg.className='status-msg err'; return; }
+          try{
+            await apiPost('edit', {sheet:'বাচ্চা', id: baby['ID'], data:{ 'অবস্থা': 'বিক্রিত' }});
+            const newPaid = Number(iv['পরিশোধিত_টাকা']||0) + amt;
+            const newPL = (Number(iv['বর্তমান_মূল্য']||0) + newPaid) - Number(iv['বিনিয়োগ_টাকা']||0);
+            await apiPost('edit', {sheet:'ইনভেস্টমেন্ট', id: iv['ID'], data:{
+              'পরিশোধিত_টাকা': newPaid, 'লাভ_ক্ষতি': newPL,
+              'বাচ্চা_সংখ্যা': Math.max(0, babyCount - 1)
+            }});
+            await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+              'ইনভেস্টমেন্ট_ID': iv['ID'], 'নোট': `বাচ্চা #${baby['ক্রম']} বিক্রি হয়েছে — নগদ প্রাপ্তি: ৳${money(amt)}`,
+              'সদস্য_ID': session['ID'], 'সদস্যের_নাম': session['নাম'], 'সদস্যের_ফোন': session['ফোন']||''
+            }});
+            toast('বিক্রি সম্পন্ন হয়েছে'); withRefreshThen(()=>renderTab());
+          }catch(e){ sellMsg.textContent=e.message; sellMsg.className='status-msg err'; }
+        });
+
+        babyListEl.appendChild(bCard);
+      });
+    }
+
+    const goTxnInstBtn = row.querySelector('[data-act="goTxnInst"]');
+    if(goTxnInstBtn) goTxnInstBtn.addEventListener('click', ()=>goToTxnFor('কিস্তি আদায়', iv['ID']));
+    const goTxnCashBtn = row.querySelector('[data-act="goTxnCash"]');
+    if(goTxnCashBtn) goTxnCashBtn.addEventListener('click', ()=>goToTxnFor('ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা', iv['ID']));
+
+    const addInstBtn = row.querySelector('[data-act="addInst"]');
+    const instForm = row.querySelector('[data-act="instForm"]');
+    if(addInstBtn) addInstBtn.addEventListener('click', ()=>{
+      instForm.style.display = instForm.style.display==='none' ? '' : 'none';
+    });
+    const instSubmit = row.querySelector('[data-act="instSubmit"]');
+    if(instSubmit) instSubmit.addEventListener('click', async ()=>{
+      const amt = row.querySelector('[data-act="instAmt"]').value;
+      const method = row.querySelector('[data-act="instMethod"]').value;
+      const by = row.querySelector('[data-act="instBy"]').value.trim();
+      const instMsg = row.querySelector('[data-act="instMsg"]');
+      if(!amt || Number(amt)<=0){ instMsg.textContent='কিস্তির পরিমাণ দিন'; instMsg.className='status-msg err'; return; }
+      try{
+        await apiPost('addInstallment', {data:{
+          'ইনভেস্টমেন্ট_ID':iv['ID'],'পরিমাণ':amt,'মাধ্যম':method,'আদায়কারী':by
+        }});
+        toast('কিস্তি জমা হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ instMsg.textContent=e.message; instMsg.className='status-msg err'; }
+    });
+
+    const noteBtn = row.querySelector('[data-act="addNote"]');
+    const updForm = row.querySelector('[data-act="updForm"]');
+    noteBtn.addEventListener('click', ()=>{
+      updForm.style.display = updForm.style.display==='none' ? '' : 'none';
+    });
+    const updFile = row.querySelector('[data-act="updFile"]');
+    const updPreview = row.querySelector('[data-act="updPreview"]');
+    updFile.addEventListener('change', ()=>{
+      updPreview.innerHTML = '';
+      Array.from(updFile.files).forEach(f=>{
+        const reader = new FileReader();
+        reader.onload = e=>{
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
+          updPreview.appendChild(img);
+        };
+        reader.readAsDataURL(f);
+      });
+    });
+    const updMsg = row.querySelector('[data-act="updMsg"]');
+    row.querySelector('[data-act="updSubmit"]').addEventListener('click', async ()=>{
+      const note = row.querySelector('[data-act="updNote"]').value.trim();
+      if(!note && updFile.files.length===0){
+        updMsg.textContent='অন্তত একটা নোট বা ছবি দিন'; updMsg.className='status-msg err'; return;
+      }
+      try{
+        const urls = await uploadMultiplePhotos_(updFile.files, (iv['শিরোনাম']||'update'), updMsg);
+        await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
+          'ইনভেস্টমেন্ট_ID':iv['ID'],'ছবি_লিংক':urls.join(','),'নোট':note,
+          'সদস্য_ID':session['ID'],'সদস্যের_নাম':session['নাম'],'সদস্যের_ফোন':session['ফোন']||''
+        }});
+        toast('তথ্য যোগ হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ updMsg.textContent=e.message; updMsg.className='status-msg err'; }
+    });
+
+    el.appendChild(row);
+  });
+
+  // "লাভ/ক্ষতি" বিস্তারিত পেজ থেকে কোনো নির্দিষ্ট ইনভেস্টমেন্টে ক্লিক করে এলে
+  // সেই এন্ট্রিটার বিস্তারিত অংশ সাথে সাথেই খুলে দিয়ে সেখানে স্ক্রল করে দেখানো হয়
+  if(focusInvestId){
+    const targetRow = el.querySelector(`[data-invest-id="${focusInvestId}"]`);
+    if(targetRow){
+      const head = targetRow.querySelector('[data-act="toggleHead"]');
+      if(head) head.click();
+      targetRow.scrollIntoView({behavior:'smooth', block:'start'});
+      targetRow.style.transition = 'background-color .3s';
+      targetRow.style.backgroundColor = 'var(--brass-soft)';
+      setTimeout(()=>{ targetRow.style.backgroundColor = ''; }, 1600);
+    }
+    focusInvestId = null;
+  }
+}
+
+/* একাধিক ছবি ফাইল একে একে Drive-এ আপলোড করে URL-এর তালিকা রিটার্ন করে */
+async function uploadMultiplePhotos_(fileList, namePrefix, msgEl){
+  const files = Array.from(fileList || []);
+  const urls = [];
+  for(let i=0;i<files.length;i++){
+    if(msgEl){ msgEl.textContent = `ছবি আপলোড হচ্ছে (${i+1}/${files.length})...`; msgEl.className='status-msg'; }
+    const dataUrl = await resizeImageToDataUrl_(files[i]);
+    const base64 = dataUrl.split(',')[1];
+    const uploadRes = await apiPost('uploadImage', {data:{base64, mimeType:'image/jpeg', filename:namePrefix+'_'+(i+1)+'.jpg'}});
+    if(uploadRes.data && uploadRes.data.url) urls.push(uploadRes.data.url);
+  }
+  return urls;
+}
+
+/* ---------------- বাকিতে পণ্য বিক্রয় (মুরাবাহা পদ্ধতি) ----------------
+   সমিতি একটা পণ্য ক্রয় করে গ্রামের মানুষের কাছে অগ্রিম-ঘোষিত লাভে বিক্রি করে,
+   আর সেই বিক্রয়মূল্যটা কয়েক কিস্তিতে আদায় করা হয়। কোনো সুদ নেই — শুধু
+   ক্রয়মূল্যের সাথে সুনির্দিষ্ট লাভ যোগ করে একটাই নির্দিষ্ট মোট মূল্য ঠিক হয়,
+   যা শুরুতেই গ্রাহককে জানিয়ে দেওয়া হয় (তাই ইসলামিক শরিয়া মোতাবেক হালাল)। */
+
+/* ---------------- POLLS ---------------- */
+function renderPoll(main, role){
+  const isManager = role===ROLES.MANAGER;
+  const polls = [...cache.poll].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  main.innerHTML = `
+    ${isManager? `
+    <div class="card">
+      <h2>নতুন ভোট চালু করুন</h2>
+      <label>প্রশ্ন</label>
+      <input type="text" id="pQ" placeholder="চলতি মাসে ২টি গরু কেনা হবে কি?">
+      <label>অপশনসমূহ (কমা দিয়ে আলাদা করুন)</label>
+      <input type="text" id="pOpts" placeholder="হ্যাঁ, না">
+      <label>গোপনীয়তা</label>
+      <select id="pPrivacy">
+        <option value="গোপন">গোপন ভোট (কে কী ভোট দিলো কেউ দেখতে পারবে না, শুধু মোট ফলাফল দেখা যাবে)</option>
+        <option value="প্রকাশ্য">প্রকাশ্য ভোট (কে কোনটাতে ভোট দিলো সবাই দেখতে পারবে)</option>
+      </select>
+      <button class="btn full gold" id="addPollBtn">ভোট চালু করুন</button>
+      <div class="status-msg" id="pMsg"></div>
+    </div>` : ''}
+    <div class="card"><h2>ভোটসমূহ</h2>
+      <div id="pollList">${polls.length? '' : '<div class="empty">কোনো ভোট নেই</div>'}</div>
+    </div>`;
+  if(isManager){
+    document.getElementById('addPollBtn').addEventListener('click', async ()=>{
+      const q = document.getElementById('pQ').value.trim();
+      const opts = document.getElementById('pOpts').value.trim();
+      const privacy = document.getElementById('pPrivacy').value;
+      const msg = document.getElementById('pMsg');
+      if(!q || !opts){ msg.textContent='প্রশ্ন ও অপশন দিন'; msg.className='status-msg err'; return; }
+      try{
+        await apiPost('add', {sheet:'ভোট', data:{'প্রশ্ন':q,'অপশন':opts,'প্রকাশক':session['নাম'],'স্ট্যাটাস':'চলমান','গোপনীয়তা':privacy}});
+        toast('ভোট চালু হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+  const el = document.getElementById('pollList');
+  polls.forEach(p=>{
+    const options = String(p['অপশন']||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const votes = cache.votes.filter(v=>String(v['ভোট_ID'])===String(p['ID']));
+    const myVote = votes.find(v=>String(v['সদস্য_ID'])===String(session['ID']));
+    const total = votes.length || 1;
+    const isPublic = p['গোপনীয়তা']==='প্রকাশ্য';
+    const canVote = p['স্ট্যাটাস']==='চলমান' && !myVote;
+    const card = document.createElement('div'); card.className='list-item';
+    card.innerHTML = `
+      <div class="li-top">
+        <div class="li-name">${p['প্রশ্ন']}</div>
+        <span class="badge ${p['স্ট্যাটাস']==='চলমান'?'running':'closed'}">${p['স্ট্যাটাস']}</span>
+      </div>
+      <div class="li-meta">প্রকাশক: ${p['প্রকাশক']||''} · ${fmtDate(p['তারিখ'])} · ${isPublic? 'প্রকাশ্য ভোট' : 'গোপন ভোট'}</div>
+      <div class="poll-options" data-opts></div>
+      ${isManager && p['স্ট্যাটাস']==='চলমান'? `<div class="row-actions"><button class="btn small danger" data-act="close">ভোট বন্ধ করুন</button></div>`:''}`;
+    const optsWrap = card.querySelector('[data-opts]');
+    options.forEach(opt=>{
+      const optVotes = votes.filter(v=>v['বাছাই']===opt);
+      const count = optVotes.length;
+      const pct = Math.round((count/total)*100);
+      // প্রকাশ্য ভোট হলে কে কে এই অপশনে ভোট দিয়েছে তাদের নাম দেখানো হয়;
+      // গোপন ভোট হলে শুধু মোট সংখ্যা/শতাংশ দেখানো হয়, কারো নাম নয়
+      const voterNames = isPublic
+        ? optVotes.map(v=>{
+            const u = cache.users.find(u=>String(u['ID'])===String(v['সদস্য_ID']));
+            return u? u['নাম'] : 'অজানা সদস্য';
+          }).join(', ')
+        : '';
+      const div = document.createElement('div'); div.className='poll-opt';
+      div.style.flexDirection='column'; div.style.alignItems='stretch';
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;">
+          <span>${opt} ${myVote && myVote['বাছাই']===opt?'✓':''}</span>
+          <span>${count} ভোট (${pct}%)</span>
+        </div>
+        <div class="bar"><i style="width:${pct}%;"></i></div>
+        ${isPublic && count>0? `<div class="li-meta" style="margin-top:4px;">ভোটদাতা: ${voterNames}</div>` : ''}`;
+      if(canVote){
+        div.style.cursor='pointer';
+        div.addEventListener('click', async ()=>{
+          try{ await apiPost('vote', {data:{'ভোট_ID':p['ID'],'সদস্য_ID':session['ID'],'বাছাই':opt}}); toast('ভোট গৃহীত হয়েছে'); withRefreshThen(()=>renderTab()); }
+          catch(e){ toast(e.message); }
+        });
+      }
+      optsWrap.appendChild(div);
+    });
+    const closeBtn = card.querySelector('[data-act="close"]');
+    if(closeBtn) closeBtn.addEventListener('click', async ()=>{
+      try{ await apiPost('closePoll', {id:p['ID']}); toast('ভোট বন্ধ হয়েছে'); withRefreshThen(()=>renderTab()); }
+      catch(e){ toast(e.message); }
+    });
+    el.appendChild(card);
+  });
+}
+
+/* ---------------- NOTICES ---------------- */
+function renderNotice(main, role){
+  const isManager = role===ROLES.MANAGER;
+  const notices = [...cache.notice].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  main.innerHTML = `
+    ${isManager? `
+    <div class="card">
+      <h2>নতুন নোটিশ প্রকাশ করুন</h2>
+      <label>শিরোনাম</label>
+      <input type="text" id="nTitle">
+      <label>বিস্তারিত</label>
+      <textarea id="nBody" rows="3"></textarea>
+      <div class="check-row"><input type="checkbox" id="nUrgent"><label style="margin:0;">জরুরি নোটিশ হিসেবে চিহ্নিত করুন</label></div>
+      <button class="btn full gold" id="addNoticeBtn">প্রকাশ করুন</button>
+      <div class="status-msg" id="nMsg"></div>
+    </div>` : ''}
+    <div id="noticeList">${notices.length? '' : '<div class="empty">কোনো নোটিশ নেই</div>'}</div>`;
+  if(isManager){
+    document.getElementById('addNoticeBtn').addEventListener('click', async ()=>{
+      const title = document.getElementById('nTitle').value.trim();
+      const body = document.getElementById('nBody').value.trim();
+      const urgent = document.getElementById('nUrgent').checked;
+      const msg = document.getElementById('nMsg');
+      if(!title || !body){ msg.textContent='শিরোনাম ও বিস্তারিত দিন'; msg.className='status-msg err'; return; }
+      try{
+        await apiPost('add', {sheet:'নোটিশ', data:{'শিরোনাম':title,'বিস্তারিত':body,'তারিখ':new Date().toISOString().slice(0,10),'প্রকাশক':session['নাম'],'জরুরি':urgent}});
+        toast('নোটিশ প্রকাশিত হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+  const el = document.getElementById('noticeList');
+  notices.forEach(n=>{
+    const div = document.createElement('div'); div.className='card notice-card ' + (String(n['জরুরি'])==='true'?'urgent':'');
+    div.innerHTML = `<h3>${n['শিরোনাম']}</h3><p>${n['বিস্তারিত']}</p><time>${fmtDate(n['তারিখ'])} · ${n['প্রকাশক']||''}</time>
+      ${isManager? `<div class="row-actions"><button class="btn small danger" data-act="delNotice">মুছে ফেলুন</button></div>`:''}`;
+    if(isManager){
+      div.querySelector('[data-act="delNotice"]').addEventListener('click', async ()=>{
+        if(!confirm('এই নোটিশটি মুছে ফেলতে চান?')) return;
+        try{ await apiPost('delete', {sheet:'নোটিশ', id:n['ID']}); toast('নোটিশ মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+    }
+    el.appendChild(div);
+  });
+}
+
+/* ---------------- নিয়মাবলী (সংগঠনের গঠনতন্ত্র/নীতিমালা) ----------------
+   সবাই এখানে সব নিয়ম পড়তে পারবেন। নতুন নিয়ম যোগ করা বা কোনো নিয়ম মুছে
+   ফেলার ফর্ম/বাটন শুধু ম্যানেজারের জন্যই দেখানো হয় — এবং সার্ভার সাইডেও
+   (ROLE_GUARD['নিয়মাবলী']) এটা নিশ্চিত করা আছে, তাই ফ্রন্টএন্ড এড়িয়ে সরাসরি
+   API কল করলেও অন্য কেউ যোগ/মুছে ফেলতে পারবেন না। */
+function renderRules(main, role){
+  const isManager = role===ROLES.MANAGER;
+  const rules = [...cache.rules].sort((a,b)=>Number(a['ক্রম']||0)-Number(b['ক্রম']||0));
+  const groups = {};
+  const order = [];
+  rules.forEach(r=>{
+    const cat = r['বিভাগ'] || 'সাধারণ';
+    if(!groups[cat]){ groups[cat] = []; order.push(cat); }
+    groups[cat].push(r);
+  });
+
+  main.innerHTML = `
+    <div class="principle-box">📜 সমিতির গঠনতন্ত্র ও নিয়মকানুন — সকল সদস্যের জন্য উন্মুক্ত</div>
+    ${isManager? `
+    <div class="card">
+      <h2>নতুন নিয়ম যোগ করুন</h2>
+      <label>বিভাগ</label>
+      <input type="text" id="rCat" placeholder="যেমন: আয়ের উৎস" value="সাধারণ">
+      <label>নিয়মের বিবরণ</label>
+      <textarea id="rBody" rows="3" placeholder="নিয়মের সম্পূর্ণ বিবরণ লিখুন"></textarea>
+      <button class="btn full gold" id="addRuleBtn">যোগ করুন</button>
+      <div class="status-msg" id="rMsg"></div>
+    </div>` : ''}
+    <div id="rulesList">${rules.length? '' : '<div class="empty">কোনো নিয়ম এখনও যোগ করা হয়নি</div>'}</div>`;
+
+  if(isManager){
+    document.getElementById('addRuleBtn').addEventListener('click', async ()=>{
+      const cat = document.getElementById('rCat').value.trim() || 'সাধারণ';
+      const body = document.getElementById('rBody').value.trim();
+      const msg = document.getElementById('rMsg');
+      if(!body){ msg.textContent='নিয়মের বিবরণ লিখুন'; msg.className='status-msg err'; return; }
+      const nextOrder = rules.reduce((m,r)=>Math.max(m, Number(r['ক্রম']||0)), 0) + 1;
+      try{
+        await apiPost('add', {sheet:'নিয়মাবলী', data:{
+          'ক্রম': nextOrder, 'বিভাগ': cat, 'বিষয়বস্তু': body,
+          'সংযোজনকারী': session['নাম'], 'তারিখ': new Date().toISOString().slice(0,10)
+        }});
+        toast('নিয়ম যোগ করা হয়েছে'); withRefreshThen(()=>renderTab());
+      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+    });
+  }
+
+  const el = document.getElementById('rulesList');
+  order.forEach(cat=>{
+    const catHead = document.createElement('div');
+    catHead.style.cssText = 'font-family:"Baloo Da 2",sans-serif;font-size:14px;color:var(--brass);margin:14px 2px 6px;';
+    catHead.textContent = cat;
+    el.appendChild(catHead);
+    groups[cat].forEach(r=>{
+      const div = document.createElement('div'); div.className='card';
+      div.style.cssText='padding:12px 14px;margin-bottom:8px;';
+      div.innerHTML = `
+        <div style="font-size:13.5px;line-height:1.65;">${r['ক্রম']}. ${r['বিষয়বস্তু']}</div>
+        ${isManager? `<div class="row-actions"><button class="btn small danger" data-act="delRule">মুছে ফেলুন</button></div>`:''}`;
+      if(isManager){
+        div.querySelector('[data-act="delRule"]').addEventListener('click', async ()=>{
+          if(!confirm('এই নিয়মটি মুছে ফেলতে চান?')) return;
+          try{ await apiPost('delete', {sheet:'নিয়মাবলী', id:r['ID']}); toast('নিয়ম মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
+          catch(e){ toast(e.message); }
+        });
+      }
+      el.appendChild(div);
+    });
+  });
+}
+
+/* ---------------- MEMBER: home ---------------- */
+function renderHome(main){
+  const my = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(session['ID']));
+  const myVerified = my.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড');
+  const totalPaid = myVerified.reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const month = currentMonth();
+  const paidThisMonth = myVerified.some(c=>String(c['মাস']).slice(0,7)===month);
+  const history = [...my].sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+
+  main.innerHTML = `
+    <div class="summary-bar">
+      <div class="summary-chip"><div class="lbl">আমার মোট জমা</div><div class="val">৳${money(totalPaid)}</div></div>
+      <div class="summary-chip"><div class="lbl">এ মাসের চাঁদা</div><div class="val" style="color:${paidThisMonth?'var(--sage)':'var(--terracotta)'}">${paidThisMonth?'জমা হয়েছে':'বাকি আছে'}</div></div>
+    </div>
+    ${orgSummaryBarHtml_(session['রোল'])}
+    <div class="card">
+      <h2>এ মাসের চাঁদা জমা দিন <small>(${month})</small></h2>
+      <label>পরিমাণ (৳)</label>
+      <input type="number" id="cAmt" value="500">
+      <div class="row2">
+        <div><label>মাধ্যম</label>
+          <select id="cMethod"><option>বিকাশ</option><option>নগদ</option><option>রকেট</option><option>হাতে হাতে</option></select>
+        </div>
+        <div><label>ট্রানজেকশন আইডি (ঐচ্ছিক)</label><input type="text" id="cTx"></div>
+      </div>
+      <button class="btn full gold" id="submitContribBtn">রিকুয়েস্ট পাঠান</button>
+      <div class="status-msg" id="cMsg"></div>
+    </div>
+    <div class="card">
+      <h2>আমার জমার ইতিহাস</h2>
+      <div id="myHistory">${history.length? '' : '<div class="empty">এখনো কোনো জমা নেই</div>'}</div>
+    </div>`;
+  bindOrgSummaryNav_();
+
+  document.getElementById('submitContribBtn').addEventListener('click', async ()=>{
+    const amt = document.getElementById('cAmt').value;
+    const method = document.getElementById('cMethod').value;
+    const tx = document.getElementById('cTx').value.trim();
+    const msg = document.getElementById('cMsg');
+    if(!amt){ msg.textContent='পরিমাণ দিন'; msg.className='status-msg err'; return; }
+    try{
+      await apiPost('submitContribution', {data:{
+        'সদস্য_ID':session['ID'],'সদস্যের_নাম':session['নাম'],'মাস':month,
+        'পরিমাণ':amt,'মাধ্যম':method,'ট্রানজেকশন_আইডি':tx
+      }});
+      toast('রিকুয়েস্ট পাঠানো হয়েছে, ক্যাশিয়ারের যাচাইয়ের অপেক্ষায় থাকুন');
+      withRefreshThen(()=>renderTab());
+    }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
+  });
+
+  const el = document.getElementById('myHistory');
+  history.forEach(c=>{
+    const row = document.createElement('div'); row.className='list-item';
+    const isV = c['স্ট্যাটাস']==='ভেরিফাইড';
+    const isR = c['স্ট্যাটাস']==='বাতিল';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${c['মাস']}</div><div class="li-meta">${c['মাধ্যম']||''} · ${fmtDate(c['জমার_তারিখ'])}</div></div>
+        <div style="text-align:right;">
+          <div class="amt ${isV?'pos':''}">৳${money(c['পরিমাণ'])}</div>
+          <span class="badge ${isV?'verified':(isR?'rejected':'pending')}">${c['স্ট্যাটাস']}</span>
+        </div>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+
+/* ---------------- SETTINGS ---------------- */
+function renderSettings(main){
+  const isManager = session['রোল']===ROLES.MANAGER;
+  main.innerHTML = `
+    <div class="principle-box">
+      🌿 আমাদের নীতি: সমিতির সব ইনভেস্টমেন্ট সম্পূর্ণ সুদমুক্ত এবং লাভ-ক্ষতির স্বচ্ছ হিসাব সব সদস্যের জন্য উন্মুক্ত।
+    </div>
+    <div class="card" id="rulesLinkCard" style="cursor:pointer;">
+      <h2>📜 সংগঠনের নিয়মাবলী</h2>
+      <div class="li-meta">সমিতির গঠনতন্ত্র ও নিয়মকানুন — সকল সদস্যের জন্য উন্মুক্ত${isManager? ' (যোগ/মুছে ফেলার ক্ষমতা আপনার আছে)':''}</div>
+    </div>
+    <div class="card">
+      <h2>প্রোফাইল</h2>
+      <div class="li-meta">নাম: ${session['নাম']}</div>
+      <div class="li-meta">ইউজারনেম: ${session['ইউজারনেম']}</div>
+      <div class="li-meta">ফোন: ${session['ফোন']}</div>
+      <div class="li-meta">রোল: ${ROLE_LABEL[session['রোল']]}</div>
+    </div>
+    <div class="card">
+      <h2>Google Sheet সংযোগ</h2>
+      <label>Apps Script Web App URL</label>
+      <input type="text" id="urlInput2" value="${API_URL||''}">
+      <button class="btn" id="saveUrl2">সংরক্ষণ করুন</button>
+      <div class="status-msg" id="setMsg2"></div>
+    </div>
+    <button class="btn danger full" id="logoutBtn2">লগআউট করুন</button>`;
+  document.getElementById('rulesLinkCard').addEventListener('click', ()=>{ activeTab='rules'; renderShell(); });
+  document.getElementById('saveUrl2').addEventListener('click', async ()=>{
+    const url = document.getElementById('urlInput2').value.trim();
+    const msg = document.getElementById('setMsg2');
+    if(!url){ msg.textContent='URL দিন'; msg.className='status-msg err'; return; }
+    await saveApiUrl(url);
+    try{ await refreshAll(); msg.textContent='সংযুক্ত হয়েছে ✓'; msg.className='status-msg ok'; }
+    catch(e){ msg.textContent='সংযোগ ব্যর্থ'; msg.className='status-msg err'; }
+  });
+  document.getElementById('logoutBtn2').addEventListener('click', async ()=>{ await clearSession(); render(); });
+}
+
+/* ---------------- INIT ---------------- */
+
+/* ---------------- গ্লোবাল ক্লিক গার্ড ----------------
+   সাইটের সব বাটন (.btn) ও ভোটের অপশনে (.poll-opt) একসাথে প্রযোজ্য —
+   আলাদা করে প্রতিটা বাটনের কোডে হাত দেওয়ার দরকার নেই।
+   ১) ক্লিক করলে সাথে সাথে একটা ছোট প্রেস ইফেক্ট দেখা যায় (CSS :active দিয়ে)।
+   ২) একই বাটনে/অপশনে দ্রুত বারবার ক্লিক করলে (ডাবল-ট্যাপ, ধীর নেটওয়ার্কে
+      বিরক্ত হয়ে আবার চাপ দেওয়া ইত্যাদি কারণে) — একই সাবমিট/অ্যাকশন
+      একাধিকবার না হয়ে যায়, তার জন্য ক্লিকের সাথে সাথেই বাটন/অপশনটা
+      সাময়িকভাবে (দেড় সেকেন্ড) নিষ্ক্রিয় করে দেওয়া হয়। সফল অ্যাকশনের
+      ক্ষেত্রে সাধারণত পুরো তালিকা renderTab() দিয়ে নতুন করে আঁকা হয় বলে
+      পুরনো বাটনটাই DOM থেকে বদলে যায়; ভ্যালিডেশন এরর বা ব্যর্থ হলে
+      নির্দিষ্ট সময় পর বাটনটা নিজে থেকেই আবার সচল হয়ে যায়।
+      এটা ভোটে একাধিকবার ক্লিক করে একাধিক ভোট পাঠানো ঠেকাতেও সাহায্য করে —
+      চূড়ান্তভাবে একবারের বেশি ভোট গ্রহণ না করাটা অবশ্য সার্ভার সাইডেও
+      (castVote_ ফাংশনে) নিশ্চিত করা আছে। */
+const CLICK_GUARD_COOLDOWN_MS = 1500;
+document.addEventListener('click', function(ev){
+  const el = ev.target.closest('.btn, .poll-opt');
+  if(!el) return;
+  if(el.disabled || el.classList.contains('busy')){
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    return;
+  }
+  if('disabled' in el) el.disabled = true;
+  el.classList.add('busy');
+  setTimeout(()=>{
+    if('disabled' in el) el.disabled = false;
+    el.classList.remove('busy');
+  }, CLICK_GUARD_COOLDOWN_MS);
+}, true);
+
+/* PWA: সার্ভিস ওয়ার্কার রেজিস্টার করলেই ব্রাউজার অ্যাপটাকে "ইনস্টলযোগ্য" ধরে
+   এবং ফোনে "Add to Home Screen" অপশন দেখায়। HTTPS ছাড়া (বা localhost ছাড়া)
+   সার্ভিস ওয়ার্কার কাজ করে না — তাই index.html-টা অবশ্যই কোনো HTTPS হোস্টিং
+   থেকে খুলতে হবে (নিচের রিডমি নোট দ্রষ্টব্য)। */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+
+(async function init(){
+  await loadConfig();
+  if(API_URL){ try{ await refreshAll(); }catch(e){} }
+  render();
+})();
+</script>
+</body>
+</html>

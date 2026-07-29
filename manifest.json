@@ -1,0 +1,32 @@
+{
+  "name": "বন্ধু ঐক্য সমবায় সমিতি",
+  "short_name": "বন্ধু ঐক্য",
+  "description": "বন্ধু ঐক্য সমবায় সমিতির সদস্য, চাঁদা, ইনভেস্টমেন্ট ও হিসাবরক্ষণ অ্যাপ",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F3EA",
+  "theme_color": "#0B3D3B",
+  "lang": "bn",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
