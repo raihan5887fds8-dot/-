@@ -7,15 +7,6 @@
 
 <meta name="theme-color" content="#0B3D3B">
 
-<!-- PWA: "Add to Home Screen" করলে যেন নিজস্ব আইকন-সহ স্বতন্ত্র অ্যাপের মতো খোলে -->
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="বন্ধু ঐক্য">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -35,6 +26,21 @@
   --text:#2B2A22;
   --muted:#847E6C;
 }
+html[data-theme="dark"]{
+  --bg:#12181A;
+  --card:#1E2628;
+  --rule:#333F42;
+  --text:#E8E4D8;
+  --muted:#9BA3A0;
+  --brass-soft:#EFD3B4;
+  --sage-soft:#22332A;
+  --terracotta-soft:#3A2620;
+}
+html[data-theme="dark"] body{ background:var(--bg); }
+html[data-theme="dark"] input[type=text],html[data-theme="dark"] input[type=number],html[data-theme="dark"] input[type=date],html[data-theme="dark"] input[type=tel],html[data-theme="dark"] input[type=password],html[data-theme="dark"] select,html[data-theme="dark"] textarea{
+  background:#141A1C; color:var(--text); border-color:var(--rule);
+}
+html[data-theme="dark"] .list-item{ background:transparent; }
 *{box-sizing:border-box;}
 body{
   margin:0;
@@ -111,9 +117,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brass);outline-o
   display:inline-block;background:var(--ink);color:#fff;border:none;padding:10px 16px;
   border-radius:6px;font-weight:600;font-size:13.5px;cursor:pointer;margin-top:12px;
   font-family:'Hind Siliguri',sans-serif;
-  transition:transform .1s ease, box-shadow .1s ease, opacity .1s ease;
 }
-.btn:active:not(:disabled){transform:scale(0.95);box-shadow:inset 0 1px 4px rgba(0,0,0,.25);}
 .btn:hover{background:var(--ink-deep);}
 .btn.ghost{background:none;border:1px solid var(--rule);color:var(--text);}
 .btn.danger{background:var(--terracotta);}
@@ -162,10 +166,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--brass);outline-o
 .poll-opt{
   border:1px solid var(--rule);border-radius:6px;padding:9px 11px;cursor:pointer;font-size:13.5px;
   display:flex;justify-content:space-between;background:#fff;
-  transition:transform .1s ease, opacity .1s ease;
 }
-.poll-opt:active{transform:scale(0.97);}
-.poll-opt.busy{pointer-events:none;opacity:.6;}
 .poll-opt:hover{border-color:var(--brass);}
 .poll-opt .bar{height:5px;border-radius:3px;background:var(--sage-soft);margin-top:6px;overflow:hidden;}
 .poll-opt .bar i{display:block;height:100%;background:var(--sage);}
@@ -201,9 +202,16 @@ nav.tabs button{
   flex:1;background:none;border:none;color:rgba(243,239,225,.5);
   font-family:'Hind Siliguri',sans-serif;font-size:11px;font-weight:600;
   padding:9px 2px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;
+  position:relative;
 }
 nav.tabs button .ic{font-size:16px;}
 nav.tabs button.active{color:var(--brass-soft);}
+.tab-badge{
+  position:absolute;top:3px;right:calc(50% - 22px);
+  background:#c0392b;color:#fff;font-size:9.5px;font-weight:700;
+  min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  padding:0 3px;line-height:1;
+}
 
 .toast{
   position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);
@@ -219,6 +227,29 @@ nav.tabs button.active{color:var(--brass-soft);}
 <div class="app" id="app"></div>
 <div class="toast" id="toast"></div>
 
+<!-- ===== Firebase SDK (compat ভার্সন — সাধারণ <script> ট্যাগ দিয়ে ব্যবহারযোগ্য) ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+
+<script>
+/* ===== Firebase কনফিগারেশন ও সংযোগ পরীক্ষা ===== */
+const firebaseConfig = {
+  apiKey: "AIzaSyDtsR3AbzVV-1SLMWoU7oh35qz_X6sTMbc",
+  authDomain: "bondhu-oikko-somobay-6f217.firebaseapp.com",
+  databaseURL: "https://bondhu-oikko-somobay-6f217-default-rtdb.firebaseio.com",
+  projectId: "bondhu-oikko-somobay-6f217",
+  storageBucket: "bondhu-oikko-somobay-6f217.firebasestorage.app",
+  messagingSenderId: "59010490375",
+  appId: "1:59010490375:web:e185fa31eead97f9a0caa2"
+};
+firebase.initializeApp(firebaseConfig);
+const fbDb = firebase.database();
+const fbAuth = firebase.auth();
+</script>
+
 <script>
 /* =========================================================================
    বন্ধু ঐক্য সমবায় সমিতি — Frontend
@@ -229,9 +260,19 @@ const TAGLINE = 'একতা, সমৃদ্ধি ও সুদমুক্�
 const ROLES = { MANAGER:'ম্যানেজার', CASHIER:'ক্যাশিয়ার', FIELD:'ফিল্ড_পরিচালক', MEMBER:'সদস্য' };
 const ROLE_LABEL = { 'ম্যানেজার':'ম্যানেজার', 'ক্যাশিয়ার':'ক্যাশিয়ার', 'ফিল্ড_পরিচালক':'ফিল্ড পরিচালক', 'সদস্য':'সদস্য' };
 
-let API_URL = null;
 let session = null; // logged-in user object
-let cache = { users:[], contrib:[], invest:[], investUpdate:[], investInstallment:[], custodians:[], babies:[], babyUpdate:[], expense:[], notice:[], poll:[], votes:[], transaction:[], rules:[] };
+let cache = { users:[], contrib:[], invest:[], investUpdate:[], investInstallment:[], custodians:[], babies:[], babyUpdate:[], expense:[], notice:[], poll:[], votes:[], transaction:[], resetReq:[], activityLog:[], dividend:[], withdrawal:[] };
+let searchQuery = { members:'', invest:'', transaction:'', activityLog:'' };
+let sortOrder = { members:'status', invest:'updated', transaction:'date_desc' };
+let notifyEnabled = false;
+let darkMode = false;
+function applyTheme_(){
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+}
+let chartContribInstance = null;
+let chartInvestInstance = null;
+let isOffline = (typeof navigator !== 'undefined' && 'onLine' in navigator) ? !navigator.onLine : false;
+let lastSyncAt = null;
 let activeTab = null;
 let focusInvestId = null; // "লাভ/ক্ষতি" পেজ থেকে কোনো নির্দিষ্ট ইনভেস্টমেন্টে সরাসরি যাওয়ার জন্য
 let prefillTxn = null; // {type:'কিস্তি আদায়'|'ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা', investId} — ইনভেস্ট ট্যাব থেকে "লেনদেন"-এ সরাসরি একটা নির্দিষ্ট ইনভেস্টমেন্ট প্রি-সিলেক্ট করে পাঠানোর জন্য
@@ -256,13 +297,8 @@ async function localSet(key, value){
   }catch(e){}
 }
 
-async function loadConfig(){
-  API_URL = await localGet('apiUrl', null);
-  session = await localGet('session', null);
-}
-async function saveApiUrl(url){ await localSet('apiUrl', url); API_URL = url; }
 async function saveSession(user){ await localSet('session', user); session = user; }
-async function clearSession(){ await localSet('session', null); session = null; }
+async function clearSession(){ stopRealtimeSync(); await localSet('session', null); session = null; try{ await fbAuth.signOut(); }catch(e){} }
 
 function toast(msg){
   const t = document.getElementById('toast');
@@ -270,39 +306,659 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'), 2400);
 }
 
-/* ---------- API ---------- */
+/* সাধারণ alert()-এ ক্লিকযোগ্য লিংক দেওয়া যায় না, তাই এই ছোট মডালটা ব্যবহার করা হয় */
+function showInfoModal(title, bodyHtml){
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;max-width:420px;width:100%;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,0.35);">
+      <h3 style="margin:0 0 12px;font-size:16px;color:#0f4c3a;">${title}</h3>
+      <div style="font-size:13.5px;line-height:1.8;color:#333;">${bodyHtml}</div>
+      <button id="closeInfoModal" style="margin-top:18px;width:100%;padding:11px;border:none;border-radius:9px;background:#0f4c3a;color:#fff;font-size:14px;cursor:pointer;">বুঝেছি, বন্ধ করুন</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#closeInfoModal').addEventListener('click', ()=> overlay.remove());
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.remove(); });
+}
+
+function showNetBalanceHistoryModal_(){
+  const myId = session['ID'];
+  const myContribTotal = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(myId) && c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const myDividendsChrono = cache.dividend.filter(d=>String(d['সদস্য_ID'])===String(myId)).sort((a,b)=>String(a['তারিখ']).localeCompare(String(b['তারিখ'])));
+  let running = myContribTotal;
+  const rowsArr = [`<tr><td>মোট চাঁদা (ভিত্তি)</td><td style="text-align:right;font-weight:700;">৳${money(myContribTotal)}</td></tr>`];
+  myDividendsChrono.forEach(d=>{
+    const amt = Number(d['পরিমাণ']||0);
+    const isSettledElsewhere = d['ব্যবস্থা']==='রি-ইনভেস্ট_সম্পন্ন' || d['ব্যবস্থা']==='উত্তোলিত';
+    if(!isSettledElsewhere) running += amt; // রি-ইনভেস্ট/উত্তোলন সম্পন্ন হয়ে গেলে সেটা আর এখানে গোনা হবে না, দ্বৈত-গণনা এড়াতে
+    let actionHtml = '';
+    if(amt > 0){
+      if(!d['ব্যবস্থা']){
+        actionHtml = `<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn small" data-reinvest="${d['ID']}">রি-ইনভেস্ট করুন</button>
+          <button class="btn small danger" data-withdraw="${d['ID']}">উত্তোলন করুন</button>
+        </div>`;
+      } else if(d['ব্যবস্থা']==='রি-ইনভেস্ট_পেন্ডিং'){
+        actionHtml = `<div class="li-meta" style="color:#a67c2e;">⏳ "${d['ইনভেস্টমেন্টের_শিরোনাম']||''}" থেকে পাওয়া লভ্যাংশ চাঁদা হিসেবে জমার আবেদন পেন্ডিং (ক্যাশিয়ারের অনুমোদনের অপেক্ষায়)</div>`;
+      } else if(d['ব্যবস্থা']==='রি-ইনভেস্ট_সম্পন্ন'){
+        actionHtml = `<div class="li-meta" style="color:#2e7d5b;">✓ "${d['ইনভেস্টমেন্টের_শিরোনাম']||''}" থেকে পাওয়া লভ্যাংশ চাঁদা হিসেবে জমা করা হয়েছে</div>`;
+      } else if(d['ব্যবস্থা']==='উত্তোলন_পেন্ডিং'){
+        actionHtml = `<div class="li-meta" style="color:#a67c2e;">⏳ "${d['ইনভেস্টমেন্টের_শিরোনাম']||''}" থেকে পাওয়া লভ্যাংশ উত্তোলনের আবেদন পেন্ডিং (ক্যাশিয়ারের অনুমোদনের অপেক্ষায়)</div>`;
+      } else if(d['ব্যবস্থা']==='উত্তোলিত'){
+        actionHtml = `<div class="li-meta" style="color:#2e7d5b;">✓ "${d['ইনভেস্টমেন্টের_শিরোনাম']||''}" থেকে পাওয়া লভ্যাংশ হাতে নগদ উত্তোলন করা হয়েছে</div>`;
+      }
+    }
+    rowsArr.push(`<tr>
+      <td>${d['ইনভেস্টমেন্টের_শিরোনাম']||''}<div class="li-meta">${fmtDate(d['তারিখ'])}</div>${actionHtml}</td>
+      <td style="text-align:right;font-weight:700;color:${amt>=0?'#2e7d5b':'#b3402a'};white-space:nowrap;${isSettledElsewhere?'opacity:.5;':''}">${amt>=0?'+':''}৳${money(amt)}</td>
+    </tr>`);
+  });
+  rowsArr.push(`<tr style="border-top:2px solid #333;"><td style="font-weight:800;padding-top:8px;">নিট ব্যালেন্স</td><td style="text-align:right;font-weight:800;padding-top:8px;color:${running>=0?'#2e7d5b':'#b3402a'};">৳${money(running)}</td></tr>`);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'netBalHistOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,0.35);">
+      <h3 style="margin:0 0 12px;font-size:16px;color:#0f4c3a;">নিট ব্যালেন্স — বিস্তারিত ইতিহাস</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;">${rowsArr.join('')}</table>
+      <p style="font-size:11px;color:#888;margin-top:10px;">লাভের অংশ পেলে আপনি চাইলে সেটা "রি-ইনভেস্ট" (চাঁদা হিসেবে জমা) বা "উত্তোলন" (হাতে নগদ) করার আবেদন করতে পারবেন — দুটোই ক্যাশিয়ারের অনুমোদনের পর কার্যকর হবে। ক্ষতির অংশ স্বয়ংক্রিয়ভাবেই বিয়োগ হয়ে গেছে, এখানে কোনো পদক্ষেপ নেওয়ার দরকার নেই।</p>
+      <button id="closeNetBalModal" style="margin-top:14px;width:100%;padding:11px;border:none;border-radius:9px;background:#0f4c3a;color:#fff;font-size:14px;cursor:pointer;">বন্ধ করুন</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#closeNetBalModal').addEventListener('click', ()=> overlay.remove());
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelectorAll('[data-reinvest]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      btn.disabled = true;
+      try{
+        await apiPost('requestDividendReinvest', {id: btn.dataset.reinvest});
+        toast('রি-ইনভেস্টের আবেদন পাঠানো হয়েছে');
+        overlay.remove();
+        withRefreshThen(()=>renderTab());
+      }catch(e){ toast(e.message); btn.disabled=false; }
+    });
+  });
+  overlay.querySelectorAll('[data-withdraw]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if(!confirm('উত্তোলনের আবেদন পাঠাতে চান? ক্যাশিয়ার অনুমোদন দিলে হাতে নগদ বুঝিয়ে দেওয়া হবে।')) return;
+      btn.disabled = true;
+      try{
+        await apiPost('requestDividendWithdraw', {id: btn.dataset.withdraw});
+        toast('উত্তোলনের আবেদন পাঠানো হয়েছে');
+        overlay.remove();
+        withRefreshThen(()=>renderTab());
+      }catch(e){ toast(e.message); btn.disabled=false; }
+    });
+  });
+}
+
+function showDistributionModal_(iv){
+  const dist = iv['বণ্টন'] || {};
+  const pl = Number(iv['লাভ_ক্ষতি']||0);
+  const ids = Object.keys(dist);
+  const excludedIds = Array.isArray(iv['বাদ_পড়া_সদস্য']) ? iv['বাদ_পড়া_সদস্য'] : [];
+  let rowsHtml = '';
+  if(!ids.length){
+    rowsHtml = '<tr><td colspan="3" style="text-align:center;color:#888;">এই ইনভেস্টমেন্টের জন্য বণ্টন হিসাব করা হয়নি (পুরনো এন্ট্রি)</td></tr>';
+  } else {
+    ids.sort((a,b)=> (dist[b]['শতাংশ']||0) - (dist[a]['শতাংশ']||0));
+    rowsHtml = ids.map(id=>{
+      const d = dist[id];
+      const share = (Number(d['শতাংশ']||0)/100) * pl;
+      return `<tr>
+        <td>${d['নাম']}</td>
+        <td style="text-align:right;">${(d['শতাংশ']||0).toFixed(2)}%</td>
+        <td style="text-align:right;color:${share>=0?'#2e7d5b':'#b3402a'};font-weight:600;">৳${money(share)}</td>
+      </tr>`;
+    }).join('');
+  }
+  const excludedNames = excludedIds.map(id=>{
+    const u = cache.users.find(x=>String(x['ID'])===String(id));
+    return u ? u['নাম'] : id;
+  });
+  showInfoModal('% লাভ/ক্ষতি বণ্টন — '+iv['শিরোনাম'], `
+    <p style="margin:0 0 8px;">মোট লাভ/ক্ষতি: <b style="color:${pl>=0?'#2e7d5b':'#b3402a'};">৳${money(pl)}</b></p>
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+      <tr style="background:#f0ece0;"><th style="text-align:left;padding:6px;">সদস্য</th><th style="text-align:right;padding:6px;">শতাংশ</th><th style="text-align:right;padding:6px;">ভাগ (৳)</th></tr>
+      ${rowsHtml}
+    </table>
+    ${excludedNames.length? `<p style="margin-top:10px;font-size:12px;color:#888;">বাদ দেওয়া হয়েছে: ${excludedNames.join(', ')}</p>` : ''}
+    <p style="margin-top:10px;font-size:11.5px;color:#888;">* শতাংশ ইনভেস্টমেন্ট তৈরির সময়কার চাঁদার অনুপাত অনুযায়ী স্থায়ীভাবে নির্ধারিত; টাকার ভাগ বর্তমান মোট লাভ/ক্ষতি অনুযায়ী পরিবর্তিত হতে থাকে।</p>
+  `);
+}
+
+/* ---------- Firebase sheet-name constants (Bangla নাম-ই RTDB নোডের নাম হিসেবে ব্যবহৃত হচ্ছে) ---------- */
+const SHEETS = {
+  USERS:'ইউজার', USER_INDEX:'ইউজার_uid_সূচক', RESET_REQ:'পাসওয়ার্ড_রিসেট_অনুরোধ', ACTIVITY_LOG:'অ্যাক্টিভিটি_লগ',
+  DIVIDEND:'লভ্যাংশ', WITHDRAWAL:'উত্তোলন_আবেদন',
+  CONTRIB:'চাঁদা', INVEST:'ইনভেস্টমেন্ট', INVEST_UPDATE:'ইনভেস্টমেন্ট_আপডেট',
+  INVEST_INSTALLMENT:'ইনভেস্টমেন্ট_কিস্তি', CUSTODIAN:'আদাল', BABY:'বাচ্চা', BABY_UPDATE:'বাচ্চা_আপডেট',
+  EXPENSE:'খরচ', NOTICE:'নোটিশ', POLL:'ভোট', VOTES:'ভোট_ফলাফল', TRANSACTION:'লেনদেন'
+};
+
+/* ---------------- অ্যাক্টিভিটি লগ (অডিট ট্রেইল) ---------------- */
+const ACTION_LABEL = {
+  approveUser:'সদস্য অনুমোদন', rejectUser:'সদস্য বাতিল', changeRole:'রোল পরিবর্তন',
+  submitContribution:'চাঁদা জমা', verifyContribution:'চাঁদা যাচাই', rejectContribution:'চাঁদা বাতিল',
+  vote:'ভোট প্রদান', closePoll:'ভোট বন্ধ', add:'নতুন এন্ট্রি', edit:'এন্ট্রি সম্পাদনা', delete:'এন্ট্রি মুছে ফেলা',
+  addInvestment:'নতুন ইনভেস্টমেন্ট', addInstallment:'কিস্তি জমা',
+  submitTransaction:'লেনদেন সাবমিট', verifyTransaction:'লেনদেন যাচাই', rejectTransaction:'লেনদেন বাতিল',
+  reviseTransaction:'লেনদেন সংশোধন', deleteTransaction:'লেনদেন মুছে ফেলা',
+  profileEdit:'প্রোফাইল সম্পাদনা', passwordChange:'পাসওয়ার্ড পরিবর্তন',
+  passwordResetApprove:'পাসওয়ার্ড রিসেট অনুমোদন', passwordResetDismiss:'পাসওয়ার্ড রিসেট রিকুয়েস্ট উড়িয়ে দেওয়া',
+  exportExcel:'Excel এক্সপোর্ট', printReport:'প্রিন্ট/PDF রিপোর্ট', annualReport:'বার্ষিক প্রতিবেদন', memberReport:'সদস্যের রিপোর্ট',
+  distributeDividend:'লভ্যাংশ বণ্টন',
+  verifyInvestment:'ইনভেস্টমেন্ট অনুমোদন', rejectInvestment:'ইনভেস্টমেন্ট প্রত্যাখ্যান',
+  requestDividendReinvest:'লভ্যাংশ রি-ইনভেস্ট আবেদন', requestDividendWithdraw:'লভ্যাংশ উত্তোলন আবেদন',
+  approveWithdrawal:'উত্তোলন অনুমোদন', rejectWithdrawal:'উত্তোলন বাতিল'
+};
+async function logActivity_(action, extra, message){
+  try{
+    let label = ACTION_LABEL[action] || action;
+    if(extra) label += ' — ' + extra;
+    await fbDb.ref(SHEETS.ACTIVITY_LOG).push({
+      'কর্তা': session ? session['নাম'] : 'অজানা',
+      'রোল': session ? session['রোল'] : '',
+      'কাজ': label,
+      'বিস্তারিত': message || '',
+      'তারিখ': Date.now()
+    });
+  }catch(e){ /* লগ ব্যর্থ হলেও মূল কাজ যেন আটকে না যায় */ }
+}
+
+/* ---------- Firebase-ভিত্তিক জেনেরিক CRUD হেল্পার ---------- */
+async function fbAdd_(sheetName, obj){
+  const ref = fbDb.ref(sheetName).push();
+  const id = ref.key;
+  await ref.set(Object.assign({}, obj, {ID:id}));
+  return id;
+}
+async function fbUpdate_(sheetName, id, patch){
+  await fbDb.ref(sheetName+'/'+id).update(patch);
+}
+async function fbGetAll_(sheetName){
+  const snap = await fbDb.ref(sheetName).get();
+  const val = snap.val();
+  if(!val) return [];
+  return Object.keys(val).map(k=>{
+    const obj = Object.assign({}, val[k]);
+    obj.ID = k; // প্রতিটা রেকর্ডের আসল Firebase key-ই সবসময় ID হিসেবে ব্যবহৃত হবে
+    return obj;
+  });
+}
+async function touchRowTimestamp_(sheetName, id){
+  if(!id) return;
+  try{ await fbUpdate_(sheetName, id, {'সর্বশেষ_আপডেট': Date.now()}); }catch(e){}
+}
+
+/* ---------- API (Firebase সংস্করণ, আগের fetch()-ভিত্তিক apiGet/apiPost-এর সমতুল্য) ---------- */
 async function apiGet(sheet){
-  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
-  let res;
-  try{ res = await fetch(API_URL + '?sheet=' + encodeURIComponent(sheet)); }
-  catch(e){ throw new Error('সংযোগ ব্যর্থ (ইন্টারনেট/URL চেক করুন)'); }
-  let json;
-  try{ json = await res.json(); }
-  catch(e){ throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি — Web App "Anyone" এক্সেসে Deploy হয়েছে কিনা চেক করুন'); }
-  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
-  return json.data;
+  try{ return await fbGetAll_(sheet); }
+  catch(e){ throw new Error('ডাটা আনতে ব্যর্থ: ' + e.message); }
 }
 async function apiPost(action, opts){
   opts = opts || {};
-  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
-  const body = Object.assign({action}, opts, { actorRole: session ? session['রোল'] : null });
-  let res;
-  try{
-    res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(body) });
-  }catch(e){ throw new Error('সংযোগ ব্যর্থ (ইন্টারনেট/URL চেক করুন)'); }
-  let json;
-  try{ json = await res.json(); }
-  catch(e){ throw new Error('সার্ভার থেকে সঠিক উত্তর আসেনি'); }
-  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
-  return json;
+  const actorRole = session ? session['রোল'] : null;
+  const data = opts.data || {};
+  const id = opts.id;
+  let result;
+  switch(action){
+    case 'approveUser':        result = await setUserStatus_(id, 'অনুমোদিত', actorRole); break;
+    case 'rejectUser':         result = await setUserStatus_(id, 'বাতিল', actorRole); break;
+    case 'changeRole':         result = await changeUserRole_(id, data['রোল'], actorRole); break;
+    case 'submitContribution': result = await submitContribution_(data); break;
+    case 'verifyContribution': result = await verifyContribution_(id, data['যাচাইকারী'], actorRole); break;
+    case 'rejectContribution': result = await rejectContribution_(id, data['যাচাইকারী'], actorRole); break;
+    case 'vote':                result = await castVote_(data); break;
+    case 'closePoll':           result = await closePoll_(id, actorRole); break;
+    case 'add':                  result = await addRow_(opts.sheet, data, actorRole); break;
+    case 'addInvestment':        result = await addInvestment_(data, actorRole); break;
+    case 'verifyInvestment':     result = await verifyInvestment_(id, actorRole); break;
+    case 'rejectInvestment':     result = await rejectInvestment_(id, data['কারণ'], actorRole); break;
+    case 'addInstallment':       result = await addInstallment_(data, actorRole); break;
+    case 'edit':                 result = await editRow_(opts.sheet, id, data, actorRole); break;
+    case 'delete':                result = await deleteRow_(opts.sheet, id, actorRole); break;
+    case 'uploadImage':          result = await uploadInvestmentImage_(data, actorRole); break;
+    case 'submitTransaction':    result = await submitTransaction_(data, actorRole); break;
+    case 'verifyTransaction':    result = await verifyTransaction_(id, data['যাচাইকারী'], actorRole); break;
+    case 'rejectTransaction':    result = await rejectTransaction_(id, data['যাচাইকারী'], data['বাতিলের_কারণ'], actorRole); break;
+    case 'reviseTransaction':    result = await reviseTransaction_(id, data, actorRole); break;
+    case 'deleteTransaction':    result = await deleteTransaction_(id, actorRole); break;
+    case 'distributeDividend':   result = await distributeDividend_(id, actorRole); break;
+    case 'requestDividendReinvest': result = await requestDividendReinvest_(id, actorRole); break;
+    case 'requestDividendWithdraw':  result = await requestDividendWithdraw_(id, actorRole); break;
+    case 'approveWithdrawal':    result = await approveWithdrawal_(id, actorRole); break;
+    case 'rejectWithdrawal':     result = await rejectWithdrawal_(id, actorRole); break;
+    default: throw new Error('অজানা action: ' + action);
+  }
+  if(!result || result.status !== 'ok') throw new Error((result && result.message) || 'অজানা সমস্যা');
+  if(action !== 'uploadImage'){
+    const extra = (action==='add'||action==='edit'||action==='delete') ? (opts.sheet||'') : '';
+    logActivity_(action, extra, result.message);
+  }
+  return result;
 }
 
 async function refreshAll(){
-  if(!API_URL) return;
-  const sheets = ['ইউজার','চাঁদা','ইনভেস্টমেন্ট','ইনভেস্টমেন্ট_আপডেট','ইনভেস্টমেন্ট_কিস্তি','আদাল','বাচ্চা','বাচ্চা_আপডেট','খরচ','নোটিশ','ভোট','ভোট_ফলাফল','লেনদেন','নিয়মাবলী'];
-  const keys = ['users','contrib','invest','investUpdate','investInstallment','custodians','babies','babyUpdate','expense','notice','poll','votes','transaction','rules'];
+  const sheets = ['ইউজার','চাঁদা','ইনভেস্টমেন্ট','ইনভেস্টমেন্ট_আপডেট','ইনভেস্টমেন্ট_কিস্তি','আদাল','বাচ্চা','বাচ্চা_আপডেট','খরচ','নোটিশ','ভোট','ভোট_ফলাফল','লেনদেন', SHEETS.RESET_REQ, SHEETS.ACTIVITY_LOG, SHEETS.DIVIDEND, SHEETS.WITHDRAWAL];
+  const keys = ['users','contrib','invest','investUpdate','investInstallment','custodians','babies','babyUpdate','expense','notice','poll','votes','transaction','resetReq','activityLog','dividend','withdrawal'];
   const results = await Promise.allSettled(sheets.map(apiGet));
   results.forEach((r,i)=>{ if(r.status==='fulfilled') cache[keys[i]] = r.value; });
+}
+
+/* =========================================================================
+   নিচের ফাংশনগুলো আগের Google Apps Script (code.gs)-এর বিজনেস লজিক হুবহু
+   JavaScript + Firebase Realtime Database-এ পোর্ট করা হয়েছে
+   ========================================================================= */
+
+function requireManager_(actorRole){ return actorRole === ROLES.MANAGER; }
+
+async function setUserStatus_(id, status, actorRole){
+  if(!requireManager_(actorRole)) return {status:'error', message:'শুধু ম্যানেজার এই কাজ করতে পারবেন'};
+  await fbUpdate_(SHEETS.USERS, id, {'স্ট্যাটাস': status});
+  return {status:'ok', message:'স্ট্যাটাস আপডেট হয়েছে'};
+}
+
+async function changeUserRole_(id, role, actorRole){
+  if(!requireManager_(actorRole)) return {status:'error', message:'শুধু ম্যানেজার এই কাজ করতে পারবেন'};
+  if([ROLES.MANAGER, ROLES.CASHIER, ROLES.FIELD, ROLES.MEMBER].indexOf(role) === -1) return {status:'error', message:'অবৈধ রোল'};
+  await fbUpdate_(SHEETS.USERS, id, {'রোল': role});
+  return {status:'ok', message:'রোল পরিবর্তন হয়েছে'};
+}
+
+/* ---------------- চাঁদা ---------------- */
+async function submitContribution_(data){
+  data = data || {};
+  const required = ['সদস্য_ID','সদস্যের_নাম','মাস','পরিমাণ'];
+  for(const k of required){ if(!data[k] && data[k] !== 0) return {status:'error', message:'সব তথ্য পূরণ করুন'}; }
+  const id = await fbAdd_(SHEETS.CONTRIB, {
+    'সদস্য_ID': data['সদস্য_ID'], 'সদস্যের_নাম': data['সদস্যের_নাম'], 'মাস': data['মাস'], 'পরিমাণ': data['পরিমাণ'],
+    'মাধ্যম': data['মাধ্যম']||'', 'ট্রানজেকশন_আইডি': data['ট্রানজেকশন_আইডি']||'', 'স্ট্যাটাস':'পেন্ডিং',
+    'জমার_তারিখ': Date.now(), 'যাচাইকারী':'', 'যাচাইয়ের_তারিখ':''
+  });
+  return {status:'ok', message:'চাঁদা জমার রিকুয়েস্ট পাঠানো হয়েছে', id};
+}
+async function verifyContribution_(id, verifier, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার যাচাই করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.CONTRIB+'/'+id).get();
+  const c = snap.exists() ? snap.val() : null;
+  await fbUpdate_(SHEETS.CONTRIB, id, {'স্ট্যাটাস':'ভেরিফাইড', 'যাচাইকারী': verifier||'', 'যাচাইয়ের_তারিখ': Date.now()});
+  if(c && c['লভ্যাংশ_ID']) await fbUpdate_(SHEETS.DIVIDEND, c['লভ্যাংশ_ID'], {'ব্যবস্থা':'রি-ইনভেস্ট_সম্পন্ন'});
+  return {status:'ok', message:'যাচাই সম্পন্ন হয়েছে'};
+}
+async function rejectContribution_(id, verifier, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার বাতিল করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.CONTRIB+'/'+id).get();
+  const c = snap.exists() ? snap.val() : null;
+  await fbUpdate_(SHEETS.CONTRIB, id, {'স্ট্যাটাস':'বাতিল', 'যাচাইকারী': verifier||'', 'যাচাইয়ের_তারিখ': Date.now()});
+  if(c && c['লভ্যাংশ_ID']) await fbUpdate_(SHEETS.DIVIDEND, c['লভ্যাংশ_ID'], {'ব্যবস্থা':''});
+  return {status:'ok', message:'রিকুয়েস্ট বাতিল করা হয়েছে'};
+}
+
+/* ==================== লভ্যাংশ রি-ইনভেস্ট / উত্তোলন ==================== */
+async function requestDividendReinvest_(dividendId, actorRole){
+  const dSnap = await fbDb.ref(SHEETS.DIVIDEND+'/'+dividendId).get();
+  if(!dSnap.exists()) return {status:'error', message:'লভ্যাংশ এন্ট্রি পাওয়া যায়নি'};
+  const d = dSnap.val();
+  if(!session || String(d['সদস্য_ID']) !== String(session['ID'])) return {status:'error', message:'এটা আপনার লভ্যাংশ নয়'};
+  if(Number(d['পরিমাণ']||0) <= 0) return {status:'error', message:'শুধু লাভের অংশ রি-ইনভেস্ট করা যাবে'};
+  if(d['ব্যবস্থা']) return {status:'error', message:'এই লভ্যাংশের জন্য ইতিমধ্যে একটা আবেদন চলমান বা সম্পন্ন আছে'};
+  const contribId = await fbAdd_(SHEETS.CONTRIB, {
+    'সদস্য_ID': d['সদস্য_ID'], 'সদস্যের_নাম': d['সদস্যের_নাম'], 'মাস': 'লভ্যাংশ রি-ইনভেস্ট', 'পরিমাণ': d['পরিমাণ'],
+    'মাধ্যম': 'লভ্যাংশ রি-ইনভেস্ট', 'ট্রানজেকশন_আইডি': '', 'স্ট্যাটাস':'পেন্ডিং',
+    'জমার_তারিখ': Date.now(), 'যাচাইকারী':'', 'যাচাইয়ের_তারিখ':'',
+    'লভ্যাংশ_ID': dividendId, 'উৎস': 'লভ্যাংশ'
+  });
+  await fbUpdate_(SHEETS.DIVIDEND, dividendId, {'ব্যবস্থা':'রি-ইনভেস্ট_পেন্ডিং', 'সংশ্লিষ্ট_চাঁদা_ID': contribId});
+  return {status:'ok', message:'চাঁদা হিসেবে রি-ইনভেস্টের আবেদন ক্যাশিয়ারের কাছে পাঠানো হয়েছে', id: contribId};
+}
+async function requestDividendWithdraw_(dividendId, actorRole){
+  const dSnap = await fbDb.ref(SHEETS.DIVIDEND+'/'+dividendId).get();
+  if(!dSnap.exists()) return {status:'error', message:'লভ্যাংশ এন্ট্রি পাওয়া যায়নি'};
+  const d = dSnap.val();
+  if(!session || String(d['সদস্য_ID']) !== String(session['ID'])) return {status:'error', message:'এটা আপনার লভ্যাংশ নয়'};
+  if(Number(d['পরিমাণ']||0) <= 0) return {status:'error', message:'শুধু লাভের অংশ উত্তোলন করা যাবে'};
+  if(d['ব্যবস্থা']) return {status:'error', message:'এই লভ্যাংশের জন্য ইতিমধ্যে একটা আবেদন চলমান বা সম্পন্ন আছে'};
+  const reqId = await fbAdd_(SHEETS.WITHDRAWAL, {
+    'সদস্য_ID': d['সদস্য_ID'], 'সদস্যের_নাম': d['সদস্যের_নাম'], 'পরিমাণ': d['পরিমাণ'],
+    'লভ্যাংশ_ID': dividendId, 'তারিখ': Date.now(), 'স্ট্যাটাস':'পেন্ডিং'
+  });
+  await fbUpdate_(SHEETS.DIVIDEND, dividendId, {'ব্যবস্থা':'উত্তোলন_পেন্ডিং', 'সংশ্লিষ্ট_উত্তোলন_ID': reqId});
+  return {status:'ok', message:'উত্তোলনের আবেদন ক্যাশিয়ারের কাছে পাঠানো হয়েছে', id: reqId};
+}
+async function approveWithdrawal_(reqId, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার অনুমোদন করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.WITHDRAWAL+'/'+reqId).get();
+  if(!snap.exists()) return {status:'error', message:'আবেদন পাওয়া যায়নি'};
+  const w = snap.val();
+  if(w['স্ট্যাটাস'] !== 'পেন্ডিং') return {status:'error', message:'এই আবেদনটি এখন পেন্ডিং অবস্থায় নেই'};
+  const actorName = session ? session['নাম'] : '';
+  await fbUpdate_(SHEETS.WITHDRAWAL, reqId, {'স্ট্যাটাস':'অনুমোদিত', 'অনুমোদনকারী': actorName, 'অনুমোদনের_তারিখ': Date.now()});
+  if(w['লভ্যাংশ_ID']) await fbUpdate_(SHEETS.DIVIDEND, w['লভ্যাংশ_ID'], {'ব্যবস্থা':'উত্তোলিত'});
+  return {status:'ok', message:'উত্তোলন অনুমোদিত হয়েছে — সদস্যকে হাতে টাকা বুঝিয়ে দিন'};
+}
+async function rejectWithdrawal_(reqId, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার বাতিল করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.WITHDRAWAL+'/'+reqId).get();
+  if(!snap.exists()) return {status:'error', message:'আবেদন পাওয়া যায়নি'};
+  const w = snap.val();
+  if(w['স্ট্যাটাস'] !== 'পেন্ডিং') return {status:'error', message:'এই আবেদনটি এখন পেন্ডিং অবস্থায় নেই'};
+  await fbUpdate_(SHEETS.WITHDRAWAL, reqId, {'স্ট্যাটাস':'বাতিল'});
+  if(w['লভ্যাংশ_ID']) await fbUpdate_(SHEETS.DIVIDEND, w['লভ্যাংশ_ID'], {'ব্যবস্থা':''});
+  return {status:'ok', message:'আবেদন বাতিল করা হয়েছে'};
+}
+
+/* ---------------- ভোট ---------------- */
+async function castVote_(data){
+  data = data || {};
+  const pollId = data['ভোট_ID'], memberId = data['সদস্য_ID'], choice = data['বাছাই'];
+  if(!pollId || !memberId || !choice) return {status:'error', message:'সব তথ্য দরকার'};
+  const pollSnap = await fbDb.ref(SHEETS.POLL+'/'+pollId).get();
+  if(!pollSnap.exists()) return {status:'error', message:'ভোট পাওয়া যায়নি'};
+  if(pollSnap.val()['স্ট্যাটাস'] !== 'চলমান') return {status:'error', message:'এই ভোট এখন বন্ধ আছে'};
+  const votes = await fbGetAll_(SHEETS.VOTES);
+  if(votes.some(v => String(v['ভোট_ID'])===String(pollId) && String(v['সদস্য_ID'])===String(memberId))){
+    return {status:'error', message:'আপনি ইতিমধ্যে এই ভোটে অংশ নিয়েছেন'};
+  }
+  const id = await fbAdd_(SHEETS.VOTES, {'ভোট_ID':pollId, 'সদস্য_ID':memberId, 'বাছাই':choice, 'তারিখ': Date.now()});
+  return {status:'ok', message:'ভোট গ্রহণ করা হয়েছে', id};
+}
+async function closePoll_(id, actorRole){
+  if(!requireManager_(actorRole)) return {status:'error', message:'শুধু ম্যানেজার ভোট বন্ধ করতে পারবেন'};
+  await fbUpdate_(SHEETS.POLL, id, {'স্ট্যাটাস':'বন্ধ'});
+  return {status:'ok', message:'ভোট বন্ধ করা হয়েছে'};
+}
+
+/* ---------------- generic add/edit/delete-এর রোল-গার্ড ---------------- */
+const ROLE_GUARD = {};
+ROLE_GUARD[SHEETS.INVEST] = [ROLES.MANAGER, ROLES.FIELD];
+ROLE_GUARD[SHEETS.INVEST_INSTALLMENT] = [ROLES.MANAGER, ROLES.FIELD, ROLES.CASHIER];
+ROLE_GUARD[SHEETS.CUSTODIAN] = [ROLES.MANAGER, ROLES.FIELD];
+ROLE_GUARD[SHEETS.BABY] = [ROLES.MANAGER, ROLES.FIELD];
+ROLE_GUARD[SHEETS.EXPENSE] = [ROLES.MANAGER, ROLES.CASHIER];
+ROLE_GUARD[SHEETS.NOTICE] = [ROLES.MANAGER];
+ROLE_GUARD[SHEETS.POLL] = [ROLES.MANAGER];
+function checkGuard_(sheetName, actorRole){
+  const allowed = ROLE_GUARD[sheetName];
+  if(!allowed) return true;
+  return allowed.indexOf(actorRole) !== -1;
+}
+
+/* ---------------- ছবি "আপলোড" ----------------
+   Google Drive-এর বদলে: রিসাইজ করা ছবিটাকে সরাসরি একটা data URL (base64
+   স্ট্রিং) হিসেবে রেকর্ডের ফিল্ডেই সেভ করা হয় — এতে আলাদা কোনো স্টোরেজ
+   সার্ভিস/বিলিং লাগে না, ফ্রি Realtime Database-এই কাজ চলে। */
+async function uploadInvestmentImage_(data, actorRole){
+  if([ROLES.MANAGER, ROLES.CASHIER, ROLES.FIELD, ROLES.MEMBER].indexOf(actorRole) === -1){
+    return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  }
+  data = data || {};
+  if(!data.base64) return {status:'error', message:'কোনো ছবি পাওয়া যায়নি'};
+  const mimeType = data.mimeType || 'image/jpeg';
+  const url = 'data:' + mimeType + ';base64,' + data.base64;
+  return {status:'ok', message:'ছবি প্রস্তুত হয়েছে', data:{url}};
+}
+
+/* ---------------- generic add/edit/delete ---------------- */
+async function addRow_(sheetName, data, actorRole){
+  if(!checkGuard_(sheetName, actorRole)) return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  const obj = Object.assign({}, data || {});
+  const now = Date.now();
+  if(obj['তারিখ'] === undefined) obj['তারিখ'] = now;
+  if((sheetName===SHEETS.INVEST || sheetName===SHEETS.BABY) && obj['সর্বশেষ_আপডেট']===undefined) obj['সর্বশেষ_আপডেট'] = now;
+  if(sheetName===SHEETS.INVEST && obj['শুরুর_তারিখ']===undefined) obj['শুরুর_তারিখ'] = now;
+  const id = await fbAdd_(sheetName, obj);
+  if(sheetName === SHEETS.INVEST_UPDATE && data && data['ইনভেস্টমেন্ট_ID']) await touchRowTimestamp_(SHEETS.INVEST, data['ইনভেস্টমেন্ট_ID']);
+  if(sheetName === SHEETS.BABY_UPDATE && data && data['বাচ্চা_ID']) await touchRowTimestamp_(SHEETS.BABY, data['বাচ্চা_ID']);
+  return {status:'ok', message:'যোগ করা হয়েছে', id};
+}
+async function editRow_(sheetName, id, data, actorRole){
+  if(!checkGuard_(sheetName, actorRole)) return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  const snap = await fbDb.ref(sheetName+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'এন্ট্রি পাওয়া যায়নি'};
+  const patch = Object.assign({}, data || {});
+  if(sheetName===SHEETS.INVEST || sheetName===SHEETS.BABY) patch['সর্বশেষ_আপডেট'] = Date.now();
+  await fbUpdate_(sheetName, id, patch);
+  return {status:'ok', message:'আপডেট হয়েছে'};
+}
+async function deleteRow_(sheetName, id, actorRole){
+  if(!checkGuard_(sheetName, actorRole)) return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  await fbDb.ref(sheetName+'/'+id).remove();
+  return {status:'ok', message:'মুছে ফেলা হয়েছে'};
+}
+
+/* ---------------- নতুন ইনভেস্টমেন্ট (সাধারণ + বাকি বিক্রয়/মুরাবাহা) ---------------- */
+async function addInvestment_(data, actorRole){
+  if(!checkGuard_(SHEETS.INVEST, actorRole)) return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  data = data || {};
+  const title = (data['শিরোনাম']||'').toString().trim();
+  const type = (data['ধরন']||'').toString().trim();
+  const amt = Number(data['বিনিয়োগ_টাকা']||0);
+  if(!title || !type || !amt) return {status:'error', message:'শিরোনাম, ধরন ও বিনিয়োগের পরিমাণ আবশ্যক'};
+  const now = Date.now();
+  const isSale = type === SALE_TYPE;
+  let currentValue, profit, salePrice, custName, custPhone, custAddr, totalInst, paidInst, paidAmt, dueAmt;
+  if(isSale){
+    salePrice = Number(data['বিক্রয়মূল্য']||0);
+    custName = (data['গ্রাহকের_নাম']||'').toString().trim();
+    if(!salePrice || !custName) return {status:'error', message:'বাকি বিক্রয়ের জন্য বিক্রয়মূল্য ও গ্রাহকের নাম আবশ্যক'};
+    if(salePrice < amt) return {status:'error', message:'বিক্রয়মূল্য ক্রয়মূল্যের (বিনিয়োগ) চেয়ে কম হতে পারে না'};
+    currentValue = salePrice; profit = salePrice - amt;
+    custPhone = data['গ্রাহকের_ফোন']||''; custAddr = data['গ্রাহকের_ঠিকানা']||'';
+    totalInst = Math.max(1, Number(data['মোট_কিস্তি']||1));
+    paidInst = 0; paidAmt = 0; dueAmt = salePrice;
+  } else {
+    currentValue = Number(data['বর্তমান_মূল্য']||amt);
+    profit = currentValue - amt;
+    salePrice=''; custName=''; custPhone=''; custAddr='';
+    totalInst=''; paidInst=''; paidAmt=''; dueAmt='';
+  }
+  const id = await fbAdd_(SHEETS.INVEST, {
+    'শিরোনাম': title, 'ধরন': type, 'বিনিয়োগ_টাকা': amt, 'বর্তমান_মূল্য': currentValue,
+    'লাভ_ক্ষতি': profit, 'অবস্থা': 'অনুমোদনের অপেক্ষায়', 'শুরুর_তারিখ': data['শুরুর_তারিখ']||now,
+    'পরিচালক': data['পরিচালক']||'', 'প্রমাণ_লিংক': data['প্রমাণ_লিংক']||'', 'বিবরণ': data['বিবরণ']||'',
+    'সর্বশেষ_আপডেট': now, 'বিক্রয়মূল্য': salePrice, 'গ্রাহকের_নাম': custName, 'গ্রাহকের_ফোন': custPhone,
+    'গ্রাহকের_ঠিকানা': custAddr, 'মোট_কিস্তি': totalInst, 'পরিশোধিত_কিস্তি': paidInst,
+    'পরিশোধিত_টাকা': paidAmt, 'বাকি_টাকা': dueAmt,
+    'বাদ_পড়া_সদস্য': Array.isArray(data['বাদ_পড়া_সদস্য']) ? data['বাদ_পড়া_সদস্য'] : [],
+    'বণ্টন': await computeProfitDistribution_(Array.isArray(data['বাদ_পড়া_সদস্য']) ? data['বাদ_পড়া_সদস্য'] : [])
+  });
+  return {status:'ok', message:'ইনভেস্টমেন্টের আবেদন ক্যাশিয়ারের কাছে অনুমোদনের জন্য পাঠানো হয়েছে', id};
+}
+
+/* ==================== ইনভেস্টমেন্ট অনুমোদন/বাতিল (শুধু ক্যাশিয়ার) ==================== */
+async function verifyInvestment_(id, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার ইনভেস্টমেন্ট অনুমোদন করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.INVEST+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'ইনভেস্টমেন্ট এন্ট্রি পাওয়া যায়নি'};
+  if(snap.val()['অবস্থা'] !== 'অনুমোদনের অপেক্ষায়') return {status:'error', message:'এই ইনভেস্টমেন্টটি এখন অনুমোদনের অপেক্ষায় নেই'};
+  await fbUpdate_(SHEETS.INVEST, id, {'অবস্থা':'চলমান', 'অনুমোদনকারী': session? session['নাম']:'', 'অনুমোদনের_তারিখ': Date.now()});
+  return {status:'ok', message:'ইনভেস্টমেন্ট অনুমোদিত হয়েছে, এখন এটা সক্রিয়'};
+}
+async function rejectInvestment_(id, reason, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার বাতিল করতে পারবেন'};
+  reason = (reason||'').toString().trim();
+  if(!reason) return {status:'error', message:'বাতিলের কারণ লেখা আবশ্যক'};
+  const snap = await fbDb.ref(SHEETS.INVEST+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'ইনভেস্টমেন্ট এন্ট্রি পাওয়া যায়নি'};
+  if(snap.val()['অবস্থা'] !== 'অনুমোদনের অপেক্ষায়') return {status:'error', message:'এই ইনভেস্টমেন্টটি এখন অনুমোদনের অপেক্ষায় নেই'};
+  await fbUpdate_(SHEETS.INVEST, id, {'অবস্থা':'প্রত্যাখ্যাত', 'প্রত্যাখ্যানের_কারণ': reason, 'প্রত্যাখ্যানকারী': session? session['নাম']:'', 'প্রত্যাখ্যানের_তারিখ': Date.now()});
+  return {status:'ok', message:'ইনভেস্টমেন্টের আবেদন কারণসহ বাতিল করা হয়েছে'};
+}
+
+/* প্রতিটা অনুমোদিত সদস্যের (বাদ-দেওয়া সদস্য বাদে) মোট যাচাইকৃত চাঁদার অনুপাতে
+   শতকরা হিসাব বের করে — এই হিসাবটা ইনভেস্টমেন্ট তৈরির মুহূর্তেই স্থায়ীভাবে
+   সংরক্ষণ করা হয়, যাতে পরে নতুন সদস্য এলে বা কেউ বেশি চাঁদা দিলেও পুরনো
+   ইনভেস্টমেন্টের বণ্টন-অনুপাত অন্যায়ভাবে না বদলে যায়। */
+async function computeProfitDistribution_(excludedIds){
+  const [allUsers, allContrib] = await Promise.all([fbGetAll_(SHEETS.USERS), fbGetAll_(SHEETS.CONTRIB)]);
+  const members = allUsers.filter(u => u['স্ট্যাটাস']==='অনুমোদিত' && excludedIds.indexOf(u['ID']) === -1);
+  const verified = allContrib.filter(c => c['স্ট্যাটাস']==='ভেরিফাইড');
+  const totals = {};
+  members.forEach(u=>{ totals[u['ID']] = 0; });
+  verified.forEach(c=>{ if(totals.hasOwnProperty(c['সদস্য_ID'])) totals[c['সদস্য_ID']] += Number(c['পরিমাণ']||0); });
+  const grandTotal = Object.values(totals).reduce((s,v)=>s+v,0);
+  const distribution = {};
+  members.forEach(u=>{
+    const amt = totals[u['ID']] || 0;
+    const pct = grandTotal > 0 ? (amt / grandTotal * 100) : (members.length ? (100/members.length) : 0);
+    distribution[u['ID']] = { 'নাম': u['নাম'], 'শতাংশ': Math.round(pct*10000)/10000, 'ভিত্তি_চাঁদা': amt };
+  });
+  return distribution;
+}
+
+/* ---------------- বাকি বিক্রয়ের কিস্তি আদায় ---------------- */
+async function addInstallment_(data, actorRole){
+  if(!checkGuard_(SHEETS.INVEST_INSTALLMENT, actorRole)) return {status:'error', message:'এই কাজের অনুমতি নেই'};
+  data = data || {};
+  const investId = data['ইনভেস্টমেন্ট_ID'];
+  const amount = Number(data['পরিমাণ']||0);
+  if(!investId || isNaN(amount) || amount < 0) return {status:'error', message:'ইনভেস্টমেন্ট ও কিস্তির পরিমাণ আবশ্যক'};
+  const invSnap = await fbDb.ref(SHEETS.INVEST+'/'+investId).get();
+  if(!invSnap.exists()) return {status:'error', message:'ইনভেস্টমেন্ট এন্ট্রি পাওয়া যায়নি'};
+  const iv = invSnap.val();
+  if(iv['ধরন'] !== SALE_TYPE) return {status:'error', message:'এটা বাকি বিক্রয় এন্ট্রি নয়'};
+  const dueBefore = Number(iv['বাকি_টাকা']||0);
+  if(amount > dueBefore) return {status:'error', message:'কিস্তির পরিমাণ বাকি টাকার চেয়ে বেশি হতে পারে না (বাকি: ৳'+dueBefore+')'};
+  const instNo = Number(iv['পরিশোধিত_কিস্তি']||0) + 1;
+  const now = Date.now();
+  const instId = await fbAdd_(SHEETS.INVEST_INSTALLMENT, {
+    'ইনভেস্টমেন্ট_ID': investId, 'কিস্তি_নম্বর': instNo, 'পরিমাণ': amount,
+    'মাধ্যম': data['মাধ্যম']||'', 'আদায়কারী': data['আদায়কারী']||'', 'তারিখ': now
+  });
+  const paidTotal = Number(iv['পরিশোধিত_টাকা']||0) + amount;
+  const dueAfter = Math.max(0, dueBefore - amount);
+  const newStatus = dueAfter <= 0 ? 'পরিশোধিত' : 'চলমান';
+  await fbUpdate_(SHEETS.INVEST, investId, {
+    'পরিশোধিত_কিস্তি': instNo, 'পরিশোধিত_টাকা': paidTotal, 'বাকি_টাকা': dueAfter,
+    'অবস্থা': newStatus, 'সর্বশেষ_আপডেট': now
+  });
+  return {status:'ok', message: newStatus==='পরিশোধিত' ? 'শেষ কিস্তি জমা হয়েছে, সম্পূর্ণ পরিশোধিত' : 'কিস্তি জমা হয়েছে', id: instId};
+}
+
+/* ==================== লেনদেন (ফিল্ড পরিচালক/ম্যানেজার → ক্যাশিয়ার যাচাই) ==================== */
+async function submitTransaction_(data, actorRole){
+  if([ROLES.FIELD, ROLES.MANAGER].indexOf(actorRole) === -1) return {status:'error', message:'শুধু ফিল্ড পরিচালক বা ম্যানেজার লেনদেন সাবমিট করতে পারবেন'};
+  data = data || {};
+  const category = (data['ধরন']||'').toString().trim();
+  const amount = Number(data['পরিমাণ']);
+  const desc = (data['বিবরণ']||'').toString().trim();
+  const submitterId = data['সাবমিটকারী_ID'];
+  const submitterName = (data['সাবমিটকারীর_নাম']||'').toString().trim();
+  const submitterRole = (data['সাবমিটকারীর_পদ']||actorRole).toString().trim();
+  if(!category || isNaN(amount) || amount < 0 || !desc || !submitterId || !submitterName){
+    return {status:'error', message:'ধরন, পরিমাণ, বিস্তারিত বিবরণ ও সাবমিটকারীর তথ্য আবশ্যক'};
+  }
+  const now = Date.now();
+  const id = await fbAdd_(SHEETS.TRANSACTION, {
+    'ধরন': category, 'সংশ্লিষ্ট_তথ্য': data['ইনভেস্টমেন্ট_ID']||data['সংশ্লিষ্ট_তথ্য']||'', 'পরিমাণ': amount, 'বিবরণ': desc,
+    'সাবমিটকারী_ID': submitterId, 'সাবমিটকারীর_নাম': submitterName, 'সাবমিটকারীর_পদ': submitterRole,
+    'স্ট্যাটাস':'পেন্ডিং', 'বাতিলের_কারণ':'', 'জমার_তারিখ': now, 'যাচাইকারী':'', 'যাচাইয়ের_তারিখ':''
+  });
+  return {status:'ok', message:'লেনদেনের আবেদন ক্যাশিয়ারের কাছে ভেরিফিকেশনের জন্য পাঠানো হয়েছে', id};
+}
+
+async function applyVerifiedTransactionEffect_(category, investId, amount, actorRole, submitterName){
+  if(category === TXN_TYPE_INSTALLMENT){
+    if(!investId) return {status:'error', message:'এই লেনদেনে ইনভেস্টমেন্টের তথ্য নেই, কিস্তি হিসাবে যোগ করা যাচ্ছে না'};
+    return await addInstallment_({'ইনভেস্টমেন্ট_ID':investId, 'পরিমাণ':amount, 'আদায়কারী':submitterName||''}, actorRole);
+  }
+  if(category === TXN_TYPE_INVEST_CASH){
+    if(!investId) return {status:'error', message:'এই লেনদেনে ইনভেস্টমেন্টের তথ্য নেই, টাকা যোগ করা যাচ্ছে না'};
+    const invSnap = await fbDb.ref(SHEETS.INVEST+'/'+investId).get();
+    if(!invSnap.exists()) return {status:'error', message:'সংশ্লিষ্ট ইনভেস্টমেন্ট এন্ট্রি পাওয়া যায়নি'};
+    const iv = invSnap.val();
+    const investedAmt = Number(iv['বিনিয়োগ_টাকা']||0);
+    const paidBefore = Number(iv['পরিশোধিত_টাকা']||0);
+    const plBefore = Number(iv['লাভ_ক্ষতি']||0);
+    const profitLoss = plBefore + (amount - investedAmt);
+    const now = Date.now();
+    await fbUpdate_(SHEETS.INVEST, investId, {
+      'পরিশোধিত_টাকা': paidBefore + amount, 'লাভ_ক্ষতি': profitLoss,
+      'বর্তমান_মূল্য': 0, 'অবস্থা': 'সমাপ্ত', 'সর্বশেষ_আপডেট': now
+    });
+    const noteText = 'ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা: ৳'+amount+' (বিনিয়োগ ছিল ৳'+investedAmt+' — '+(profitLoss>=0?'লাভ':'ক্ষতি')+' ৳'+Math.abs(profitLoss)+') — ইনভেস্টমেন্টটি বন্ধ করা হয়েছে';
+    await fbAdd_(SHEETS.INVEST_UPDATE, {'ইনভেস্টমেন্ট_ID':investId, 'ছবি_লিংক':'', 'নোট':noteText, 'সদস্য_ID':'', 'সদস্যের_নাম':submitterName||'', 'সদস্যের_ফোন':'', 'তারিখ': now});
+    return {status:'ok'};
+  }
+  return {status:'ok'};
+}
+
+async function verifyTransaction_(id, verifier, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার যাচাই করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.TRANSACTION+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'লেনদেন পাওয়া যায়নি'};
+  const t = snap.val();
+  if(t['স্ট্যাটাস'] !== 'পেন্ডিং') return {status:'error', message:'এই লেনদেনটি এখন পেন্ডিং অবস্থায় নেই'};
+  const effect = await applyVerifiedTransactionEffect_(t['ধরন'], t['সংশ্লিষ্ট_তথ্য'], Number(t['পরিমাণ']||0), actorRole, t['সাবমিটকারীর_নাম']);
+  if(effect && effect.status === 'error') return effect;
+  await fbUpdate_(SHEETS.TRANSACTION, id, {'স্ট্যাটাস':'ভেরিফাইড', 'যাচাইকারী': verifier||'', 'যাচাইয়ের_তারিখ': Date.now()});
+  return {status:'ok', message:'লেনদেন ভেরিফাই করা হয়েছে, এটি এখন কার্যকর এবং হ্যান্ড ক্যাশে যোগ হয়ে গেছে'};
+}
+
+async function rejectTransaction_(id, verifier, reason, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার বাতিল করতে পারবেন'};
+  reason = (reason||'').toString().trim();
+  if(!reason) return {status:'error', message:'বাতিলের কারণ লেখা আবশ্যক'};
+  const snap = await fbDb.ref(SHEETS.TRANSACTION+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'লেনদেন পাওয়া যায়নি'};
+  if(snap.val()['স্ট্যাটাস'] !== 'পেন্ডিং') return {status:'error', message:'এই লেনদেনটি এখন পেন্ডিং অবস্থায় নেই'};
+  await fbUpdate_(SHEETS.TRANSACTION, id, {'স্ট্যাটাস':'বাতিল', 'বাতিলের_কারণ':reason, 'যাচাইকারী':verifier||'', 'যাচাইয়ের_তারিখ': Date.now()});
+  return {status:'ok', message:'লেনদেনটি কারণসহ বাতিল করে সাবমিটকারীর কাছে ফেরত পাঠানো হয়েছে'};
+}
+
+async function reviseTransaction_(id, data, actorRole){
+  if([ROLES.FIELD, ROLES.MANAGER].indexOf(actorRole) === -1) return {status:'error', message:'শুধু ফিল্ড পরিচালক বা ম্যানেজার সংশোধন করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.TRANSACTION+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'লেনদেন পাওয়া যায়নি'};
+  if(snap.val()['স্ট্যাটাস'] !== 'বাতিল') return {status:'error', message:'শুধু বাতিল হওয়া লেনদেনই সংশোধন করা যাবে'};
+  data = data || {};
+  const patch = {};
+  ['ধরন','পরিমাণ','বিবরণ','সংশ্লিষ্ট_তথ্য'].forEach(key=>{ if(data[key] !== undefined) patch[key] = data[key]; });
+  patch['স্ট্যাটাস'] = 'পেন্ডিং'; patch['বাতিলের_কারণ'] = ''; patch['যাচাইকারী'] = ''; patch['যাচাইয়ের_তারিখ'] = ''; patch['জমার_তারিখ'] = Date.now();
+  await fbUpdate_(SHEETS.TRANSACTION, id, patch);
+  return {status:'ok', message:'সংশোধিত আবেদনটি আবার ক্যাশিয়ারের কাছে পাঠানো হয়েছে'};
+}
+
+async function deleteTransaction_(id, actorRole){
+  if([ROLES.FIELD, ROLES.MANAGER].indexOf(actorRole) === -1) return {status:'error', message:'শুধু ফিল্ড পরিচালক বা ম্যানেজার মুছতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.TRANSACTION+'/'+id).get();
+  if(!snap.exists()) return {status:'error', message:'লেনদেন পাওয়া যায়নি'};
+  if(snap.val()['স্ট্যাটাস'] !== 'বাতিল') return {status:'error', message:'শুধু বাতিল হওয়া লেনদেনই মুছে ফেলা যাবে'};
+  await fbDb.ref(SHEETS.TRANSACTION+'/'+id).remove();
+  return {status:'ok', message:'আবেদনটি সম্পূর্ণ মুছে ফেলা হয়েছে, যেন এটি কখনো হয়ইনি'};
+}
+
+/* ==================== লভ্যাংশ বণ্টন ====================
+   একটা ইনভেস্টমেন্ট "সমাপ্ত" হওয়ার পর ম্যানেজার/ক্যাশিয়ার এই বণ্টন কার্যকর
+   করতে পারেন — প্রতিটা অংশগ্রহণকারী সদস্যের জন্য তার নির্ধারিত % অনুযায়ী
+   একটা আলাদা লভ্যাংশ-রেকর্ড তৈরি হয় (একবারই করা যাবে)। */
+async function distributeDividend_(investId, actorRole){
+  if(actorRole !== ROLES.CASHIER) return {status:'error', message:'শুধু ক্যাশিয়ার লভ্যাংশ বণ্টন করতে পারবেন'};
+  const snap = await fbDb.ref(SHEETS.INVEST+'/'+investId).get();
+  if(!snap.exists()) return {status:'error', message:'ইনভেস্টমেন্ট এন্ট্রি পাওয়া যায়নি'};
+  const iv = snap.val();
+  if(iv['অবস্থা'] !== 'সমাপ্ত') return {status:'error', message:'শুধু সমাপ্ত হওয়া ইনভেস্টমেন্টেরই লভ্যাংশ বণ্টন করা যাবে'};
+  if(iv['বণ্টন_সম্পন্ন']) return {status:'error', message:'এই ইনভেস্টমেন্টের লভ্যাংশ ইতিমধ্যে বণ্টন করা হয়েছে'};
+  const dist = iv['বণ্টন'] || {};
+  const ids = Object.keys(dist);
+  if(!ids.length) return {status:'error', message:'এই ইনভেস্টমেন্টের জন্য কোনো বণ্টন হিসাব সংরক্ষিত নেই (পুরনো এন্ট্রি)'};
+  const pl = Number(iv['লাভ_ক্ষতি']||0);
+  const now = Date.now();
+  const actorName = session ? session['নাম'] : '';
+  for(const uid of ids){
+    const d = dist[uid];
+    const pct = Number(d['শতাংশ']||0);
+    const amount = Math.round((pct/100 * pl) * 100) / 100;
+    await fbAdd_(SHEETS.DIVIDEND, {
+      'ইনভেস্টমেন্ট_ID': investId, 'ইনভেস্টমেন্টের_শিরোনাম': iv['শিরোনাম']||'',
+      'সদস্য_ID': uid, 'সদস্যের_নাম': d['নাম']||'', 'শতাংশ': pct, 'পরিমাণ': amount,
+      'তারিখ': now, 'বিতরণকারী': actorName
+    });
+  }
+  await fbUpdate_(SHEETS.INVEST, investId, {'বণ্টন_সম্পন্ন': true, 'বণ্টনের_তারিখ': now, 'বণ্টনকারী': actorName});
+  return {status:'ok', message: ids.length+' জন সদস্যের মধ্যে লভ্যাংশ বণ্টন সম্পন্ন হয়েছে'};
 }
 
 /* ---------- helpers ---------- */
@@ -335,15 +991,347 @@ function resizeImageToDataUrl_(file, maxDim, quality){
     reader.readAsDataURL(file);
   });
 }
+/* ---------------- রিপোর্ট/এক্সপোর্ট (Excel + প্রিন্ট/PDF) ---------------- */
+function exportToExcel_(filename, sheetName, headers, rows){
+  const data = [headers, ...rows];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  XLSX.writeFile(wb, filename);
+  logActivity_('exportExcel', filename);
+}
+function exportMembersExcel_(){
+  const headers = ['নাম','ইউজারনেম','ফোন','রোল','স্ট্যাটাস','যোগদানের তারিখ'];
+  const rows = cache.users.map(u=>[u['নাম'],u['ইউজারনেম'],u['ফোন'],ROLE_LABEL[u['রোল']]||u['রোল'],u['স্ট্যাটাস'],fmtDate(u['যোগদানের_তারিখ'])]);
+  exportToExcel_('সদস্য_তালিকা.xlsx','সদস্য',headers,rows);
+}
+function exportContribExcel_(){
+  const headers = ['সদস্যের নাম','মাস','পরিমাণ','মাধ্যম','স্ট্যাটাস','জমার তারিখ','যাচাইকারী'];
+  const rows = cache.contrib.map(c=>[c['সদস্যের_নাম'],c['মাস'],c['পরিমাণ'],c['মাধ্যম'],c['স্ট্যাটাস'],fmtDate(c['জমার_তারিখ']),c['যাচাইকারী']]);
+  exportToExcel_('চাঁদার_হিসাব.xlsx','চাঁদা',headers,rows);
+}
+function exportInvestExcel_(){
+  const headers = ['শিরোনাম','ধরন','বিনিয়োগ (৳)','বর্তমান মূল্য (৳)','লাভ/ক্ষতি (৳)','অবস্থা','পরিচালক','শুরুর তারিখ'];
+  const rows = cache.invest.map(i=>[i['শিরোনাম'],i['ধরন'],i['বিনিয়োগ_টাকা'],i['বর্তমান_মূল্য'],i['লাভ_ক্ষতি'],i['অবস্থা'],i['পরিচালক'],fmtDate(i['শুরুর_তারিখ'])]);
+  exportToExcel_('ইনভেস্টমেন্ট_সামারি.xlsx','ইনভেস্টমেন্ট',headers,rows);
+}
+function exportTransactionExcel_(){
+  const headers = ['ধরন','পরিমাণ (৳)','বিবরণ','সাবমিটকারী','স্ট্যাটাস','জমার তারিখ','যাচাইকারী'];
+  const rows = cache.transaction.map(t=>[t['ধরন'],t['পরিমাণ'],t['বিবরণ'],t['সাবমিটকারীর_নাম'],t['স্ট্যাটাস'],fmtDate(t['জমার_তারিখ']),t['যাচাইকারী']]);
+  exportToExcel_('লেনদেনের_হিসাব.xlsx','লেনদেন',headers,rows);
+}
+function findContributionByReceiptNo_(query){
+  const q = String(query||'').trim().toUpperCase();
+  if(!q) return null;
+  return cache.contrib.find(c => String(c['ID']||'').slice(-8).toUpperCase() === q) || null;
+}
+function printContributionReceipt_(c){
+  const receiptNo = String(c['ID']||'').slice(-8).toUpperCase();
+  const win = window.open('', '_blank');
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>রশিদ — ${c['সদস্যের_নাম']||''}</title>
+    <style>
+      body{font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;padding:36px;color:#222;}
+      .wrap{max-width:480px;margin:0 auto;border:2px solid #0f4c3a;border-radius:12px;padding:28px;}
+      h1{color:#0f4c3a;margin:0 0 2px;font-size:20px;text-align:center;}
+      p.sub{color:#666;margin:2px 0 0;text-align:center;font-size:12px;}
+      .divider{border-top:1px dashed #999;margin:18px 0;}
+      table{width:100%;border-collapse:collapse;font-size:13.5px;}
+      td{padding:6px 0;}
+      td.lbl{color:#666;width:45%;}
+      td.val{font-weight:700;text-align:right;}
+      .amt-box{text-align:center;margin:18px 0;padding:14px;background:#f0ece0;border-radius:10px;}
+      .amt-box .amt{font-size:26px;font-weight:800;color:#0f4c3a;}
+      .stamp{text-align:center;margin-top:20px;color:#2e7d5b;font-weight:700;font-size:13px;}
+      .footer{text-align:center;margin-top:16px;font-size:10.5px;color:#999;}
+    </style></head><body>
+    <div class="wrap">
+      <h1>${ORG_NAME}</h1>
+      <p class="sub">${TAGLINE}</p>
+      <div class="divider"></div>
+      <table>
+        <tr><td class="lbl">রশিদ নম্বর</td><td class="val">#${receiptNo}</td></tr>
+        <tr><td class="lbl">সদস্যের নাম</td><td class="val">${c['সদস্যের_নাম']||''}</td></tr>
+        <tr><td class="lbl">মাস</td><td class="val">${c['মাস']||''}</td></tr>
+        <tr><td class="lbl">জমার মাধ্যম</td><td class="val">${c['মাধ্যম']||''}</td></tr>
+        ${c['ট্রানজেকশন_আইডি']? `<tr><td class="lbl">ট্রানজেকশন আইডি</td><td class="val">${c['ট্রানজেকশন_আইডি']}</td></tr>` : ''}
+        <tr><td class="lbl">জমার তারিখ</td><td class="val">${fmtDate(c['জমার_তারিখ'])}</td></tr>
+        <tr><td class="lbl">যাচাইকারী</td><td class="val">${c['যাচাইকারী']||''}</td></tr>
+        <tr><td class="lbl">যাচাইয়ের তারিখ</td><td class="val">${fmtDate(c['যাচাইয়ের_তারিখ'])}</td></tr>
+      </table>
+      <div class="amt-box"><div class="amt">৳${money(c['পরিমাণ'])}</div></div>
+      <div class="stamp">✓ যাচাইকৃত</div>
+      <div class="footer">এটি একটি কম্পিউটার-জেনারেটেড রশিদ, স্বাক্ষরের প্রয়োজন নেই।</div>
+    </div>
+    <script>window.onload = function(){ window.print(); };<\/script>
+    </body></html>`);
+  win.document.close();
+}
+
+function getAvailableYears_(){
+  const years = new Set();
+  years.add(new Date().getFullYear());
+  cache.contrib.forEach(c=>{ const y = new Date(Number(c['যাচাইয়ের_তারিখ'])||0).getFullYear(); if(y>2000) years.add(y); });
+  cache.invest.forEach(i=>{ const y = new Date(Number(i['শুরুর_তারিখ'])||0).getFullYear(); if(y>2000) years.add(y); });
+  cache.expense.forEach(x=>{ const y = new Date(Number(x['তারিখ'])||0).getFullYear(); if(y>2000) years.add(y); });
+  cache.dividend.forEach(d=>{ const y = new Date(Number(d['তারিখ'])||0).getFullYear(); if(y>2000) years.add(y); });
+  return Array.from(years).sort((a,b)=>b-a);
+}
+
+/* ---------------- সদস্যের বিস্তারিত ব্যক্তিগত রিপোর্ট ---------------- */
+function printMemberReport_(u){
+  const myId = u['ID'];
+  const myContribs = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(myId)).sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
+  const myContribVerified = myContribs.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড');
+  const myContribTotal = myContribVerified.reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const myContribPending = myContribs.filter(c=>c['স্ট্যাটাস']==='পেন্ডিং').length;
+
+  const participations = cache.invest.filter(iv => iv['বণ্টন'] && iv['বণ্টন'][myId]).sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
+
+  const myDividends = cache.dividend.filter(d=>String(d['সদস্য_ID'])===String(myId)).sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  const dividendCountable = myDividends.filter(d => d['ব্যবস্থা'] !== 'রি-ইনভেস্ট_সম্পন্ন' && d['ব্যবস্থা'] !== 'উত্তোলিত');
+  const dividendTotal = dividendCountable.reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const netBalance = myContribTotal + dividendTotal;
+  const totalWithdrawn = myDividends.filter(d=>d['ব্যবস্থা']==='উত্তোলিত').reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const totalReinvested = myDividends.filter(d=>d['ব্যবস্থা']==='রি-ইনভেস্ট_সম্পন্ন').reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+
+  const contribRows = myContribs.map(c=>
+    `<tr><td>${c['মাস']}</td><td style="text-align:right;">৳${money(c['পরিমাণ'])}</td><td>${c['মাধ্যম']||''}</td><td>${c['স্ট্যাটাস']}</td><td>${fmtDate(c['জমার_তারিখ'])}</td></tr>`
+  ).join('') || '<tr><td colspan="5" style="text-align:center;">কোনো এন্ট্রি নেই</td></tr>';
+
+  const investRows = participations.map(iv=>{
+    const d = iv['বণ্টন'][myId];
+    const pct = Number(d['শতাংশ']||0);
+    const share = (pct/100) * Number(iv['লাভ_ক্ষতি']||0);
+    return `<tr><td>${iv['শিরোনাম']}</td><td>${iv['ধরন']}</td><td style="text-align:right;">${pct.toFixed(2)}%</td><td>${iv['অবস্থা']}</td><td style="text-align:right;color:${share>=0?'#2e7d5b':'#b3402a'};">৳${money(share)}</td></tr>`;
+  }).join('') || '<tr><td colspan="5" style="text-align:center;">কোনো অংশগ্রহণ নেই</td></tr>';
+
+  const dividendRows = myDividends.map(d=>
+    `<tr><td>${d['ইনভেস্টমেন্টের_শিরোনাম']||''}</td><td style="text-align:right;color:${Number(d['পরিমাণ'])>=0?'#2e7d5b':'#b3402a'};">৳${money(d['পরিমাণ'])}</td><td>${d['ব্যবস্থা']||'সিদ্ধান্তহীন'}</td><td>${fmtDate(d['তারিখ'])}</td></tr>`
+  ).join('') || '<tr><td colspan="4" style="text-align:center;">কোনো লভ্যাংশ পাননি</td></tr>';
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>সদস্য রিপোর্ট — ${u['নাম']}</title>
+    <style>
+      body{font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;padding:32px;color:#222;}
+      h1{color:#0f4c3a;margin-bottom:2px;text-align:center;} p.sub{color:#666;margin-top:0;text-align:center;}
+      h2{margin-top:24px;font-size:15.5px;color:#0f4c3a;border-bottom:2px solid #0f4c3a;padding-bottom:4px;}
+      table{width:100%;border-collapse:collapse;margin-top:10px;}
+      th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;font-size:12px;}
+      th{background:#f0ece0;}
+      .info-table td{border:none;padding:3px 0;font-size:13px;}
+      .info-table td.lbl{color:#666;width:40%;} .info-table td.val{font-weight:700;}
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+      .box{border:1px solid #ccc;border-radius:8px;padding:9px 11px;}
+      .box .lbl{font-size:11px;color:#666;} .box .val{font-size:15px;font-weight:700;color:#0f4c3a;}
+      @media print{ h2{page-break-before:auto;} table{page-break-inside:auto;} tr{page-break-inside:avoid;} }
+    </style></head><body>
+    <h1>${ORG_NAME}</h1>
+    <p class="sub">সদস্যের বিস্তারিত রিপোর্ট · তৈরির তারিখ: ${fmtDate(Date.now())}</p>
+
+    <h2>সদস্য পরিচিতি</h2>
+    <table class="info-table">
+      <tr><td class="lbl">নাম</td><td class="val">${u['নাম']}</td></tr>
+      <tr><td class="lbl">ইউজারনেম</td><td class="val">@${u['ইউজারনেম']}</td></tr>
+      <tr><td class="lbl">ফোন</td><td class="val">${u['ফোন']||''}</td></tr>
+      <tr><td class="lbl">পদ</td><td class="val">${ROLE_LABEL[u['রোল']]||u['রোল']}</td></tr>
+      <tr><td class="lbl">যোগদানের তারিখ</td><td class="val">${fmtDate(u['যোগদানের_তারিখ'])}</td></tr>
+      <tr><td class="lbl">স্ট্যাটাস</td><td class="val">${u['স্ট্যাটাস']}</td></tr>
+    </table>
+
+    <div class="grid">
+      <div class="box"><div class="lbl">মোট জমাকৃত চাঁদা (যাচাইকৃত)</div><div class="val">৳${money(myContribTotal)}</div></div>
+      <div class="box"><div class="lbl">নিট ব্যালেন্স</div><div class="val" style="color:${netBalance>=0?'#2e7d5b':'#b3402a'};">৳${money(netBalance)}</div></div>
+      <div class="box"><div class="lbl">পেন্ডিং চাঁদা আবেদন</div><div class="val">${myContribPending}টি</div></div>
+      <div class="box"><div class="lbl">মোট রি-ইনভেস্টকৃত লভ্যাংশ</div><div class="val">৳${money(totalReinvested)}</div></div>
+      <div class="box"><div class="lbl">মোট উত্তোলিত লভ্যাংশ</div><div class="val">৳${money(totalWithdrawn)}</div></div>
+      <div class="box"><div class="lbl">ইনভেস্টমেন্টে অংশগ্রহণ</div><div class="val">${participations.length}টি</div></div>
+    </div>
+
+    <h2>চাঁদা জমার সম্পূর্ণ ইতিহাস (${myContribs.length}টি)</h2>
+    <table><tr><th>মাস</th><th style="text-align:right;">পরিমাণ</th><th>মাধ্যম</th><th>স্ট্যাটাস</th><th>তারিখ</th></tr>${contribRows}</table>
+
+    <h2>ইনভেস্টমেন্টে অংশগ্রহণ (${participations.length}টি)</h2>
+    <table><tr><th>ইনভেস্টমেন্ট</th><th>ধরন</th><th style="text-align:right;">আমার শেয়ার</th><th>অবস্থা</th><th style="text-align:right;">বর্তমান ভাগ</th></tr>${investRows}</table>
+
+    <h2>লভ্যাংশের সম্পূর্ণ ইতিহাস (${myDividends.length}টি)</h2>
+    <table><tr><th>ইনভেস্টমেন্ট</th><th style="text-align:right;">পরিমাণ</th><th>ব্যবস্থা</th><th>তারিখ</th></tr>${dividendRows}</table>
+
+    <script>window.onload = function(){ window.print(); };<\/script>
+    </body></html>`);
+  win.document.close();
+  logActivity_('memberReport', u['নাম']);
+}
+
+function printAnnualReport_(year){
+  year = Number(year);
+  const yearContrib = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড' && new Date(Number(c['যাচাইয়ের_তারিখ'])||0).getFullYear()===year);
+  const totalContribYear = yearContrib.reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+
+  const yearExpense = cache.expense.filter(x=>new Date(Number(x['তারিখ'])||0).getFullYear()===year);
+  const totalExpenseYear = yearExpense.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
+
+  const yearNewInvests = cache.invest.filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত' && new Date(Number(i['শুরুর_তারিখ'])||0).getFullYear()===year);
+  const totalNewInvestYear = yearNewInvests.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+
+  const yearDividends = cache.dividend.filter(d=>new Date(Number(d['তারিখ'])||0).getFullYear()===year);
+  const totalDividendYear = yearDividends.reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const profitDividendYear = yearDividends.filter(d=>Number(d['পরিমাণ']||0)>=0).reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const lossDividendYear = yearDividends.filter(d=>Number(d['পরিমাণ']||0)<0).reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+
+  const newMembersYear = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত' && new Date(Number(u['যোগদানের_তারিখ'])||0).getFullYear()===year).length;
+  const totalMembersNow = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত').length;
+
+  const monthNames = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  const monthlyMap = {};
+  yearContrib.forEach(c=>{
+    const m = new Date(Number(c['যাচাইয়ের_তারিখ'])).getMonth();
+    monthlyMap[m] = (monthlyMap[m]||0) + Number(c['পরিমাণ']||0);
+  });
+  const monthRows = monthNames.map((name,i)=> `<tr><td>${name}</td><td style="text-align:right;">৳${money(monthlyMap[i]||0)}</td></tr>`).join('');
+
+  const investRows = yearNewInvests.map(i=>
+    `<tr><td>${i['শিরোনাম']}</td><td>${i['ধরন']}</td><td style="text-align:right;">৳${money(i['বিনিয়োগ_টাকা'])}</td><td>${i['অবস্থা']}</td></tr>`
+  ).join('') || '<tr><td colspan="4" style="text-align:center;">এই বছরে নতুন কোনো ইনভেস্টমেন্ট নেই</td></tr>';
+
+  const dividendRows = yearDividends.map(d=>
+    `<tr><td>${d['ইনভেস্টমেন্টের_শিরোনাম']||''}</td><td>${d['সদস্যের_নাম']||''}</td><td style="text-align:right;color:${Number(d['পরিমাণ'])>=0?'#2e7d5b':'#b3402a'};">৳${money(d['পরিমাণ'])}</td></tr>`
+  ).join('') || '<tr><td colspan="3" style="text-align:center;">এই বছরে কোনো লভ্যাংশ বণ্টন হয়নি</td></tr>';
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>বার্ষিক প্রতিবেদন ${year} — ${ORG_NAME}</title>
+    <style>
+      body{font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;padding:32px;color:#222;}
+      h1{color:#0f4c3a;margin-bottom:2px;text-align:center;} p.sub{color:#666;margin-top:0;text-align:center;}
+      h2{margin-top:26px;font-size:16px;color:#0f4c3a;border-bottom:2px solid #0f4c3a;padding-bottom:4px;}
+      table{width:100%;border-collapse:collapse;margin-top:10px;}
+      th,td{border:1px solid #ccc;padding:6px 9px;text-align:left;font-size:12.5px;}
+      th{background:#f0ece0;}
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+      .box{border:1px solid #ccc;border-radius:8px;padding:10px 12px;}
+      .box .lbl{font-size:11.5px;color:#666;} .box .val{font-size:16px;font-weight:700;color:#0f4c3a;}
+      @media print{ h2{page-break-before:auto;} table{page-break-inside:auto;} tr{page-break-inside:avoid;} }
+    </style></head><body>
+    <h1>${ORG_NAME}</h1>
+    <p class="sub">বার্ষিক প্রতিবেদন — ${year} সাল · তৈরির তারিখ: ${fmtDate(Date.now())}</p>
+
+    <div class="grid">
+      <div class="box"><div class="lbl">এই বছর নতুন সদস্য</div><div class="val">${newMembersYear}</div></div>
+      <div class="box"><div class="lbl">মোট সদস্য (বর্তমানে)</div><div class="val">${totalMembersNow}</div></div>
+      <div class="box"><div class="lbl">এই বছর মোট চাঁদা আদায়</div><div class="val">৳${money(totalContribYear)}</div></div>
+      <div class="box"><div class="lbl">এই বছর মোট খরচ</div><div class="val">৳${money(totalExpenseYear)}</div></div>
+      <div class="box"><div class="lbl">এই বছর নতুন বিনিয়োগ</div><div class="val">৳${money(totalNewInvestYear)}</div></div>
+      <div class="box"><div class="lbl">এই বছর বণ্টিত লভ্যাংশ (নিট)</div><div class="val" style="color:${totalDividendYear>=0?'#2e7d5b':'#b3402a'};">৳${money(totalDividendYear)}</div></div>
+      <div class="box"><div class="lbl">— যার মধ্যে লাভ</div><div class="val" style="color:#2e7d5b;">৳${money(profitDividendYear)}</div></div>
+      <div class="box"><div class="lbl">— যার মধ্যে ক্ষতি</div><div class="val" style="color:#b3402a;">৳${money(Math.abs(lossDividendYear))}</div></div>
+    </div>
+
+    <h2>মাসভিত্তিক চাঁদা আদায় (${year})</h2>
+    <table><tr><th>মাস</th><th style="text-align:right;">পরিমাণ</th></tr>${monthRows}
+      <tr style="font-weight:700;background:#f0ece0;"><td>মোট</td><td style="text-align:right;">৳${money(totalContribYear)}</td></tr>
+    </table>
+
+    <h2>এই বছরের নতুন ইনভেস্টমেন্ট (${yearNewInvests.length}টি)</h2>
+    <table><tr><th>শিরোনাম</th><th>ধরন</th><th style="text-align:right;">বিনিয়োগ</th><th>অবস্থা</th></tr>${investRows}</table>
+
+    <h2>এই বছরের লভ্যাংশ বণ্টন (${yearDividends.length}টি এন্ট্রি)</h2>
+    <table><tr><th>ইনভেস্টমেন্ট</th><th>সদস্য</th><th style="text-align:right;">পরিমাণ</th></tr>${dividendRows}</table>
+
+    <p style="margin-top:22px;font-size:11px;color:#888;">এই প্রতিবেদনটি সিস্টেমে সংরক্ষিত তথ্যের ভিত্তিতে স্বয়ংক্রিয়ভাবে তৈরি — চূড়ান্ত অনুমোদনের আগে কমিটির যাচাই সুপারিশ করা হচ্ছে।</p>
+
+    <script>window.onload = function(){ window.print(); };<\/script>
+    </body></html>`);
+  win.document.close();
+  logActivity_('annualReport', String(year));
+}
+
+function printSummaryReport_(){
+  const approvedMembers = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত');
+  const totalContrib = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+  const totalExpense = cache.expense.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
+  const activeInvests = cache.invest.filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত');
+  const totalInvest = activeInvests.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const totalPL = activeInvests.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
+  const totalReturned = activeInvests.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
+  const totalWithdrawn = cache.withdrawal.filter(w=>w['স্ট্যাটাস']==='অনুমোদিত').reduce((s,w)=>s+Number(w['পরিমাণ']||0),0);
+  const handCash = totalContrib - totalExpense - totalInvest + totalReturned - totalWithdrawn;
+  const rowsHtml = approvedMembers.map(u=>{
+    const paid = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(u['ID']) && c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+    return `<tr><td>${u['নাম']}</td><td>${u['ফোন']}</td><td>৳${money(paid)}</td></tr>`;
+  }).join('');
+  const investRows = [...cache.invest].sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ']))).map(i=>
+    `<tr><td>${i['শিরোনাম']}</td><td>${i['ধরন']}</td><td>৳${money(i['বিনিয়োগ_টাকা'])}</td><td>৳${money(i['বর্তমান_মূল্য'])}</td><td>৳${money(i['লাভ_ক্ষতি'])}</td><td>${i['অবস্থা']}</td><td>${i['পরিচালক']||''}</td></tr>`
+  ).join('') || '<tr><td colspan="7">কোনো এন্ট্রি নেই</td></tr>';
+  const txnRows = [...cache.transaction].filter(t=>t['ধরন']!=='মূল্য হালনাগাদ').sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ']))).map(t=>
+    `<tr><td>${fmtDate(t['জমার_তারিখ'])}</td><td>${t['ধরন']}</td><td>৳${money(t['পরিমাণ'])}</td><td>${t['বিবরণ']||''}</td><td>${t['সাবমিটকারীর_নাম']||''}</td><td>${t['স্ট্যাটাস']}</td></tr>`
+  ).join('') || '<tr><td colspan="6">কোনো এন্ট্রি নেই</td></tr>';
+  const logRows = [...cache.activityLog].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))).slice(0,200).map(l=>
+    `<tr><td>${fmtDate(l['তারিখ'])}</td><td>${l['কর্তা']} (${ROLE_LABEL[l['রোল']]||l['রোল']})</td><td>${l['কাজ']}</td><td>${l['বিস্তারিত']||''}</td></tr>`
+  ).join('') || '<tr><td colspan="4">কোনো লগ নেই</td></tr>';
+  const win = window.open('', '_blank');
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>ফুল রিপোর্ট — ${ORG_NAME}</title>
+    <style>
+      body{font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;padding:30px;color:#222;}
+      h1{color:#0f4c3a;margin-bottom:2px;} p.sub{color:#666;margin-top:0;}
+      h2{margin-top:28px;font-size:16px;color:#0f4c3a;border-bottom:2px solid #0f4c3a;padding-bottom:4px;}
+      table{width:100%;border-collapse:collapse;margin-top:10px;}
+      th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;font-size:12px;}
+      th{background:#f0ece0;}
+      .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;}
+      .box{border:1px solid #ccc;border-radius:8px;padding:10px 14px;}
+      .box .lbl{font-size:12px;color:#666;} .box .val{font-size:18px;font-weight:700;color:#0f4c3a;}
+      @media print{ h2{page-break-before:auto;} table{page-break-inside:auto;} tr{page-break-inside:avoid;} }
+    </style></head><body>
+    <h1>${ORG_NAME}</h1>
+    <p class="sub">ফুল রিপোর্ট — তৈরির তারিখ: ${fmtDate(Date.now())}</p>
+    <div class="grid">
+      <div class="box"><div class="lbl">মোট সদস্য</div><div class="val">${approvedMembers.length}</div></div>
+      <div class="box"><div class="lbl">মোট চাঁদা আদায় (যাচাইকৃত)</div><div class="val">৳${money(totalContrib)}</div></div>
+      <div class="box"><div class="lbl">মোট বিনিয়োগ</div><div class="val">৳${money(totalInvest)}</div></div>
+      <div class="box"><div class="lbl">মোট লাভ/ক্ষতি</div><div class="val">৳${money(totalPL)}</div></div>
+      <div class="box"><div class="lbl">মোট খরচ</div><div class="val">৳${money(totalExpense)}</div></div>
+      <div class="box"><div class="lbl">হাতে নগদ (আনুমানিক)</div><div class="val">৳${money(handCash)}</div></div>
+    </div>
+
+    <h2>সদস্য অনুযায়ী মোট জমাকৃত চাঁদা</h2>
+    <table><tr><th>নাম</th><th>ফোন</th><th>মোট জমা</th></tr>${rowsHtml}</table>
+
+    <h2>ইনভেস্টমেন্টের বিস্তারিত তালিকা (${cache.invest.length}টি)</h2>
+    <table><tr><th>শিরোনাম</th><th>ধরন</th><th>বিনিয়োগ</th><th>বর্তমান মূল্য</th><th>লাভ/ক্ষতি</th><th>অবস্থা</th><th>পরিচালক</th></tr>${investRows}</table>
+
+    <h2>লেনদেনের বিস্তারিত তালিকা (${cache.transaction.filter(t=>t['ধরন']!=='মূল্য হালনাগাদ').length}টি)</h2>
+    <table><tr><th>তারিখ</th><th>ধরন</th><th>পরিমাণ</th><th>বিবরণ</th><th>সাবমিটকারী</th><th>স্ট্যাটাস</th></tr>${txnRows}</table>
+
+    <h2>অ্যাক্টিভিটি লগ (সাম্প্রতিক ${Math.min(cache.activityLog.length,200)}টি)</h2>
+    <table><tr><th>তারিখ</th><th>কর্তা</th><th>কাজ</th><th>বিস্তারিত</th></tr>${logRows}</table>
+
+    <script>window.onload = function(){ window.print(); };<\/script>
+    </body></html>`);
+  win.document.close();
+  logActivity_('printReport', 'ফুল রিপোর্ট');
+}
+
 function fmtDate(d){
-  if(!d) return '';
-  const s = String(d);
-  const dt = new Date(s.includes('T') ? s : s + 'T00:00:00');
-  if(isNaN(dt.getTime())) return s.slice(0,10);
+  if(d === undefined || d === null || d === '') return '';
+  let dt;
+  if(typeof d === 'number'){
+    dt = new Date(d);
+  } else {
+    const s = String(d).trim();
+    if(/^\d+$/.test(s) && s.length >= 10){
+      // Date.now()-এর মতো সংখ্যাসূচক টাইমস্ট্যাম্প, স্ট্রিং আকারে এসে থাকলে
+      dt = new Date(Number(s));
+    } else if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+      // শুধু তারিখ (সময় নেই), যেমন "2026-08-07"
+      dt = new Date(s + 'T00:00:00');
+    } else {
+      dt = new Date(s);
+    }
+  }
+  if(isNaN(dt.getTime())) return String(d);
   const dateStr = dt.toLocaleDateString('bn-BD', {year:'numeric', month:'long', day:'numeric'});
-  // "T00:00:00" মানে সময় নেই (শুধু তারিখ), তাই সেক্ষেত্রে সময় দেখানোর দরকার নেই
-  const hasTime = /T(?!00:00:00(\.0+)?$)/.test(s);
-  if(!hasTime) return dateStr;
+  // ঠিক মধ্যরাত (00:00:00.000) মানে ধরে নেওয়া হয় এটা শুধু তারিখ-ভিত্তিক এন্ট্রি, সময় দেখানোর দরকার নেই
+  const hasRealTime = !(dt.getHours()===0 && dt.getMinutes()===0 && dt.getSeconds()===0 && dt.getMilliseconds()===0);
+  if(!hasRealTime) return dateStr;
   const timeStr = dt.toLocaleTimeString('bn-BD', {hour:'numeric', minute:'2-digit', hour12:true});
   return dateStr + ', ' + timeStr;
 }
@@ -353,36 +1341,14 @@ function currentMonth(){ const d=new Date(); return d.getFullYear()+'-'+String(d
 const app = document.getElementById('app');
 
 function render(){
-  if(!API_URL){ renderConnectScreen(); return; }
   if(!session){ renderAuthScreen(); return; }
   renderShell();
 }
 
-/* ---------------- CONNECT (first run) ---------------- */
-function renderConnectScreen(){
-  app.innerHTML = `
-    <div class="auth-wrap">
-      <div class="auth-brand">
-        <div class="seal">ব ঐ স</div>
-        <h1>${ORG_NAME}</h1>
-        <p>${TAGLINE}</p>
-      </div>
-      <div class="card">
-        <h2>সার্ভার লিংক যুক্ত করুন</h2>
-        <label>Apps Script Web App URL</label>
-        <input type="text" id="urlInput" placeholder="https://script.google.com/macros/s/.../exec">
-        <button class="btn full" id="connectBtn">সংযুক্ত করুন</button>
-        <div class="status-msg" id="connMsg"></div>
-      </div>
-    </div>`;
-  document.getElementById('connectBtn').addEventListener('click', async ()=>{
-    const url = document.getElementById('urlInput').value.trim();
-    const msg = document.getElementById('connMsg');
-    if(!url){ msg.textContent='URL দিন'; msg.className='status-msg err'; return; }
-    await saveApiUrl(url);
-    try{ await refreshAll(); msg.textContent='সংযুক্ত হয়েছে ✓'; msg.className='status-msg ok'; render(); }
-    catch(e){ msg.textContent='সংযোগ ব্যর্থ — URL চেক করুন'; msg.className='status-msg err'; }
-  });
+/* ইউজারনেমকে Firebase Auth-এর জন্য একটা ছদ্ম-ইমেইলে রূপান্তর করে
+   (Firebase Auth ইমেইল দিয়ে কাজ করে, কিন্তু ব্যবহারকারী শুধু ইউজারনেম দেখবে/দেবে) */
+function usernameToEmail_(username){
+  return username.trim().toLowerCase() + '@bondhuoikko.local';
 }
 
 /* ---------------- AUTH (login/register) ---------------- */
@@ -404,6 +1370,33 @@ function renderAuthScreen(){
   document.getElementById('tglLogin').addEventListener('click', ()=>{ authMode='login'; renderAuthScreen(); });
   document.getElementById('tglReg').addEventListener('click', ()=>{ authMode='register'; renderAuthScreen(); });
   const card = document.getElementById('authCard');
+  if(authMode==='forgot'){
+    card.innerHTML = `
+      <h2>পাসওয়ার্ড ভুলে গেছেন?</h2>
+      <p style="font-size:12px;color:var(--muted);">আপনার ইউজারনেম ও ফোন নম্বর দিন — ম্যানেজারের কাছে একটা রিকুয়েস্ট যাবে। তিনি অনুমোদন দিলে আপনি "নতুন অ্যাকাউন্ট" ফর্ম থেকে একই ইউজারনেম দিয়ে নতুন পাসওয়ার্ড সেট করতে পারবেন — আপনার আগের সব ইতিহাস অক্ষত থাকবে।</p>
+      <label>ইউজারনেম</label>
+      <input type="text" id="fUser" placeholder="ইউজারনেম">
+      <label>ফোন নম্বর</label>
+      <input type="tel" id="fPhone" placeholder="01xxxxxxxxx">
+      <button class="btn full" id="forgotBtn">রিকুয়েস্ট পাঠান</button>
+      <div class="status-msg" id="authMsg"></div>
+      <p style="font-size:12px;margin-top:10px;"><a href="#" id="backToLogin">← লগইনে ফিরে যান</a></p>`;
+    document.getElementById('backToLogin').addEventListener('click', (e)=>{ e.preventDefault(); authMode='login'; renderAuthScreen(); });
+    document.getElementById('forgotBtn').addEventListener('click', async ()=>{
+      const username = document.getElementById('fUser').value.trim();
+      const phone = document.getElementById('fPhone').value.trim();
+      const msg = document.getElementById('authMsg');
+      if(!username || !phone){ msg.textContent='ইউজারনেম ও ফোন নম্বর দিন'; msg.className='status-msg err'; return; }
+      msg.textContent='পাঠানো হচ্ছে...'; msg.className='status-msg';
+      try{
+        await fbDb.ref(SHEETS.RESET_REQ).push({
+          'ইউজারনেম': username, 'ফোন': phone, 'তারিখ': Date.now(), 'স্ট্যাটাস': 'পেন্ডিং'
+        });
+        msg.textContent='রিকুয়েস্ট পাঠানো হয়েছে। ম্যানেজার অনুমোদন দিলে জানানো হবে।'; msg.className='status-msg ok';
+      }catch(e){ msg.textContent='পাঠাতে ব্যর্থ: '+e.message; msg.className='status-msg err'; }
+    });
+    return;
+  }
   if(authMode==='login'){
     card.innerHTML = `
       <h2>লগইন করুন</h2>
@@ -412,20 +1405,42 @@ function renderAuthScreen(){
       <label>পাসওয়ার্ড</label>
       <input type="password" id="lPass">
       <button class="btn full" id="loginBtn">লগইন</button>
-      <div class="status-msg" id="authMsg"></div>`;
+      <div class="status-msg" id="authMsg"></div>
+      <p style="font-size:12px;margin-top:10px;"><a href="#" id="forgotLink">পাসওয়ার্ড ভুলে গেছেন?</a></p>`;
+    document.getElementById('forgotLink').addEventListener('click', (e)=>{ e.preventDefault(); authMode='forgot'; renderAuthScreen(); });
     document.getElementById('loginBtn').addEventListener('click', async ()=>{
       const username = document.getElementById('lUser').value.trim();
       const pass = document.getElementById('lPass').value;
       const msg = document.getElementById('authMsg');
       if(!username || !pass){ msg.textContent='ইউজারনেম ও পাসওয়ার্ড দিন'; msg.className='status-msg err'; return; }
+      msg.textContent = 'লগইন হচ্ছে...'; msg.className='status-msg';
       try{
-        const res = await apiPostRaw('login', {ইউজারনেম:username, পাসওয়ার্ড:pass});
-        await saveSession(res.data);
+        const email = usernameToEmail_(username);
+        const cred = await fbAuth.signInWithEmailAndPassword(email, pass);
+        const uid = cred.user.uid;
+        const idxSnap = await fbDb.ref(SHEETS.USER_INDEX+'/'+uid).get();
+        const memberId = idxSnap.val();
+        if(!memberId){ await fbAuth.signOut(); throw new Error('প্রোফাইল লিংক পাওয়া যায়নি'); }
+        const snap = await fbDb.ref(SHEETS.USERS+'/'+memberId).get();
+        if(!snap.exists()){ await fbAuth.signOut(); throw new Error('ইউজার প্রোফাইল পাওয়া যায়নি'); }
+        const profile = snap.val();
+        if(profile['স্ট্যাটাস'] !== 'অনুমোদিত'){
+          await fbAuth.signOut();
+          throw new Error('আপনার অ্যাকাউন্ট এখনো ম্যানেজার অনুমোদন করেননি');
+        }
+        profile['ID'] = memberId;
+        await saveSession(profile);
+        startRealtimeSync();
         await refreshAll();
-        toast('স্বাগতম, ' + res.data['নাম']);
-        activeTab = defaultTabFor(res.data['রোল']);
+        checkDuePaymentReminder_();
+        toast('স্বাগতম, ' + profile['নাম']);
+        activeTab = defaultTabFor(profile['রোল']);
         render();
-      }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+      }catch(e){
+        let m = e.message || 'লগইন ব্যর্থ';
+        if(e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found') m = 'ইউজারনেম বা পাসওয়ার্ড ভুল';
+        msg.textContent = m; msg.className='status-msg err';
+      }
     });
   } else {
     card.innerHTML = `
@@ -448,25 +1463,45 @@ function renderAuthScreen(){
       const pass = document.getElementById('rPass').value;
       const msg = document.getElementById('authMsg');
       if(!username || !name || !phone || !pass){ msg.textContent='সব ঘর পূরণ করুন'; msg.className='status-msg err'; return; }
+      if(!/^[A-Za-z0-9_.]+$/.test(username)){ msg.textContent='ইউজারনেম শুধু ইংরেজি অক্ষর/সংখ্যা/আন্ডারস্কোর হতে হবে (স্পেস/বাংলা চলবে না)'; msg.className='status-msg err'; return; }
+      if(pass.length < 6){ msg.textContent='পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে'; msg.className='status-msg err'; return; }
+      msg.textContent = 'আবেদন পাঠানো হচ্ছে...'; msg.className='status-msg';
       try{
-        await apiPostRaw('register', {ইউজারনেম:username, নাম:name, ফোন:phone, পাসওয়ার্ড:pass});
+        const email = usernameToEmail_(username);
+        const cred = await fbAuth.createUserWithEmailAndPassword(email, pass);
+        const uid = cred.user.uid;
+        // এই ইউজারনেমে কোনো পুরনো প্রোফাইল আগে থেকেই আছে কিনা দেখা হচ্ছে —
+        // থাকলে বুঝতে হবে এটা "পাসওয়ার্ড রিসেট"-এর পর ফিরে আসা পুরনো সদস্য
+        // (কারণ সক্রিয় থাকা অবস্থায় একই ইউজারনেমে নতুন অ্যাকাউন্ট তৈরিই হতো না)
+        const allUsers = await fbGetAll_(SHEETS.USERS);
+        const existing = allUsers.find(u => String(u['ইউজারনেম']||'').toLowerCase() === username.toLowerCase());
+        if(existing){
+          await fbDb.ref(SHEETS.USER_INDEX+'/'+uid).set(existing['ID']);
+          await fbDb.ref(SHEETS.USERS+'/'+existing['ID']+'/authUid').set(uid);
+          await fbAuth.signOut();
+          msg.textContent = 'পুরনো অ্যাকাউন্ট ও ইতিহাসসহ নতুন পাসওয়ার্ড সেট হয়েছে। এখন লগইন করুন।'; msg.className='status-msg ok';
+          authMode='login';
+          setTimeout(renderAuthScreen, 1300);
+          return;
+        }
+        const memberId = fbDb.ref(SHEETS.USERS).push().key;
+        await fbDb.ref(SHEETS.USER_INDEX+'/'+uid).set(memberId);
+        await fbDb.ref(SHEETS.USERS+'/'+memberId).set({
+          'ID': memberId, 'ইউজারনেম': username, 'নাম': name, 'ফোন': phone, 'authUid': uid,
+          'রোল': ROLES.MEMBER, 'স্ট্যাটাস': 'পেন্ডিং', 'যোগদানের_তারিখ': Date.now()
+        });
+        await fbAuth.signOut();
         msg.textContent='আবেদন জমা হয়েছে। ম্যানেজারের অনুমোদনের অপেক্ষায় থাকুন।'; msg.className='status-msg ok';
         authMode='login';
         setTimeout(renderAuthScreen, 1300);
-      }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+      }catch(e){
+        let m = e.message || 'আবেদন ব্যর্থ';
+        if(e.code === 'auth/email-already-in-use') m = 'এই ইউজারনেমটি এখনো সক্রিয় আছে — নতুন পাসওয়ার্ড লাগলে "পাসওয়ার্ড ভুলে গেছেন?" ব্যবহার করুন';
+        if(e.code === 'auth/weak-password') m = 'পাসওয়ার্ড খুব দুর্বল';
+        msg.textContent = m; msg.className='status-msg err';
+      }
     });
   }
-}
-/* auth calls happen before a session exists, so actorRole is simply omitted */
-async function apiPostRaw(action, data, id){
-  if(!API_URL) throw new Error('সার্ভার সংযুক্ত নয়');
-  let res;
-  try{
-    res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action, data, id}) });
-  }catch(e){ throw new Error('সংযোগ ব্যর্থ'); }
-  const json = await res.json();
-  if(json.status !== 'ok') throw new Error(json.message || 'অজানা সমস্যা');
-  return json;
 }
 
 function defaultTabFor(role){
@@ -481,6 +1516,7 @@ function tabsFor(role){
   if(role===ROLES.MANAGER) return [
     {id:'dashboard', ic:'📊', label:'সারাংশ'},
     {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'myAccount', ic:'🧮', label:'আমার হিসাব'},
     {id:'members',   ic:'👥', label:'সদস্য'},
     {id:'transaction', ic:'📥', label:'লেনদেন'},
     {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
@@ -490,6 +1526,7 @@ function tabsFor(role){
   ];
   if(role===ROLES.CASHIER) return [
     {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'myAccount', ic:'🧮', label:'আমার হিসাব'},
     {id:'contrib',   ic:'💰', label:'চাঁদা যাচাই'},
     {id:'transaction', ic:'📥', label:'লেনদেন যাচাই'},
     {id:'expense',   ic:'🧾', label:'খরচ'},
@@ -500,6 +1537,7 @@ function tabsFor(role){
   ];
   if(role===ROLES.FIELD) return [
     {id:'home',      ic:'💵', label:'আমার চাঁদা'},
+    {id:'myAccount', ic:'🧮', label:'আমার হিসাব'},
     {id:'transaction', ic:'📥', label:'লেনদেন'},
     {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
     {id:'poll',      ic:'🗳️', label:'ভোট'},
@@ -508,11 +1546,75 @@ function tabsFor(role){
   ];
   return [
     {id:'home',      ic:'🏠', label:'হোম'},
+    {id:'myAccount', ic:'🧮', label:'আমার হিসাব'},
     {id:'invest',    ic:'📈', label:'ইনভেস্ট'},
     {id:'poll',      ic:'🗳️', label:'ভোট'},
     {id:'notice',    ic:'📢', label:'নোটিশ'},
     {id:'settings',  ic:'⚙️', label:'সেটিংস'}
   ];
+}
+
+/* ==================== অফলাইন সাপোর্ট (সীমিত — শুধু পড়ার জন্য) ====================
+   ইন্টারনেট চলে গেলে নতুন কিছু লেখা/আপডেট করা যাবে না, কিন্তু শেষবার দেখা ডেটা
+   ব্রাউজারেই থেকে যাবে, তাই সংযোগ ফিরে আসার আগ পর্যন্ত অন্তত আগের তথ্য দেখা যাবে। */
+async function saveCacheSnapshot_(){
+  try{ await localSet('cacheSnapshot', {cache, savedAt: Date.now()}); }catch(e){}
+}
+async function loadCacheSnapshot_(){
+  try{
+    const snap = await localGet('cacheSnapshot', null);
+    if(snap && snap.cache){ cache = snap.cache; lastSyncAt = snap.savedAt; return true; }
+  }catch(e){}
+  return false;
+}
+window.addEventListener('online', ()=>{
+  isOffline = false;
+  toast('ইন্টারনেট সংযোগ ফিরে এসেছে — আপডেট হচ্ছে');
+  if(session){ refreshAll().then(()=>{ lastSyncAt = Date.now(); saveCacheSnapshot_(); }).catch(()=>{}); startRealtimeSync(); }
+  if(session) render();
+});
+window.addEventListener('offline', ()=>{
+  isOffline = true;
+  toast('ইন্টারনেট সংযোগ নেই — শেষ দেখা তথ্য দেখানো হচ্ছে');
+  if(session) render();
+});
+
+function computeDueMemberCount_(){
+  const approvedMembers = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত');
+  const month = currentMonth();
+  const submittedIds = new Set(cache.contrib.filter(c=>String(c['মাস']).slice(0,7)===month && c['স্ট্যাটাস']!=='বাতিল').map(c=>String(c['সদস্য_ID'])));
+  return approvedMembers.filter(u=>!submittedIds.has(String(u['ID']))).length;
+}
+/* ১৬ তারিখ থেকে, ক্যাশিয়ার/ম্যানেজার যতবারই অ্যাপ খুলুন না কেন, দিনে সর্বোচ্চ
+   একবার বকেয়া সদস্যের সংখ্যাসহ একটা ডেস্কটপ নোটিফিকেশন দেখানো হয় (যদি
+   নোটিফিকেশন চালু থাকে) — সত্যিকারের সার্ভার-পুশ ছাড়া এটাই সবচেয়ে কাছাকাছি
+   ফ্রি সমাধান। */
+async function checkDuePaymentReminder_(){
+  if(!session) return;
+  if(session['রোল'] !== ROLES.CASHIER && session['রোল'] !== ROLES.MANAGER) return;
+  const today = new Date();
+  if(today.getDate() < 16) return;
+  const todayKey = today.toISOString().slice(0,10);
+  const lastShown = await localGet('dueReminderShown', '');
+  if(lastShown === todayKey) return;
+  await localSet('dueReminderShown', todayKey);
+  const dueCount = computeDueMemberCount_();
+  if(dueCount > 0){
+    notifyBrowser_('চাঁদা বকেয়া রিমাইন্ডার', dueCount+' জন সদস্যের এই মাসের চাঁদা এখনো বাকি আছে');
+  }
+}
+
+function pendingCountFor_(tabId, role){
+  if(tabId==='members' && role===ROLES.MANAGER){
+    return cache.users.filter(u=>u['স্ট্যাটাস']==='পেন্ডিং').length + cache.resetReq.filter(r=>r['স্ট্যাটাস']==='পেন্ডিং').length;
+  }
+  if(tabId==='contrib' && (role===ROLES.CASHIER || role===ROLES.MANAGER)){
+    return cache.contrib.filter(c=>c['স্ট্যাটাস']==='পেন্ডিং').length;
+  }
+  if(tabId==='transaction' && (role===ROLES.CASHIER || role===ROLES.MANAGER)){
+    return cache.transaction.filter(t=>t['স্ট্যাটাস']==='পেন্ডিং').length + cache.withdrawal.filter(w=>w['স্ট্যাটাস']==='পেন্ডিং').length;
+  }
+  return 0;
 }
 
 function renderShell(){
@@ -528,13 +1630,20 @@ function renderShell(){
         </div>
       </div>
       <div class="header-user">
-        <span>${session['নাম']} <span class="role-pill">${ROLE_LABEL[session['রোল']]}</span></span>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <img src="${session['ছবি']||'https://api.dicebear.com/7.x/initials/svg?seed='+encodeURIComponent(session['নাম']||'?')}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff;flex-shrink:0;">
+          ${session['নাম']} <span class="role-pill">${ROLE_LABEL[session['রোল']]}</span>
+        </span>
         <button class="logout-link" id="logoutBtn">লগআউট</button>
       </div>
     </header>
+    ${isOffline ? `<div style="background:#c0392b;color:#fff;text-align:center;font-size:12px;padding:6px 10px;">📴 ইন্টারনেট সংযোগ নেই — শেষ দেখা তথ্য দেখানো হচ্ছে${lastSyncAt? ' ('+fmtDate(lastSyncAt)+')' : ''}। নতুন কিছু জমা/পরিবর্তন করা যাবে না।</div>` : ''}
     <main id="main"></main>
     <nav class="tabs" id="tabs">
-      ${tabs.map(t=>`<button data-tab="${t.id}" class="${activeTab===t.id?'active':''}"><span class="ic">${t.ic}</span>${t.label}</button>`).join('')}
+      ${tabs.map(t=>{
+        const cnt = pendingCountFor_(t.id, session['রোল']);
+        return `<button data-tab="${t.id}" class="${activeTab===t.id?'active':''}"><span class="ic">${t.ic}</span>${t.label}${cnt? `<span class="tab-badge">${cnt>99?'99+':cnt}</span>` : ''}</button>`;
+      }).join('')}
     </nav>`;
   document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await clearSession(); render(); });
   document.getElementById('tabs').addEventListener('click', e=>{
@@ -558,14 +1667,104 @@ function renderTab(){
   if(activeTab==='handcash') return renderHandCash(main);
   if(activeTab==='poll') return renderPoll(main, role);
   if(activeTab==='notice') return renderNotice(main, role);
-  if(activeTab==='rules') return renderRules(main, role);
   if(activeTab==='home') return renderHome(main);
+  if(activeTab==='myAccount') return renderMyAccount(main);
   if(activeTab==='settings') return renderSettings(main);
 }
 
 async function withRefreshThen(fn){
   try{ await refreshAll(); }catch(e){}
   fn();
+}
+
+/* ==================== মাল্টি-ডিভাইস রিয়েল-টাইম সিঙ্ক ====================
+   একবার লগইন হলে, প্রতিটা ডেটা-নোডে একটা "লাইভ" শোনার ব্যবস্থা (listener) বসানো
+   হয়। কোনো ডিভাইস/ব্যবহারকারী ডেটা বদলালেই (নিজে হোক বা অন্য কেউ), সব
+   ডিভাইসের ক্যাশ স্বয়ংক্রিয়ভাবে আপডেট হয়ে বর্তমান ট্যাবটা আবার আঁকা হয়ে যায়
+   — পেজ রিফ্রেশ করার দরকার হয় না। */
+let realtimeRefs = [];
+let rerenderTimer = null;
+function scheduleTabRerender(){
+  if(rerenderTimer) clearTimeout(rerenderTimer);
+  rerenderTimer = setTimeout(()=>{
+    rerenderTimer = null;
+    const active = document.activeElement;
+    const isTyping = active && ['INPUT','TEXTAREA','SELECT'].indexOf(active.tagName) !== -1;
+    // কেউ যদি ঠিক এই মুহূর্তে কোনো ফর্মে টাইপ করছে, তাহলে এখনই রি-রেন্ডার করে
+    // তার লেখা মুছে দেওয়া হবে না — একটু পরে আবার চেষ্টা করবে
+    if(isTyping){ scheduleTabRerender(); return; }
+    if(session){ try{ renderTab(); updateTabBadges_(); lastSyncAt = Date.now(); saveCacheSnapshot_(); }catch(e){} }
+  }, 600);
+}
+function updateTabBadges_(){
+  const tabsEl = document.getElementById('tabs');
+  if(!tabsEl || !session) return;
+  const tabs = tabsFor(session['রোল']);
+  tabsEl.innerHTML = tabs.map(t=>{
+    const cnt = pendingCountFor_(t.id, session['রোল']);
+    return `<button data-tab="${t.id}" class="${activeTab===t.id?'active':''}"><span class="ic">${t.ic}</span>${t.label}${cnt? `<span class="tab-badge">${cnt>99?'99+':cnt}</span>` : ''}</button>`;
+  }).join('');
+}
+function notifyBrowser_(title, body){
+  if(!notifyEnabled) return;
+  if(typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+  try{ new Notification(title, {body: body||'', tag: title+body}); }catch(e){}
+}
+function notifyForNewItems_(key, added){
+  if(!added.length) return;
+  const myRole = session ? session['রোল'] : null;
+  added.forEach(item=>{
+    if(key==='contrib' && item['স্ট্যাটাস']==='পেন্ডিং' && (myRole===ROLES.CASHIER || myRole===ROLES.MANAGER)){
+      notifyBrowser_('নতুন চাঁদা জমার আবেদন', (item['সদস্যের_নাম']||'')+' — ৳'+(item['পরিমাণ']||''));
+    }
+    if(key==='transaction' && item['স্ট্যাটাস']==='পেন্ডিং' && (myRole===ROLES.CASHIER || myRole===ROLES.MANAGER)){
+      notifyBrowser_('নতুন লেনদেনের আবেদন', (item['ধরন']||'')+' — ৳'+(item['পরিমাণ']||''));
+    }
+    if(key==='users' && item['স্ট্যাটাস']==='পেন্ডিং' && myRole===ROLES.MANAGER){
+      notifyBrowser_('নতুন সদস্য আবেদন', (item['নাম']||'')+' (@'+(item['ইউজারনেম']||'')+')');
+    }
+    if(key==='resetReq' && item['স্ট্যাটাস']==='পেন্ডিং' && myRole===ROLES.MANAGER){
+      notifyBrowser_('পাসওয়ার্ড রিসেট রিকুয়েস্ট', '@'+(item['ইউজারনেম']||''));
+    }
+    if(key==='withdrawal' && item['স্ট্যাটাস']==='পেন্ডিং' && (myRole===ROLES.CASHIER || myRole===ROLES.MANAGER)){
+      notifyBrowser_('লভ্যাংশ উত্তোলনের আবেদন', (item['সদস্যের_নাম']||'')+' — ৳'+(item['পরিমাণ']||''));
+    }
+    if(key==='notice'){
+      notifyBrowser_('নতুন নোটিশ', item['শিরোনাম']||item['বিবরণ']||'');
+    }
+  });
+}
+
+function startRealtimeSync(){
+  stopRealtimeSync();
+  const map = [
+    [SHEETS.USERS,'users'], [SHEETS.CONTRIB,'contrib'], [SHEETS.INVEST,'invest'],
+    [SHEETS.INVEST_UPDATE,'investUpdate'], [SHEETS.INVEST_INSTALLMENT,'investInstallment'],
+    [SHEETS.CUSTODIAN,'custodians'], [SHEETS.BABY,'babies'], [SHEETS.BABY_UPDATE,'babyUpdate'],
+    [SHEETS.EXPENSE,'expense'], [SHEETS.NOTICE,'notice'], [SHEETS.POLL,'poll'],
+    [SHEETS.VOTES,'votes'], [SHEETS.TRANSACTION,'transaction'], [SHEETS.RESET_REQ,'resetReq'], [SHEETS.ACTIVITY_LOG,'activityLog'], [SHEETS.DIVIDEND,'dividend'], [SHEETS.WITHDRAWAL,'withdrawal']
+  ];
+  map.forEach(([sheetName, key])=>{
+    let isFirst = true;
+    const ref = fbDb.ref(sheetName);
+    const cb = ref.on('value', snap=>{
+      const val = snap.val();
+      const newList = val ? Object.keys(val).map(k=>{ const o = Object.assign({}, val[k]); o.ID = k; return o; }) : [];
+      if(!isFirst){
+        const oldIds = new Set(cache[key].map(x=>x['ID']));
+        const added = newList.filter(x=>!oldIds.has(x['ID']));
+        notifyForNewItems_(key, added);
+      }
+      isFirst = false;
+      cache[key] = newList;
+      scheduleTabRerender();
+    }, err=>{ /* সাধারণত permission-denied — লগআউট হয়ে যাওয়ার পর পুরনো লিসেনার হলে চুপচাপ উপেক্ষা করা হয় */ });
+    realtimeRefs.push({ref, cb});
+  });
+}
+function stopRealtimeSync(){
+  realtimeRefs.forEach(({ref, cb})=>{ try{ ref.off('value', cb); }catch(e){} });
+  realtimeRefs = [];
 }
 
 /* ---------------- SHARED: org-wide summary bar (সদস্য/মোট জমা/বিনিয়োগ/লাভ-ক্ষতি/হ্যান্ড ক্যাশ) ----------------
@@ -577,11 +1776,13 @@ async function withRefreshThen(fn){
 function orgSummaryBarHtml_(role){
   const totalMembers = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত').length;
   const totalContrib = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
-  const totalInvest = cache.invest.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
-  const totalPL = cache.invest.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
+  const activeInvests = cache.invest.filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত');
+  const totalInvest = activeInvests.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const totalPL = activeInvests.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
   const totalExpense = cache.expense.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
-  const totalCashReturned = cache.invest.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
-  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned;
+  const totalCashReturned = activeInvests.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
+  const totalWithdrawn = cache.withdrawal.filter(w=>w['স্ট্যাটাস']==='অনুমোদিত').reduce((s,w)=>s+Number(w['পরিমাণ']||0),0);
+  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned - totalWithdrawn;
   // পাঁচটা চিপই সবার জন্য ক্লিকযোগ্য — প্রতিটা নিজস্ব বিস্তারিত পেজে নিয়ে যায়,
   // রোলের ট্যাব-তালিকায় সেই আইডি আছে কিনা তার উপর নির্ভর করে না
   return `
@@ -603,12 +1804,84 @@ function bindOrgSummaryNav_(){
 }
 
 /* ---------------- MANAGER: dashboard ---------------- */
+/* ---------------- ড্যাশবোর্ড গ্রাফ ---------------- */
+function computeMonthlyContribData_(){
+  const verified = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড');
+  const map = {};
+  verified.forEach(c=>{
+    const key = String(c['মাস']||'').slice(0,7);
+    if(!/^\d{4}-\d{2}$/.test(key)) return; // "লভ্যাংশ রি-ইনভেস্ট"-এর মতো অ-মাস এন্ট্রি বাদ
+    map[key] = (map[key]||0) + Number(c['পরিমাণ']||0);
+  });
+  const months = Object.keys(map).sort().slice(-12);
+  return { labels: months, values: months.map(m=>map[m]) };
+}
+function computeInvestGrowthData_(){
+  const activeInvests = cache.invest.filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত');
+  const sorted = [...activeInvests].sort((a,b)=>Number(a['শুরুর_তারিখ']||0)-Number(b['শুরুর_তারিখ']||0));
+  let cum = 0;
+  const labels = [], values = [];
+  sorted.forEach(iv=>{
+    cum += Number(iv['বিনিয়োগ_টাকা']||0);
+    labels.push(fmtDate(iv['শুরুর_তারিখ']));
+    values.push(cum);
+  });
+  return { labels, values };
+}
+function renderDashboardCharts_(){
+  if(typeof Chart === 'undefined'){
+    const c1 = document.getElementById('chartContrib'), c2 = document.getElementById('chartInvest');
+    const msg = '<div class="empty">গ্রাফ লোড করা যায়নি — ইন্টারনেট সংযোগ চেক করুন (Chart.js লাইব্রেরি লোড হয়নি)</div>';
+    if(c1) c1.parentElement.insertAdjacentHTML('beforeend', msg);
+    if(c2) c2.parentElement.insertAdjacentHTML('beforeend', msg);
+    return;
+  }
+  const contribData = computeMonthlyContribData_();
+  const investData = computeInvestGrowthData_();
+  const ctx1 = document.getElementById('chartContrib');
+  const ctx2 = document.getElementById('chartInvest');
+  if(chartContribInstance){ chartContribInstance.destroy(); chartContribInstance = null; }
+  if(chartInvestInstance){ chartInvestInstance.destroy(); chartInvestInstance = null; }
+  if(ctx1){
+    if(!contribData.labels.length){
+      ctx1.parentElement.insertAdjacentHTML('beforeend', '<div class="empty" id="chartContribEmpty">এখনো কোনো যাচাইকৃত চাঁদা নেই</div>');
+    } else {
+      const oldEmpty = document.getElementById('chartContribEmpty'); if(oldEmpty) oldEmpty.remove();
+      chartContribInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: contribData.labels, datasets: [{ label:'চাঁদা আদায় (৳)', data: contribData.values, backgroundColor:'#0f4c3a', borderRadius:4 }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+      });
+    }
+  }
+  if(ctx2){
+    if(!investData.labels.length){
+      ctx2.parentElement.insertAdjacentHTML('beforeend', '<div class="empty" id="chartInvestEmpty">এখনো কোনো সক্রিয় ইনভেস্টমেন্ট নেই</div>');
+    } else {
+      const oldEmpty = document.getElementById('chartInvestEmpty'); if(oldEmpty) oldEmpty.remove();
+      chartInvestInstance = new Chart(ctx2, {
+        type: 'line',
+        data: { labels: investData.labels, datasets: [{ label:'ক্রমবর্ধমান বিনিয়োগ (৳)', data: investData.values, borderColor:'#a67c2e', backgroundColor:'rgba(166,124,46,0.15)', fill:true, tension:0.3, pointRadius:3 }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+      });
+    }
+  }
+}
+
 function renderDashboard(main){
   const pending = cache.users.filter(u=>u['স্ট্যাটাস']==='পেন্ডিং');
   const notices = [...cache.notice].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))).slice(0,3);
 
   main.innerHTML = `
     ${orgSummaryBarHtml_(session['রোল'])}
+    <div class="card">
+      <h2>মাসভিত্তিক চাঁদা আদায় (সাম্প্রতিক মাসগুলো)</h2>
+      <canvas id="chartContrib" height="180"></canvas>
+    </div>
+    <div class="card">
+      <h2>ইনভেস্টমেন্টের ক্রমবর্ধমান প্রবৃদ্ধি</h2>
+      <canvas id="chartInvest" height="180"></canvas>
+    </div>
     <div class="card">
       <h2>নতুন আবেদন <small>(${pending.length}টি অপেক্ষমাণ)</small></h2>
       <div id="pendingList">${pending.length? '' : '<div class="empty">কোনো নতুন আবেদন নেই</div>'}</div>
@@ -621,6 +1894,7 @@ function renderDashboard(main){
         </div>`).join('') : '<div class="empty">কোনো নোটিশ নেই</div>'}
     </div>`;
   bindOrgSummaryNav_();
+  renderDashboardCharts_();
 
   const list = document.getElementById('pendingList');
   pending.forEach(u=>{
@@ -651,9 +1925,70 @@ function renderMembers(main){
   const isManager = session['রোল']===ROLES.MANAGER;
   // ম্যানেজার সব সদস্য (পেন্ডিং/বাতিলসহ) দেখেন ও এডিট করতে পারেন; অন্য সবাই শুধু
   // অনুমোদিত সদস্যদের নাম, পোষ্ট (রোল) ও ফোন নম্বর দেখতে পান — এডিট অপশন ছাড়া
-  const users = (isManager ? [...cache.users] : cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত'))
-    .sort((a,b)=> isManager ? String(a['স্ট্যাটাস']).localeCompare(String(b['স্ট্যাটাস'])) : String(a['নাম']).localeCompare(String(b['নাম'])));
-  main.innerHTML = `<div class="card"><h2>সদস্য তালিকা <small>(${users.length}জন)</small></h2><div id="memberList"></div></div>`;
+  let users = isManager ? [...cache.users] : cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত');
+  switch(sortOrder.members){
+    case 'name_asc': users.sort((a,b)=>String(a['নাম']).localeCompare(String(b['নাম']))); break;
+    case 'name_desc': users.sort((a,b)=>String(b['নাম']).localeCompare(String(a['নাম']))); break;
+    case 'joined_desc': users.sort((a,b)=>Number(b['যোগদানের_তারিখ']||0)-Number(a['যোগদানের_তারিখ']||0)); break;
+    case 'joined_asc': users.sort((a,b)=>Number(a['যোগদানের_তারিখ']||0)-Number(b['যোগদানের_তারিখ']||0)); break;
+    default: users.sort((a,b)=> isManager ? String(a['স্ট্যাটাস']).localeCompare(String(b['স্ট্যাটাস'])) : String(a['নাম']).localeCompare(String(b['নাম'])));
+  }
+  const q = (searchQuery.members||'').trim().toLowerCase();
+  const hadFocus = document.activeElement && document.activeElement.id === 'memberSearch';
+  if(q){
+    users = users.filter(u => String(u['নাম']||'').toLowerCase().includes(q) || String(u['ইউজারনেম']||'').toLowerCase().includes(q) || String(u['ফোন']||'').includes(q));
+  }
+  const resetReqs = isManager ? cache.resetReq.filter(r=>r['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))) : [];
+  main.innerHTML = `
+    ${isManager ? `
+    <div class="card">
+      <h2>পাসওয়ার্ড রিসেট রিকুয়েস্ট <small>(${resetReqs.length}টি)</small></h2>
+      <div id="resetReqList">${resetReqs.length? '' : '<div class="empty">কোনো পেন্ডিং রিকুয়েস্ট নেই</div>'}</div>
+    </div>` : ''}
+    <div class="card">
+      <h2>সদস্য তালিকা <small>(${users.length}জন)</small></h2>
+      <input type="text" id="memberSearch" placeholder="🔍 নাম, ইউজারনেম বা ফোন দিয়ে খুঁজুন" value="${searchQuery.members||''}" style="margin-bottom:10px;">
+      <label style="font-size:12px;">সাজান</label>
+      <select id="memberSort" style="margin-bottom:10px;">
+        <option value="status" ${sortOrder.members==='status'?'selected':''}>${isManager?'স্ট্যাটাস অনুযায়ী (ডিফল্ট)':'নাম (A-Z)'}</option>
+        <option value="name_asc" ${sortOrder.members==='name_asc'?'selected':''}>নাম (A-Z)</option>
+        <option value="name_desc" ${sortOrder.members==='name_desc'?'selected':''}>নাম (Z-A)</option>
+        <option value="joined_desc" ${sortOrder.members==='joined_desc'?'selected':''}>যোগদান (নতুন আগে)</option>
+        <option value="joined_asc" ${sortOrder.members==='joined_asc'?'selected':''}>যোগদান (পুরনো আগে)</option>
+      </select>
+      <div id="memberList"></div>
+    </div>`;
+  document.getElementById('memberSearch').addEventListener('input', (e)=>{ searchQuery.members = e.target.value; renderTab(); });
+  document.getElementById('memberSort').addEventListener('change', (e)=>{ sortOrder.members = e.target.value; renderTab(); });
+  if(hadFocus){ const ms = document.getElementById('memberSearch'); ms.focus(); ms.selectionStart = ms.selectionEnd = ms.value.length; }
+  if(isManager){
+    const rrList = document.getElementById('resetReqList');
+    resetReqs.forEach(r=>{
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">@${r['ইউজারনেম']}</div><div class="li-meta">ফোন: ${r['ফোন']} · ${fmtDate(r['তারিখ'])}</div></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn small" data-act="approveReset">অনুমোদন করুন</button>
+          <button class="btn small danger" data-act="dismissReset">উড়িয়ে দিন</button>
+        </div>`;
+      row.querySelector('[data-act="approveReset"]').addEventListener('click', async ()=>{
+        showInfoModal('পাসওয়ার্ড রিসেট অনুমোদন', `
+          এখন <a href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/users" target="_blank" rel="noopener" style="color:#0f4c3a;font-weight:600;text-decoration:underline;">Firebase Console → Authentication</a>-এ গিয়ে
+          "<b>${r['ইউজারনেম']}</b>"-এর পুরনো এন্ট্রিটা (ইমেইল অনেকটা <b>${r['ইউজারনেম'].toLowerCase()}@bondhuoikko.local</b> এর মতো দেখতে) খুঁজে মুছে দিন।
+          এরপর সদস্যকে বলুন "নতুন অ্যাকাউন্ট" ফর্ম থেকে একই ইউজারনেম দিয়ে নতুন পাসওয়ার্ড সেট করতে — তার আগের সব ইতিহাস এমনিতেই ফিরে আসবে।
+        `);
+        try{ await fbDb.ref(SHEETS.RESET_REQ+'/'+r['ID']).update({'স্ট্যাটাস':'অনুমোদিত'}); logActivity_('passwordResetApprove', '@'+r['ইউজারনেম']); toast('অনুমোদন করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      row.querySelector('[data-act="dismissReset"]').addEventListener('click', async ()=>{
+        try{ await fbDb.ref(SHEETS.RESET_REQ+'/'+r['ID']).remove(); logActivity_('passwordResetDismiss', '@'+r['ইউজারনেম']); toast('মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      rrList.appendChild(row);
+    });
+  }
   const list = document.getElementById('memberList');
   if(!users.length){ list.innerHTML='<div class="empty">কোনো সদস্য নেই</div>'; return; }
   users.forEach(u=>{
@@ -661,7 +1996,10 @@ function renderMembers(main){
     const statusBadge = u['স্ট্যাটাস']==='অনুমোদিত'?'approved':(u['স্ট্যাটাস']==='বাতিল'?'rejected':'pending');
     row.innerHTML = `
       <div class="li-top">
-        <div><div class="li-name">${u['নাম']}</div><div class="li-meta">@${u['ইউজারনেম']} · ${u['ফোন']}${!isManager? ' · '+(ROLE_LABEL[u['রোল']]||u['রোল']) : ''}</div></div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="${u['ছবি']||'https://api.dicebear.com/7.x/initials/svg?seed='+encodeURIComponent(u['নাম']||'?')}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#eee;">
+          <div><div class="li-name">${u['নাম']}</div><div class="li-meta">@${u['ইউজারনেম']} · ${u['ফোন']}${!isManager? ' · '+(ROLE_LABEL[u['রোল']]||u['রোল']) : ''}</div></div>
+        </div>
         ${isManager? `<span class="badge ${statusBadge}">${u['স্ট্যাটাস']}</span>` : `<span class="role-pill">${ROLE_LABEL[u['রোল']]||u['রোল']}</span>`}
       </div>
       ${isManager? `
@@ -687,7 +2025,7 @@ function renderMembers(main){
 
 /* ---------------- CASHIER (+ manager view): contributions ---------------- */
 function renderContrib(main){
-  const canVerify = session['রোল']===ROLES.CASHIER || session['রোল']===ROLES.MANAGER;
+  const canVerify = session['রোল']===ROLES.CASHIER;
   const pending = cache.contrib.filter(c=>c['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
   const verified = cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
 
@@ -767,10 +2105,8 @@ function txnInvestOptions_(type){
     // শুধু "বাকি বিক্রয়" জাতীয় ইনভেস্টমেন্ট, যেগুলোর কিস্তি এখনো বাকি আছে
     return cache.invest.filter(iv=>iv['ধরন']===SALE_TYPE && iv['অবস্থা']!=='পরিশোধিত');
   }
-  // ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা (বিক্রয়/লভ্যাংশ/উদ্ধারকৃত ইত্যাদি) — শুধু চলমান
-  // ইনভেস্টমেন্ট (যেগুলো থেকে এখনো টাকা আদায়ের সম্ভাবনা আছে); সমাপ্ত হয়ে যাওয়া
-  // ইনভেস্টমেন্ট থেকে আবার নতুন করে টাকা আসার কিছু নেই, তাই তালিকায় দেখানো হয় না
-  return cache.invest.filter(iv=>iv['অবস্থা']==='চলমান');
+  // ইনভেস্টমেন্ট থেকে প্রাপ্ত টাকা (বিক্রয়/লভ্যাংশ/উদ্ধারকৃত ইত্যাদি) — চলমান ও সমাপ্ত সব ইনভেস্টমেন্ট
+  return cache.invest.filter(iv=>iv['অবস্থা']==='চলমান' || iv['অবস্থা']==='সমাপ্ত');
 }
 function txnInvestOptionLabel_(iv, type){
   if(type===TXN_TYPE_INSTALLMENT) return `${iv['শিরোনাম']} — বাকি ৳${money(iv['বাকি_টাকা'])}`;
@@ -780,12 +2116,27 @@ function txnInvestOptionLabel_(iv, type){
 function renderTransaction(main, role){
   const canSubmit = role===ROLES.FIELD || role===ROLES.MANAGER;
   const canVerify = role===ROLES.CASHIER; // অনুমোদন/বাতিল করার ক্ষমতা শুধু ক্যাশিয়ারের — ম্যানেজার/ফিল্ড পরিচালক শুধু সাবমিট করতে পারবেন
+  const canApproveWithdrawal = role===ROLES.CASHIER;
+  const pendingWithdrawals = cache.withdrawal.filter(w=>w['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
   const mine = cache.transaction.filter(t=>String(t['সাবমিটকারী_ID'])===String(session['ID']));
   const pending = cache.transaction.filter(t=>t['স্ট্যাটাস']==='পেন্ডিং').sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
   // "মূল্য হালনাগাদ" অনুরোধের কোনো ইতিহাস রাখা হয় না — অনুমোদন বা বাতিল দুই
   // ক্ষেত্রেই সরাসরি মুছে ফেলা হয়, তাই সতর্কতাবশত এখানেও বাদ দেওয়া হলো
   const rejectedMine = mine.filter(t=>t['স্ট্যাটাস']==='বাতিল' && t['ধরন']!=='মূল্য হালনাগাদ').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
-  const verified = cache.transaction.filter(t=>t['স্ট্যাটাস']==='ভেরিফাইড' && t['ধরন']!=='মূল্য হালনাগাদ').sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
+  let verified = cache.transaction.filter(t=>t['স্ট্যাটাস']==='ভেরিফাইড' && t['ধরন']!=='মূল্য হালনাগাদ');
+  switch(sortOrder.transaction){
+    case 'date_asc': verified.sort((a,b)=>String(a['যাচাইয়ের_তারিখ']).localeCompare(String(b['যাচাইয়ের_তারিখ']))); break;
+    case 'amount_desc': verified.sort((a,b)=>Number(b['পরিমাণ']||0)-Number(a['পরিমাণ']||0)); break;
+    case 'amount_asc': verified.sort((a,b)=>Number(a['পরিমাণ']||0)-Number(b['পরিমাণ']||0)); break;
+    default: verified.sort((a,b)=>String(b['যাচাইয়ের_তারিখ']).localeCompare(String(a['যাচাইয়ের_তারিখ'])));
+  }
+  const tq = (searchQuery.transaction||'').trim().toLowerCase();
+  const verifiedFiltered = tq ? verified.filter(t =>
+    String(t['বিবরণ']||'').toLowerCase().includes(tq) ||
+    String(t['সাবমিটকারীর_নাম']||'').toLowerCase().includes(tq) ||
+    String(t['ধরন']||'').toLowerCase().includes(tq)
+  ) : verified;
+  const txnHadFocus = document.activeElement && document.activeElement.id === 'txnSearch';
 
   main.innerHTML = `
     ${canSubmit? `
@@ -803,10 +2154,6 @@ function renderTransaction(main, role){
       <input type="number" id="tAmount">
       <label>বিস্তারিত বিবরণ</label>
       <textarea id="tDesc" rows="3" placeholder="কার কাছ থেকে, কবে, কীভাবে টাকা পেয়েছেন তা লিখুন"></textarea>
-      <label>প্রমাণ/রসিদের ছবি (একাধিক ছবি দেওয়া যাবে, ঐচ্ছিক)</label>
-      <input type="file" id="tProofFile" accept="image/*" multiple>
-      <div id="tProofPreviewWrap" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
-      <div class="li-meta" style="margin-top:2px;">এখানে দেওয়া ছবি অনুমোদনের পর সংশ্লিষ্ট ইনভেস্টমেন্টের হিস্টোরিতে সংরক্ষিত থাকবে</div>
       <button class="btn full gold" id="submitTxnBtn">ক্যাশিয়ারের কাছে পাঠান</button>
       <div class="status-msg" id="tMsg"></div>
     </div>` : ''}
@@ -823,10 +2170,27 @@ function renderTransaction(main, role){
       <div id="pendingTxnList">${pending.length? '' : '<div class="empty">কোনো পেন্ডিং লেনদেন নেই</div>'}</div>
     </div>` : ''}
 
+    ${canApproveWithdrawal? `
     <div class="card">
-      <h2>যাচাইকৃত লেনদেন</h2>
-      <div id="verifiedTxnList">${verified.length? '' : '<div class="empty">এখনো কোনো যাচাই হয়নি</div>'}</div>
+      <h2>লভ্যাংশ উত্তোলনের আবেদন <small>(${pendingWithdrawals.length}টি)</small></h2>
+      <div id="withdrawalList">${pendingWithdrawals.length? '' : '<div class="empty">কোনো পেন্ডিং উত্তোলন আবেদন নেই</div>'}</div>
+    </div>` : ''}
+
+    <div class="card">
+      <h2>যাচাইকৃত লেনদেন <small>(${verifiedFiltered.length}টি)</small></h2>
+      <input type="text" id="txnSearch" placeholder="🔍 বিবরণ, নাম বা ধরন দিয়ে খুঁজুন" value="${searchQuery.transaction||''}" style="margin-bottom:10px;">
+      <label style="font-size:12px;">সাজান</label>
+      <select id="txnSort" style="margin-bottom:10px;">
+        <option value="date_desc" ${sortOrder.transaction==='date_desc'?'selected':''}>তারিখ (নতুন আগে)</option>
+        <option value="date_asc" ${sortOrder.transaction==='date_asc'?'selected':''}>তারিখ (পুরনো আগে)</option>
+        <option value="amount_desc" ${sortOrder.transaction==='amount_desc'?'selected':''}>পরিমাণ (বেশি আগে)</option>
+        <option value="amount_asc" ${sortOrder.transaction==='amount_asc'?'selected':''}>পরিমাণ (কম আগে)</option>
+      </select>
+      <div id="verifiedTxnList">${verifiedFiltered.length? '' : '<div class="empty">কিছু পাওয়া যায়নি</div>'}</div>
     </div>`;
+  document.getElementById('txnSearch').addEventListener('input', (e)=>{ searchQuery.transaction = e.target.value; renderTab(); });
+  document.getElementById('txnSort').addEventListener('change', (e)=>{ sortOrder.transaction = e.target.value; renderTab(); });
+  if(txnHadFocus){ const ts = document.getElementById('txnSearch'); ts.focus(); ts.selectionStart = ts.selectionEnd = ts.value.length; }
 
   if(canSubmit){
     const typeSel = document.getElementById('tType');
@@ -852,22 +2216,6 @@ function renderTransaction(main, role){
       syncInvestOptions(null);
     }
 
-    const tProofFile = document.getElementById('tProofFile');
-    const tProofPreviewWrap = document.getElementById('tProofPreviewWrap');
-    tProofFile.addEventListener('change', ()=>{
-      tProofPreviewWrap.innerHTML = '';
-      Array.from(tProofFile.files).forEach(f=>{
-        const reader = new FileReader();
-        reader.onload = e=>{
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.style.cssText = 'width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
-          tProofPreviewWrap.appendChild(img);
-        };
-        reader.readAsDataURL(f);
-      });
-    });
-
     document.getElementById('submitTxnBtn').addEventListener('click', async ()=>{
       const category = typeSel.value;
       const investId = investSel.value;
@@ -875,12 +2223,11 @@ function renderTransaction(main, role){
       const desc = document.getElementById('tDesc').value.trim();
       const msg = document.getElementById('tMsg');
       if(!investId){ msg.textContent='কোন ইনভেস্টমেন্টের সাথে সম্পর্কিত তা বাছাই করুন'; msg.className='status-msg err'; return; }
-      if(amount===''|| Number(amount)<0 || isNaN(Number(amount)) || !desc){ msg.textContent='পরিমাণ ও বিস্তারিত বিবরণ দিন'; msg.className='status-msg err'; return; }
+      if(amount === '' || isNaN(Number(amount)) || Number(amount)<0 || !desc){ msg.textContent='পরিমাণ (০ বা তার বেশি) ও বিস্তারিত বিবরণ দিন'; msg.className='status-msg err'; return; }
       const iv = cache.invest.find(x=>String(x['ID'])===String(investId));
       try{
-        const proofUrls = await uploadMultiplePhotos_(tProofFile.files, 'txn_'+category, msg);
         await apiPost('submitTransaction', {data:{
-          'ধরন':category, 'পরিমাণ':amount, 'বিবরণ':desc, 'ছবি_লিংক':proofUrls.join(','),
+          'ধরন':category, 'পরিমাণ':amount, 'বিবরণ':desc,
           'ইনভেস্টমেন্ট_ID':investId, 'ইনভেস্টমেন্টের_শিরোনাম': iv? iv['শিরোনাম'] : '',
           'সাবমিটকারী_ID':session['ID'], 'সাবমিটকারীর_নাম':session['নাম'], 'সাবমিটকারীর_পদ':session['রোল']
         }});
@@ -902,7 +2249,6 @@ function renderTransaction(main, role){
           <div class="li-meta" style="color:var(--terracotta);">বাতিলের কারণ: ${t['বাতিলের_কারণ']||''}</div></div>
           <div style="text-align:right;"><span class="amt">৳${money(t['পরিমাণ'])}</span><br><span class="badge rejected">বাতিল</span></div>
         </div>
-        ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}
         <div class="row-actions">
           <button class="btn small ghost" data-act="revise">সংশোধন করুন</button>
           <button class="btn small danger" data-act="del">আবেদনটি মুছে ফেলুন</button>
@@ -917,9 +2263,6 @@ function renderTransaction(main, role){
           <select data-f-invest></select>
           <label>পরিমাণ (৳)</label><input type="number" data-f="পরিমাণ" value="${t['পরিমাণ']}">
           <label>বিস্তারিত বিবরণ</label><textarea data-f="বিবরণ" rows="3">${t['বিবরণ']}</textarea>
-          <label>নতুন ছবি যুক্ত করুন (ঐচ্ছিক)</label>
-          <input type="file" data-f-photo accept="image/*" multiple>
-          <div data-f-photo-preview style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
           <button class="btn small gold" data-act="resubmit">সংশোধিত আবেদন আবার পাঠান</button>
         </div>`;
       const form = row.querySelector('[data-form]');
@@ -933,24 +2276,6 @@ function renderTransaction(main, role){
       };
       rTypeSel.addEventListener('change', syncRInvest);
       syncRInvest();
-      row.querySelectorAll('[data-proof-url]').forEach(img=>{
-        img.addEventListener('click', ()=>{ window.open(img.getAttribute('data-proof-url'),'_blank'); });
-      });
-      const rPhotoFile = form.querySelector('[data-f-photo]');
-      const rPhotoPreview = form.querySelector('[data-f-photo-preview]');
-      rPhotoFile.addEventListener('change', ()=>{
-        rPhotoPreview.innerHTML = '';
-        Array.from(rPhotoFile.files).forEach(f=>{
-          const reader = new FileReader();
-          reader.onload = e=>{
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--rule);';
-            rPhotoPreview.appendChild(img);
-          };
-          reader.readAsDataURL(f);
-        });
-      });
       row.querySelector('[data-act="revise"]').addEventListener('click', ()=>{
         form.style.display = form.style.display==='none'? 'block':'none';
       });
@@ -967,11 +2292,8 @@ function renderTransaction(main, role){
         if(!investId || !amount || !desc){ toast('সব তথ্য পূরণ করুন'); return; }
         const iv = cache.invest.find(x=>String(x['ID'])===String(investId));
         try{
-          const existingPhotos = String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean);
-          const newPhotos = await uploadMultiplePhotos_(rPhotoFile.files, 'txn_'+category);
-          const allPhotos = existingPhotos.concat(newPhotos);
           await apiPost('reviseTransaction', {id:t['ID'], data:{
-            'ধরন':category,'পরিমাণ':amount,'বিবরণ':desc,'ছবি_লিংক':allPhotos.join(','),
+            'ধরন':category,'পরিমাণ':amount,'বিবরণ':desc,
             'ইনভেস্টমেন্ট_ID':investId, 'ইনভেস্টমেন্টের_শিরোনাম': iv? iv['শিরোনাম'] : ''
           }});
           toast('সংশোধিত আবেদন আবার ক্যাশিয়ারের কাছে পাঠানো হয়েছে'); withRefreshThen(()=>renderTab());
@@ -994,7 +2316,6 @@ function renderTransaction(main, role){
           <div class="li-meta">${t['বিবরণ']}</div></div>
           <span class="amt">৳${money(t['পরিমাণ'])}</span>
         </div>
-        ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}
         <div class="row-actions">
           <button class="btn small gold" data-act="verify">${isValUpd? 'অনুমোদন করে কার্যকর করুন' : 'যাচাই করে অনুমোদন দিন'}</button>
           <button class="btn small danger" data-act="reject">বাতিল করুন</button>
@@ -1023,20 +2344,7 @@ function renderTransaction(main, role){
           return;
         }
         if(!confirm('এই লেনদেনটি যাচাই করে কার্যকর করতে চান? এটি সংশ্লিষ্ট ইনভেস্টমেন্টের হিসাবে যোগ হয়ে যাবে।')) return;
-        try{
-          await apiPost('verifyTransaction', {id:t['ID'], data:{'যাচাইকারী':session['নাম']}});
-          // সাবমিটকারী যে ছবি দিয়েছিলেন তা সংশ্লিষ্ট ইনভেস্টমেন্টের হিস্টোরিতে (ইনভেস্টমেন্ট_আপডেট) সংরক্ষণ করা হয়,
-          // যাতে পরে সেই ইনভেস্টমেন্টের বিস্তারিত অংশে গিয়ে ছবিসহ প্রমাণটা দেখা যায়
-          if(t['ইনভেস্টমেন্ট_ID']){
-            await apiPost('add', {sheet:'ইনভেস্টমেন্ট_আপডেট', data:{
-              'ইনভেস্টমেন্ট_ID': t['ইনভেস্টমেন্ট_ID'],
-              'ছবি_লিংক': t['ছবি_লিংক']||'',
-              'নোট': `${t['ধরন']} — ৳${money(t['পরিমাণ'])} — ${t['বিবরণ']||''}`,
-              'সদস্য_ID': t['সাবমিটকারী_ID'], 'সদস্যের_নাম': t['সাবমিটকারীর_নাম'], 'সদস্যের_ফোন': ''
-            }});
-          }
-          toast('যাচাই সম্পন্ন হয়েছে'); withRefreshThen(()=>renderTab());
-        }
+        try{ await apiPost('verifyTransaction', {id:t['ID'], data:{'যাচাইকারী':session['নাম']}}); toast('যাচাই সম্পন্ন হয়েছে'); withRefreshThen(()=>renderTab()); }
         catch(e){ toast(e.message); }
       });
       row.querySelector('[data-act="reject"]').addEventListener('click', async ()=>{
@@ -1048,9 +2356,6 @@ function renderTransaction(main, role){
           return;
         }
         const f = row.querySelector('[data-rform]'); f.style.display = f.style.display==='none'? 'block':'none';
-      });
-      row.querySelectorAll('[data-proof-url]').forEach(img=>{
-        img.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(img.getAttribute('data-proof-url'),'_blank'); });
       });
       const confirmRejectBtn = row.querySelector('[data-act="confirmReject"]');
       if(confirmRejectBtn) confirmRejectBtn.addEventListener('click', async ()=>{
@@ -1065,8 +2370,33 @@ function renderTransaction(main, role){
     });
   }
 
+  if(canApproveWithdrawal){
+    const wEl = document.getElementById('withdrawalList');
+    pendingWithdrawals.forEach(w=>{
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">${w['সদস্যের_নাম']}</div><div class="li-meta">৳${money(w['পরিমাণ'])} · ${fmtDate(w['তারিখ'])}</div></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn small gold" data-act="approveW">অনুমোদন করুন</button>
+          <button class="btn small danger" data-act="rejectW">বাতিল করুন</button>
+        </div>`;
+      row.querySelector('[data-act="approveW"]').addEventListener('click', async ()=>{
+        if(!confirm(w['সদস্যের_নাম']+'-কে ৳'+money(w['পরিমাণ'])+' হাতে বুঝিয়ে দিয়েছেন তো?')) return;
+        try{ await apiPost('approveWithdrawal', {id:w['ID']}); toast('উত্তোলন অনুমোদিত হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      row.querySelector('[data-act="rejectW"]').addEventListener('click', async ()=>{
+        try{ await apiPost('rejectWithdrawal', {id:w['ID']}); toast('বাতিল করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      wEl.appendChild(row);
+    });
+  }
+
   const vEl = document.getElementById('verifiedTxnList');
-  verified.slice(0,30).forEach(t=>{
+  verifiedFiltered.slice(0,30).forEach(t=>{
     const row = document.createElement('div'); row.className='list-item';
     row.innerHTML = `
       <div class="li-top">
@@ -1075,11 +2405,7 @@ function renderTransaction(main, role){
         ${t['ইনভেস্টমেন্টের_শিরোনাম']? `<div class="li-meta">সংশ্লিষ্ট: ${t['ইনভেস্টমেন্টের_শিরোনাম']}</div>`:''}
         <div class="li-meta">${t['বিবরণ']}</div></div>
         <span class="amt pos">৳${money(t['পরিমাণ'])} <span class="stamp">✓ ভেরিফাইড</span></span>
-      </div>
-      ${(String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean)).length? `<div class="row-actions">${String(t['ছবি_লিংক']||'').split(',').map(s=>s.trim()).filter(Boolean).map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:70px;max-height:70px;border-radius:7px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>` : ''}`;
-    row.querySelectorAll('[data-proof-url]').forEach(img=>{
-      img.addEventListener('click', ()=>{ window.open(img.getAttribute('data-proof-url'),'_blank'); });
-    });
+      </div>`;
     vEl.appendChild(row);
   });
 }
@@ -1219,25 +2545,32 @@ function renderHandCash(main){
   const totalContrib = verified.reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
   const expenses = [...cache.expense].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
   const totalExpense = expenses.reduce((s,x)=>s+Number(x['পরিমাণ']||0),0);
-  const invests = [...cache.invest].sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
+  const invests = [...cache.invest].filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত').sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
   const totalInvest = invests.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
   const cashBackList = invests.filter(i=>Number(i['পরিশোধিত_টাকা']||0) > 0);
   const totalCashReturned = invests.reduce((s,i)=>s+Number(i['পরিশোধিত_টাকা']||0),0);
-  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned;
+  const withdrawals = cache.withdrawal.filter(w=>w['স্ট্যাটাস']==='অনুমোদিত').sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  const totalWithdrawn = withdrawals.reduce((s,w)=>s+Number(w['পরিমাণ']||0),0);
+  const handCash = totalContrib - totalExpense - totalInvest + totalCashReturned - totalWithdrawn;
 
   main.innerHTML = `
     <div class="card">
       <h2>হ্যান্ড ক্যাশের হিসাব</h2>
-      <div class="li-meta">সমিতির হাতে এই মুহূর্তে থাকা নগদ টাকার হিসাব নিচের ৪টি অংশ মিলিয়ে বের হয়েছে</div>
+      <div class="li-meta">সমিতির হাতে এই মুহূর্তে থাকা নগদ টাকার হিসাব নিচের অংশগুলো মিলিয়ে বের হয়েছে</div>
       <div style="margin-top:10px;font-size:13.5px;line-height:2.1;">
         <div>➕ সদস্যদের মোট টাকা &nbsp; <b class="amt pos">৳${money(totalContrib)}</b></div>
         <div>➖ খরচ &nbsp; <b class="amt neg">৳${money(totalExpense)}</b></div>
         <div>➖ ইনভেস্টমেন্টে দেওয়া টাকা &nbsp; <b class="amt neg">৳${money(totalInvest)}</b></div>
         <div>➕ ইনভেস্টমেন্ট থেকে ফেরত আসা টাকা &nbsp; <b class="amt pos">৳${money(totalCashReturned)}</b></div>
+        <div>➖ সদস্যদের লভ্যাংশ উত্তোলন &nbsp; <b class="amt neg">৳${money(totalWithdrawn)}</b></div>
         <div style="border-top:1px solid var(--rule);margin-top:6px;padding-top:8px;">
           = হ্যান্ড ক্যাশ &nbsp; <b class="amt ${handCash>=0?'pos':'neg'}" style="font-size:17px;">৳${money(handCash)}</b>
         </div>
       </div>
+    </div>
+    <div class="card">
+      <h2>সদস্যদের লভ্যাংশ উত্তোলন <small>(মোট ৳${money(totalWithdrawn)})</small></h2>
+      <div id="hcWithdrawalList">${withdrawals.length? '' : '<div class="empty">কোনো উত্তোলন হয়নি</div>'}</div>
     </div>
     <div class="card">
       <h2>সদস্যদের মোট টাকা <small>(মোট ৳${money(totalContrib)})</small></h2>
@@ -1295,6 +2628,16 @@ function renderHandCash(main){
         <span class="amt pos">৳${money(iv['পরিশোধিত_টাকা'])}</span>
       </div>`;
     cbList.appendChild(row);
+  });
+  const wList = document.getElementById('hcWithdrawalList');
+  withdrawals.forEach(w=>{
+    const row = document.createElement('div'); row.className='list-item';
+    row.innerHTML = `
+      <div class="li-top">
+        <div><div class="li-name">${w['সদস্যের_নাম']}</div><div class="li-meta">${fmtDate(w['তারিখ'])} · অনুমোদন: ${w['অনুমোদনকারী']||''}</div></div>
+        <span class="amt neg">-৳${money(w['পরিমাণ'])}</span>
+      </div>`;
+    wList.appendChild(row);
   });
 }
 
@@ -1356,10 +2699,31 @@ function renderInvest(main, role){
   // ক্যাশিয়ারের জন্য — ফিল্ড পরিচালক/ম্যানেজার হাতে টাকা পেলে তা অবশ্যই
   // "লেনদেন" ট্যাব থেকে সাবমিট করে ক্যাশিয়ারের অনুমোদন নিতে হবে
   const canCollect = role===ROLES.CASHIER;
+  const canDistribute = role===ROLES.CASHIER;
+  const canApproveInvest = role===ROLES.CASHIER;
+  const pendingInvests = cache.invest.filter(iv=>iv['অবস্থা']==='অনুমোদনের অপেক্ষায়').sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
   const goToTxnFor = (type, investId)=>{ prefillTxn = {type, investId}; activeTab = 'transaction'; renderShell(); };
-  const list = [...cache.invest].sort((a,b)=>String(b['সর্বশেষ_আপডেট']).localeCompare(String(a['সর্বশেষ_আপডেট'])));
-  const totalInvest = cache.invest.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
-  const totalPL = cache.invest.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
+  const list = [...cache.invest];
+  switch(sortOrder.invest){
+    case 'amount_desc': list.sort((a,b)=>Number(b['বিনিয়োগ_টাকা']||0)-Number(a['বিনিয়োগ_টাকা']||0)); break;
+    case 'amount_asc': list.sort((a,b)=>Number(a['বিনিয়োগ_টাকা']||0)-Number(b['বিনিয়োগ_টাকা']||0)); break;
+    case 'pl_desc': list.sort((a,b)=>Number(b['লাভ_ক্ষতি']||0)-Number(a['লাভ_ক্ষতি']||0)); break;
+    case 'pl_asc': list.sort((a,b)=>Number(a['লাভ_ক্ষতি']||0)-Number(b['লাভ_ক্ষতি']||0)); break;
+    case 'start_desc': list.sort((a,b)=>Number(b['শুরুর_তারিখ']||0)-Number(a['শুরুর_তারিখ']||0)); break;
+    case 'start_asc': list.sort((a,b)=>Number(a['শুরুর_তারিখ']||0)-Number(b['শুরুর_তারিখ']||0)); break;
+    default: list.sort((a,b)=>String(b['সর্বশেষ_আপডেট']).localeCompare(String(a['সর্বশেষ_আপডেট'])));
+  }
+  const ivq = (searchQuery.invest||'').trim().toLowerCase();
+  const listFiltered = ivq ? list.filter(iv =>
+    String(iv['শিরোনাম']||'').toLowerCase().includes(ivq) ||
+    String(iv['গ্রাহকের_নাম']||'').toLowerCase().includes(ivq) ||
+    String(iv['ধরন']||'').toLowerCase().includes(ivq) ||
+    String(iv['অবস্থা']||'').toLowerCase().includes(ivq)
+  ) : list;
+  const ivHadFocus = document.activeElement && document.activeElement.id === 'invSearch';
+  const activeInvestsForSum = cache.invest.filter(i=>i['অবস্থা']!=='অনুমোদনের অপেক্ষায়' && i['অবস্থা']!=='প্রত্যাখ্যাত');
+  const totalInvest = activeInvestsForSum.reduce((s,i)=>s+Number(i['বিনিয়োগ_টাকা']||0),0);
+  const totalPL = activeInvestsForSum.reduce((s,i)=>s+Number(i['লাভ_ক্ষতি']||0),0);
   const totalDue = cache.invest.filter(i=>i['ধরন']===SALE_TYPE).reduce((s,i)=>s+Number(i['বাকি_টাকা']||0),0);
 
   main.innerHTML = `
@@ -1404,14 +2768,67 @@ function renderInvest(main, role){
       <div id="ivProofPreviewWrap" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
       <label>বিবরণ (ঐচ্ছিক)</label>
       <textarea id="ivNote" rows="2"></textarea>
+      <div style="border-top:1px dashed var(--rule);margin-top:10px;padding-top:10px;">
+        <label>লাভ/ক্ষতি বণ্টনে অংশগ্রহণকারী সদস্য</label>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 8px;">প্রতিটা সদস্যের চাঁদার অনুপাতে এই ইনভেস্টমেন্টের লাভ/ক্ষতির ভাগ নির্ধারিত হবে (তৈরির মুহূর্তের চাঁদার হিসাব অনুযায়ী)। চাইলে কাউকে বাদ দিতে আনচেক করুন — বাকিদের হিসাবে তার ভাগটা স্বয়ংক্রিয়ভাবে ভাগ হয়ে যাবে।</p>
+        <div id="ivMemberCheckList" style="max-height:220px;overflow-y:auto;border:1px solid var(--rule);border-radius:8px;padding:8px;"></div>
+      </div>
       <button class="btn full gold" id="addIvBtn">যোগ করুন</button>
       <div class="status-msg" id="ivMsg"></div>
     </div>` : ''}
-    <div class="card"><h2>ইনভেস্টমেন্টের তালিকা</h2>
-      <div id="invList">${list.length? '' : '<div class="empty">কোনো ইনভেস্টমেন্ট এন্ট্রি নেই</div>'}</div>
+    ${canApproveInvest ? `
+    <div class="card">
+      <h2>নতুন ইনভেস্টমেন্ট অনুমোদনের অপেক্ষায় <small>(${pendingInvests.length}টি)</small></h2>
+      <div id="pendingInvestList">${pendingInvests.length? '' : '<div class="empty">কোনো পেন্ডিং আবেদন নেই</div>'}</div>
+    </div>` : ''}
+    <div class="card"><h2>ইনভেস্টমেন্টের তালিকা <small>(${listFiltered.length}টি)</small></h2>
+      <input type="text" id="invSearch" placeholder="🔍 শিরোনাম, গ্রাহক, ধরন বা অবস্থা দিয়ে খুঁজুন" value="${searchQuery.invest||''}" style="margin-bottom:10px;">
+      <label style="font-size:12px;">সাজান</label>
+      <select id="invSort" style="margin-bottom:10px;">
+        <option value="updated" ${sortOrder.invest==='updated'?'selected':''}>সর্বশেষ আপডেট (ডিফল্ট)</option>
+        <option value="amount_desc" ${sortOrder.invest==='amount_desc'?'selected':''}>বিনিয়োগ (বেশি আগে)</option>
+        <option value="amount_asc" ${sortOrder.invest==='amount_asc'?'selected':''}>বিনিয়োগ (কম আগে)</option>
+        <option value="pl_desc" ${sortOrder.invest==='pl_desc'?'selected':''}>লাভ-ক্ষতি (বেশি লাভ আগে)</option>
+        <option value="pl_asc" ${sortOrder.invest==='pl_asc'?'selected':''}>লাভ-ক্ষতি (বেশি ক্ষতি আগে)</option>
+        <option value="start_desc" ${sortOrder.invest==='start_desc'?'selected':''}>শুরুর তারিখ (নতুন আগে)</option>
+        <option value="start_asc" ${sortOrder.invest==='start_asc'?'selected':''}>শুরুর তারিখ (পুরনো আগে)</option>
+      </select>
+      <div id="invList">${listFiltered.length? '' : '<div class="empty">কিছু পাওয়া যায়নি</div>'}</div>
     </div>`;
+  document.getElementById('invSearch').addEventListener('input', (e)=>{ searchQuery.invest = e.target.value; renderTab(); });
+  document.getElementById('invSort').addEventListener('change', (e)=>{ sortOrder.invest = e.target.value; renderTab(); });
+  if(ivHadFocus){ const is_ = document.getElementById('invSearch'); is_.focus(); is_.selectionStart = is_.selectionEnd = is_.value.length; }
 
   if(canManage){
+    const approvedForDist = cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত');
+    const memberCheckEl = document.getElementById('ivMemberCheckList');
+    const contribTotals = {};
+    approvedForDist.forEach(u=>{ contribTotals[u['ID']] = 0; });
+    cache.contrib.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড').forEach(c=>{
+      if(contribTotals.hasOwnProperty(c['সদস্য_ID'])) contribTotals[c['সদস্য_ID']] += Number(c['পরিমাণ']||0);
+    });
+    memberCheckEl.innerHTML = approvedForDist.length ? approvedForDist.map(u=>`
+      <label style="display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:13px;">
+        <input type="checkbox" class="ivMemberChk" data-uid="${u['ID']}" checked> ${u['নাম']} <span class="li-meta">(@${u['ইউজারনেম']})</span>
+        <span class="ivMemberPct" data-uid="${u['ID']}" style="margin-left:auto;font-weight:700;color:var(--brand,#0f4c3a);"></span>
+      </label>`).join('') : '<div class="empty">কোনো অনুমোদিত সদস্য নেই</div>';
+    const updateMemberPct_ = ()=>{
+      const checks = Array.from(document.querySelectorAll('.ivMemberChk'));
+      const checkedIds = checks.filter(c=>c.checked).map(c=>c.dataset.uid);
+      const grandTotal = checkedIds.reduce((s,id)=>s+(contribTotals[id]||0), 0);
+      checks.forEach(c=>{
+        const pctEl = document.querySelector('.ivMemberPct[data-uid="'+c.dataset.uid+'"]');
+        if(!pctEl) return;
+        if(!c.checked){ pctEl.textContent = 'বাদ'; pctEl.style.color = '#999'; return; }
+        const amt = contribTotals[c.dataset.uid] || 0;
+        const pct = grandTotal>0 ? (amt/grandTotal*100) : (checkedIds.length ? 100/checkedIds.length : 0);
+        pctEl.textContent = pct.toFixed(1)+'%';
+        pctEl.style.color = 'var(--brand,#0f4c3a)';
+      });
+    };
+    updateMemberPct_();
+    memberCheckEl.querySelectorAll('.ivMemberChk').forEach(chk=> chk.addEventListener('change', updateMemberPct_));
+
     const typeSel = document.getElementById('ivType');
     const otherWrap = document.getElementById('ivOtherWrap');
     const saleWrap = document.getElementById('ivSaleWrap');
@@ -1475,19 +2892,48 @@ function renderInvest(main, role){
         extra['গ্রাহকের_ঠিকানা'] = document.getElementById('ivCustAddr').value.trim();
         extra['মোট_কিস্তি'] = document.getElementById('ivInstCount').value || 1;
       }
+      const excludedIds = Array.from(document.querySelectorAll('.ivMemberChk:not(:checked)')).map(el=>el.dataset.uid);
       try{
         const proofUrls = await uploadMultiplePhotos_(proofFile.files, title||'investment', msg);
         await apiPost('addInvestment', {data: Object.assign({
           'শিরোনাম':title,'ধরন':type,'বিনিয়োগ_টাকা':amt,
-          'শুরুর_তারিখ':date,'পরিচালক':session['নাম'],'প্রমাণ_লিংক':proofUrls.join(','),'বিবরণ':note
+          'শুরুর_তারিখ':date,'পরিচালক':session['নাম'],'প্রমাণ_লিংক':proofUrls.join(','),'বিবরণ':note,
+          'বাদ_পড়া_সদস্য': excludedIds
         }, extra)});
         toast('ইনভেস্টমেন্ট যোগ হয়েছে'); withRefreshThen(()=>renderTab());
       }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
     });
   }
 
+  if(canApproveInvest){
+    const piEl = document.getElementById('pendingInvestList');
+    pendingInvests.forEach(iv=>{
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">${iv['শিরোনাম']}</div><div class="li-meta">${iv['ধরন']} · ৳${money(iv['বিনিয়োগ_টাকা'])} · পরিচালক: ${iv['পরিচালক']||''} · ${fmtDate(iv['শুরুর_তারিখ'])}</div></div>
+        </div>
+        ${iv['বিবরণ']? `<div class="li-meta">${iv['বিবরণ']}</div>` : ''}
+        <div class="row-actions">
+          <button class="btn small gold" data-act="approveInv">অনুমোদন করুন</button>
+          <button class="btn small danger" data-act="rejectInv">বাতিল করুন</button>
+        </div>`;
+      row.querySelector('[data-act="approveInv"]').addEventListener('click', async ()=>{
+        try{ await apiPost('verifyInvestment', {id: iv['ID']}); toast('ইনভেস্টমেন্ট অনুমোদিত হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      row.querySelector('[data-act="rejectInv"]').addEventListener('click', async ()=>{
+        const reason = prompt('বাতিলের কারণ লিখুন:');
+        if(!reason || !reason.trim()) return;
+        try{ await apiPost('rejectInvestment', {id: iv['ID'], data:{'কারণ':reason.trim()}}); toast('বাতিল করা হয়েছে'); withRefreshThen(()=>renderTab()); }
+        catch(e){ toast(e.message); }
+      });
+      piEl.appendChild(row);
+    });
+  }
+
   const el = document.getElementById('invList');
-  list.forEach(iv=>{
+  listFiltered.forEach(iv=>{
     const row = document.createElement('div'); row.className='list-item';
     row.dataset.investId = iv['ID'];
     const isSale = iv['ধরন']===SALE_TYPE;
@@ -1498,7 +2944,9 @@ function renderInvest(main, role){
     const updates = cache.investUpdate
       .filter(u=>String(u['ইনভেস্টমেন্ট_ID'])===String(iv['ID']))
       .sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
-    const badgeClass = isSale ? (iv['অবস্থা']==='পরিশোধিত'?'verified':'pending') : (iv['অবস্থা']==='চলমান'?'running':'closed');
+    const isPendingApproval = iv['অবস্থা']==='অনুমোদনের অপেক্ষায়';
+    const isRejectedInvest = iv['অবস্থা']==='প্রত্যাখ্যাত';
+    const badgeClass = isPendingApproval ? 'pending' : isRejectedInvest ? 'closed' : (isSale ? (iv['অবস্থা']==='পরিশোধিত'?'verified':'pending') : (iv['অবস্থা']==='চলমান'?'running':'closed'));
 
     // এই ইনভেস্টমেন্টের (মা প্রাণীর) বাচ্চাদের তালিকা — শুধু এখনো "সক্রিয়"
     // (অর্থাৎ আদালকে দেওয়া/বিক্রিত/মৃত না-হওয়া) বাচ্চাগুলোই এখানে দেখানো হয়
@@ -1557,13 +3005,44 @@ function renderInvest(main, role){
         ${detailExtraHtml}
         ${iv['বিবরণ']?`<div class="li-meta" style="margin-top:4px;">${iv['বিবরণ']}</div>`:''}
         ${photos.length? `<div class="row-actions" data-act="proofWrap">${photos.map(p=>`<img src="${p}" alt="প্রমাণ ছবি" data-proof-url="${p}" style="max-width:80px;max-height:80px;border-radius:8px;cursor:pointer;object-fit:cover;border:1px solid var(--rule);">`).join('')}</div>`:''}
+        ${(isPendingApproval)? `<div class="li-meta" style="margin-top:8px;color:#a67c2e;">⏳ এই ইনভেস্টমেন্টটি এখনো ক্যাশিয়ারের অনুমোদনের অপেক্ষায় — অনুমোদনের আগে কোনো কার্যক্রম (কিস্তি, মূল্য হালনাগাদ, লভ্যাংশ ইত্যাদি) চালু করা যাবে না।</div>` : ''}
+        ${(isRejectedInvest)? `<div class="li-meta" style="margin-top:8px;color:#b3402a;">✗ ক্যাশিয়ার এই আবেদন প্রত্যাখ্যান করেছেন — কারণ: ${iv['প্রত্যাখ্যানের_কারণ']||''}</div>` : ''}
+        ${(!isPendingApproval && !isRejectedInvest)? `
         <div class="row-actions">
+          ${(canManage && !isSale)? `<button class="btn small ghost" data-act="valUpdToggle">মূল্য হালনাগাদ করুন</button>`:''}
           ${(isSale && canCollect && iv['অবস্থা']!=='পরিশোধিত')? `<button class="btn small ghost" data-act="addInst">কিস্তি জমা নিন</button>`:''}
           ${(isSale && canManage && iv['অবস্থা']!=='পরিশোধিত')? `<button class="btn small ghost" data-act="goTxnInst">কিস্তি জমা সাবমিট করুন</button>`:''}
           ${(canManage)? `<button class="btn small ghost" data-act="goTxnCash">প্রাপ্ত টাকা সাবমিট করুন</button>`:''}
           <button class="btn small ghost" data-act="addNote">তথ্য/ছবি যুক্ত করুন</button>
-        </div>
-        ${(isSale && canManage && iv['অবস্থা']!=='পরিশোধিত')? `<div class="li-meta" style="margin-top:4px;">হাতে কিস্তির টাকা পেলে সরাসরি বসানো যাবে না — "কিস্তি জমা সাবমিট করুন" চেপে "লেনদেন" ট্যাব থেকে ক্যাশিয়ারের অনুমোদনের জন্য পাঠান</div>`:''}
+          <button class="btn small ghost" data-act="showDistribution">% লাভ/ক্ষতি বণ্টন দেখুন</button>
+          ${(iv['অবস্থা']==='সমাপ্ত' && canDistribute && !iv['বণ্টন_সম্পন্ন'])? `<button class="btn small gold" data-act="distributeDividend">লভ্যাংশ বণ্টন করুন</button>`:''}
+        </div>` : ''}
+        ${(iv['অবস্থা']==='সমাপ্ত' && iv['বণ্টন_সম্পন্ন'])? `<div class="li-meta" style="margin-top:4px;color:#2e7d5b;">✓ লভ্যাংশ বণ্টিত হয়েছে — ${fmtDate(iv['বণ্টনের_তারিখ'])} (${iv['বণ্টনকারী']||''})</div>`:''}
+        ${(isSale && canManage && iv['অবস্থা']!=='পরিশোধিত' && !isPendingApproval && !isRejectedInvest)? `<div class="li-meta" style="margin-top:4px;">হাতে কিস্তির টাকা পেলে সরাসরি বসানো যাবে না — "কিস্তি জমা সাবমিট করুন" চেপে "লেনদেন" ট্যাব থেকে ক্যাশিয়ারের অনুমোদনের জন্য পাঠান</div>`:''}
+        ${(canManage && !isSale)? `
+        <div data-act="valUpdForm" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
+          <label>কী হয়েছে?</label>
+          <select data-act="valUpdKind">
+            ${isShare? `
+              <option value="reval">মূল্য পুনর্মূল্যায়ন (দর বাড়া/কমা)</option>
+              <option value="dividend">নগদ লভ্যাংশ পেয়েছি</option>
+              <option value="loss">সম্পূর্ণ ক্ষতি / ব্যবসা বন্ধ (সমাপ্ত করুন)</option>
+            ` : `
+              <option value="grow">বৃদ্ধি পেয়েছে (বাচ্চা হয়েছে / বড় হয়েছে)</option>
+              <option value="loss_partial">আংশিক ক্ষতি/আঘাত হয়েছে</option>
+              <option value="sold">বিক্রি সম্পন্ন হয়েছে (নগদ ফেরত, সমাপ্ত করুন)</option>
+              <option value="died">মারা গেছে (সম্পূর্ণ ক্ষতি, সমাপ্ত করুন)</option>
+            `}
+          </select>
+          <div data-act="valUpdHint" class="li-meta" style="margin-top:4px;"></div>
+          <label data-act="valUpdAmtLabel">পরিমাণ (৳)</label>
+          <input type="number" data-act="valUpdAmt" value="0">
+          <label>নোট (ঐচ্ছিক)</label>
+          <input type="text" data-act="valUpdNote" placeholder="যেমন: ২টা বাচ্চা হয়েছে">
+          <button class="btn small gold" data-act="valUpdSubmit" style="margin-top:8px;">ক্যাশিয়ারের কাছে পাঠান</button>
+          <div class="li-meta" style="margin-top:4px;">এটা সরাসরি কার্যকর হবে না — ক্যাশিয়ার/ম্যানেজার অনুমোদন করলে তবেই কার্যকর হবে</div>
+          <div class="status-msg" data-act="valUpdMsg"></div>
+        </div>` : ''}
         ${isLivestock? `
         <div data-act="babyWrap" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule);">
           <div class="li-meta" style="display:flex;justify-content:space-between;align-items:center;">
@@ -1649,6 +3128,93 @@ function renderInvest(main, role){
     row.querySelectorAll('[data-proof-url]').forEach(img=>{
       img.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(img.getAttribute('data-proof-url'),'_blank'); });
     });
+
+    const valUpdToggleBtn = row.querySelector('[data-act="valUpdToggle"]');
+    const valUpdForm = row.querySelector('[data-act="valUpdForm"]');
+    if(valUpdToggleBtn) valUpdToggleBtn.addEventListener('click', ()=>{
+      valUpdForm.style.display = valUpdForm.style.display==='none' ? '' : 'none';
+    });
+    if(valUpdForm){
+      const kindSel = row.querySelector('[data-act="valUpdKind"]');
+      const amtLabel = row.querySelector('[data-act="valUpdAmtLabel"]');
+      const amtInput = row.querySelector('[data-act="valUpdAmt"]');
+      const hint = row.querySelector('[data-act="valUpdHint"]');
+      const HINTS = {
+        reval:   'নতুন বর্তমান বাজারমূল্য কত, তা লিখুন (আগের মূল্যের বদলে সরাসরি নতুন মূল্য বসবে)।',
+        dividend:'হাতে নগদ যে লভ্যাংশ এসেছে সেটা লিখুন — এটা হ্যান্ড ক্যাশে যোগ হবে, বিনিয়োগের মূল্য অপরিবর্তিত থাকবে।',
+        loss:    'ব্যবসা সম্পূর্ণ বন্ধ/লোকসানে গেলে এখানে ব্যবহার করুন। যদি কিছু টাকা উদ্ধার হয় সেটা লিখুন, না হলে ০ রাখুন।',
+        grow:    'বাচ্চা জন্ম নেওয়া বা ওজন/আকারে বেড়ে যাওয়ায় মূল্য যতটা বেড়েছে সেটা লিখুন — বর্তমান মূল্যের সাথে যোগ হবে।',
+        loss_partial: 'অসুস্থতা/আঘাত ইত্যাদির কারণে মূল্য যতটা কমেছে সেটা লিখুন — বর্তমান মূল্য থেকে বিয়োগ হবে।',
+        sold:    'বিক্রি করে যা নগদ পাওয়া গেছে সেটা লিখুন — এই টাকা হ্যান্ড ক্যাশে যোগ হবে এবং ইনভেস্টমেন্টটা সমাপ্ত হবে।',
+        died:    'মারা গেলে এখানে ব্যবহার করুন। মাংস/চামড়া ইত্যাদি বিক্রি করে কিছু টাকা উদ্ধার হলে সেটা লিখুন, না হলে ০ রাখুন।'
+      };
+      const AMT_LABELS = {
+        reval:'নতুন বর্তমান মূল্য (৳)', dividend:'লভ্যাংশের পরিমাণ (৳)', loss:'উদ্ধারকৃত টাকা (৳, না থাকলে ০)',
+        grow:'মূল্য কত বেড়েছে (৳)', loss_partial:'মূল্য কত কমেছে (৳)', sold:'বিক্রয়মূল্য — নগদ প্রাপ্তি (৳)',
+        died:'উদ্ধারকৃত টাকা (৳, না থাকলে ০)'
+      };
+      const syncKind = ()=>{
+        const k = kindSel.value;
+        hint.textContent = HINTS[k] || '';
+        amtLabel.textContent = AMT_LABELS[k] || 'পরিমাণ (৳)';
+        amtInput.value = k==='reval' ? Number(iv['বর্তমান_মূল্য']||0) : 0;
+      };
+      kindSel.addEventListener('change', syncKind);
+      syncKind();
+
+      row.querySelector('[data-act="valUpdSubmit"]').addEventListener('click', async ()=>{
+        const kind = kindSel.value;
+        const amount = Number(amtInput.value||0);
+        const userNote = row.querySelector('[data-act="valUpdNote"]').value.trim();
+        const msg = row.querySelector('[data-act="valUpdMsg"]');
+        if(kind==='reval' && amount<0){ msg.textContent='সঠিক মূল্য দিন'; msg.className='status-msg err'; return; }
+        if(kind!=='reval' && kind!=='dividend' && amount<0){ msg.textContent='সঠিক পরিমাণ দিন'; msg.className='status-msg err'; return; }
+
+        const curVal = Number(iv['বর্তমান_মূল্য']||0);
+        const curPaid = Number(iv['পরিশোধিত_টাকা']||0);
+        const invested = Number(iv['বিনিয়োগ_টাকা']||0);
+        let newVal = curVal, newPaid = curPaid, newStatus = iv['অবস্থা'], autoNote = '';
+        switch(kind){
+          case 'reval':
+            newVal = amount; autoNote = `মূল্য পুনর্মূল্যায়ন: ৳${money(curVal)} → ৳${money(amount)}`; break;
+          case 'dividend':
+            newPaid = curPaid + amount; autoNote = `নগদ লভ্যাংশ গৃহীত: ৳${money(amount)}`; break;
+          case 'loss':
+            newVal = amount; newStatus = 'সমাপ্ত'; autoNote = `সম্পূর্ণ ক্ষতি — ইনভেস্টমেন্ট সমাপ্ত।${amount>0?' উদ্ধারকৃত: ৳'+money(amount):''}`; break;
+          case 'grow':
+            newVal = curVal + amount; autoNote = `বৃদ্ধি পেয়েছে: +৳${money(amount)}`; break;
+          case 'loss_partial':
+            newVal = Math.max(0, curVal - amount); autoNote = `আংশিক ক্ষতি: -৳${money(amount)}`; break;
+          case 'sold':
+            newVal = 0; newPaid = curPaid + amount;
+            if(activeBabies.length > 0){
+              // মা বিক্রি হলেও তার সক্রিয় বাচ্চা থেকে গেলে ইনভেস্টমেন্টটা বন্ধ না
+              // করে বাচ্চাগুলোর নামেই চলমান রাখা হয় (বাচ্চার ক্রয়মূল্য ০ ধরে)
+              newStatus = 'চলমান';
+              autoNote = `মা বিক্রি সম্পন্ন — নগদ ফেরত: ৳${money(amount)}। ${activeBabies.length}টা বাচ্চা এখনো সক্রিয় থাকায় ইনভেস্টমেন্টটা বাচ্চাদের নামে চলমান থাকবে (বাচ্চার ক্রয়মূল্য ০ ধরা হয়েছে)।`;
+            } else {
+              newStatus = 'সমাপ্ত'; autoNote = `বিক্রি সম্পন্ন — নগদ ফেরত: ৳${money(amount)}`;
+            }
+            break;
+          case 'died':
+            newVal = 0; newPaid = curPaid + amount; newStatus = 'সমাপ্ত'; autoNote = `মারা গেছে — ইনভেস্টমেন্ট সমাপ্ত।${amount>0?' উদ্ধারকৃত: ৳'+money(amount):''}`; break;
+        }
+        const newPL = (newVal + newPaid) - invested;
+        const fullNote = userNote ? (autoNote + ' — ' + userNote) : autoNote;
+        try{
+          await apiPost('submitTransaction', {data:{
+            'ধরন': 'মূল্য হালনাগাদ', 'পরিমাণ': amount, 'বিবরণ': fullNote,
+            'ইনভেস্টমেন্ট_ID': iv['ID'], 'ইনভেস্টমেন্টের_শিরোনাম': iv['শিরোনাম'],
+            'হালনাগাদ_ধরন': kind,
+            'নতুন_বর্তমান_মূল্য': newVal, 'নতুন_পরিশোধিত_টাকা': newPaid,
+            'নতুন_অবস্থা': newStatus, 'নতুন_লাভ_ক্ষতি': newPL,
+            'সাবমিটকারী_ID':session['ID'], 'সাবমিটকারীর_নাম':session['নাম'], 'সাবমিটকারীর_পদ':session['রোল']
+          }});
+          toast('হালনাগাদের অনুরোধ ক্যাশিয়ারের কাছে পাঠানো হয়েছে — অনুমোদনের পর কার্যকর হবে');
+          withRefreshThen(()=>renderTab());
+        }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+      });
+    }
 
     /* ---------------- বাচ্চা (offspring) সেকশন ---------------- */
     const babyAddToggleBtn = row.querySelector('[data-act="babyAddToggle"]');
@@ -1891,6 +3457,20 @@ function renderInvest(main, role){
     noteBtn.addEventListener('click', ()=>{
       updForm.style.display = updForm.style.display==='none' ? '' : 'none';
     });
+    row.querySelector('[data-act="showDistribution"]').addEventListener('click', ()=>{
+      showDistributionModal_(iv);
+    });
+    const distBtn = row.querySelector('[data-act="distributeDividend"]');
+    if(distBtn){
+      distBtn.addEventListener('click', async ()=>{
+        if(!confirm('এই ইনভেস্টমেন্টের লভ্যাংশ এখনই বণ্টন করতে চান? এটা একবারই করা যাবে, পরে বাতিল করা যাবে না।')) return;
+        try{
+          await apiPost('distributeDividend', {id: iv['ID']});
+          toast('লভ্যাংশ বণ্টন সম্পন্ন হয়েছে');
+          withRefreshThen(()=>renderTab());
+        }catch(e){ toast(e.message); }
+      });
+    }
     const updFile = row.querySelector('[data-act="updFile"]');
     const updPreview = row.querySelector('[data-act="updPreview"]');
     updFile.addEventListener('change', ()=>{
@@ -1973,11 +3553,6 @@ function renderPoll(main, role){
       <input type="text" id="pQ" placeholder="চলতি মাসে ২টি গরু কেনা হবে কি?">
       <label>অপশনসমূহ (কমা দিয়ে আলাদা করুন)</label>
       <input type="text" id="pOpts" placeholder="হ্যাঁ, না">
-      <label>গোপনীয়তা</label>
-      <select id="pPrivacy">
-        <option value="গোপন">গোপন ভোট (কে কী ভোট দিলো কেউ দেখতে পারবে না, শুধু মোট ফলাফল দেখা যাবে)</option>
-        <option value="প্রকাশ্য">প্রকাশ্য ভোট (কে কোনটাতে ভোট দিলো সবাই দেখতে পারবে)</option>
-      </select>
       <button class="btn full gold" id="addPollBtn">ভোট চালু করুন</button>
       <div class="status-msg" id="pMsg"></div>
     </div>` : ''}
@@ -1988,11 +3563,10 @@ function renderPoll(main, role){
     document.getElementById('addPollBtn').addEventListener('click', async ()=>{
       const q = document.getElementById('pQ').value.trim();
       const opts = document.getElementById('pOpts').value.trim();
-      const privacy = document.getElementById('pPrivacy').value;
       const msg = document.getElementById('pMsg');
       if(!q || !opts){ msg.textContent='প্রশ্ন ও অপশন দিন'; msg.className='status-msg err'; return; }
       try{
-        await apiPost('add', {sheet:'ভোট', data:{'প্রশ্ন':q,'অপশন':opts,'প্রকাশক':session['নাম'],'স্ট্যাটাস':'চলমান','গোপনীয়তা':privacy}});
+        await apiPost('add', {sheet:'ভোট', data:{'প্রশ্ন':q,'অপশন':opts,'প্রকাশক':session['নাম'],'স্ট্যাটাস':'চলমান'}});
         toast('ভোট চালু হয়েছে'); withRefreshThen(()=>renderTab());
       }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
     });
@@ -2003,40 +3577,25 @@ function renderPoll(main, role){
     const votes = cache.votes.filter(v=>String(v['ভোট_ID'])===String(p['ID']));
     const myVote = votes.find(v=>String(v['সদস্য_ID'])===String(session['ID']));
     const total = votes.length || 1;
-    const isPublic = p['গোপনীয়তা']==='প্রকাশ্য';
-    const canVote = p['স্ট্যাটাস']==='চলমান' && !myVote;
     const card = document.createElement('div'); card.className='list-item';
     card.innerHTML = `
       <div class="li-top">
         <div class="li-name">${p['প্রশ্ন']}</div>
         <span class="badge ${p['স্ট্যাটাস']==='চলমান'?'running':'closed'}">${p['স্ট্যাটাস']}</span>
       </div>
-      <div class="li-meta">প্রকাশক: ${p['প্রকাশক']||''} · ${fmtDate(p['তারিখ'])} · ${isPublic? 'প্রকাশ্য ভোট' : 'গোপন ভোট'}</div>
+      <div class="li-meta">প্রকাশক: ${p['প্রকাশক']||''} · ${fmtDate(p['তারিখ'])}</div>
       <div class="poll-options" data-opts></div>
       ${isManager && p['স্ট্যাটাস']==='চলমান'? `<div class="row-actions"><button class="btn small danger" data-act="close">ভোট বন্ধ করুন</button></div>`:''}`;
     const optsWrap = card.querySelector('[data-opts]');
+    const showResults = !!myVote || p['স্ট্যাটাস']!=='চলমান';
     options.forEach(opt=>{
-      const optVotes = votes.filter(v=>v['বাছাই']===opt);
-      const count = optVotes.length;
+      const count = votes.filter(v=>v['বাছাই']===opt).length;
       const pct = Math.round((count/total)*100);
-      // প্রকাশ্য ভোট হলে কে কে এই অপশনে ভোট দিয়েছে তাদের নাম দেখানো হয়;
-      // গোপন ভোট হলে শুধু মোট সংখ্যা/শতাংশ দেখানো হয়, কারো নাম নয়
-      const voterNames = isPublic
-        ? optVotes.map(v=>{
-            const u = cache.users.find(u=>String(u['ID'])===String(v['সদস্য_ID']));
-            return u? u['নাম'] : 'অজানা সদস্য';
-          }).join(', ')
-        : '';
       const div = document.createElement('div'); div.className='poll-opt';
-      div.style.flexDirection='column'; div.style.alignItems='stretch';
-      div.innerHTML = `
-        <div style="display:flex;justify-content:space-between;">
-          <span>${opt} ${myVote && myVote['বাছাই']===opt?'✓':''}</span>
-          <span>${count} ভোট (${pct}%)</span>
-        </div>
-        <div class="bar"><i style="width:${pct}%;"></i></div>
-        ${isPublic && count>0? `<div class="li-meta" style="margin-top:4px;">ভোটদাতা: ${voterNames}</div>` : ''}`;
-      if(canVote){
+      if(showResults){
+        div.innerHTML = `<span>${opt} ${myVote && myVote['বাছাই']===opt?'✓':''}</span><span>${count} ভোট (${pct}%)</span>`;
+      } else {
+        div.innerHTML = `<span>${opt}</span>`;
         div.style.cursor='pointer';
         div.addEventListener('click', async ()=>{
           try{ await apiPost('vote', {data:{'ভোট_ID':p['ID'],'সদস্য_ID':session['ID'],'বাছাই':opt}}); toast('ভোট গৃহীত হয়েছে'); withRefreshThen(()=>renderTab()); }
@@ -2100,78 +3659,70 @@ function renderNotice(main, role){
   });
 }
 
-/* ---------------- নিয়মাবলী (সংগঠনের গঠনতন্ত্র/নীতিমালা) ----------------
-   সবাই এখানে সব নিয়ম পড়তে পারবেন। নতুন নিয়ম যোগ করা বা কোনো নিয়ম মুছে
-   ফেলার ফর্ম/বাটন শুধু ম্যানেজারের জন্যই দেখানো হয় — এবং সার্ভার সাইডেও
-   (ROLE_GUARD['নিয়মাবলী']) এটা নিশ্চিত করা আছে, তাই ফ্রন্টএন্ড এড়িয়ে সরাসরি
-   API কল করলেও অন্য কেউ যোগ/মুছে ফেলতে পারবেন না। */
-function renderRules(main, role){
-  const isManager = role===ROLES.MANAGER;
-  const rules = [...cache.rules].sort((a,b)=>Number(a['ক্রম']||0)-Number(b['ক্রম']||0));
-  const groups = {};
-  const order = [];
-  rules.forEach(r=>{
-    const cat = r['বিভাগ'] || 'সাধারণ';
-    if(!groups[cat]){ groups[cat] = []; order.push(cat); }
-    groups[cat].push(r);
-  });
+/* ---------------- MEMBER: home ---------------- */
+function renderMyAccount(main){
+  const myId = session['ID'];
+  const myContribTotal = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(myId) && c['স্ট্যাটাস']==='ভেরিফাইড').reduce((s,c)=>s+Number(c['পরিমাণ']||0),0);
+
+  const participations = cache.invest.filter(iv => iv['বণ্টন'] && iv['বণ্টন'][myId]).sort((a,b)=>String(b['শুরুর_তারিখ']).localeCompare(String(a['শুরুর_তারিখ'])));
+  let liveShareTotal = 0;
+  const rowsHtml = participations.map(iv=>{
+    const d = iv['বণ্টন'][myId];
+    const pct = Number(d['শতাংশ']||0);
+    const share = (pct/100) * Number(iv['লাভ_ক্ষতি']||0);
+    if(!iv['বণ্টন_সম্পন্ন']) liveShareTotal += share;
+    const statusColor = iv['অবস্থা']==='সমাপ্ত' ? '#2e7d5b' : (iv['অবস্থা']==='পরিশোধিত' ? '#2e7d5b' : '#a67c2e');
+    return `<div class="list-item">
+      <div class="li-top">
+        <div><div class="li-name">${iv['শিরোনাম']}</div><div class="li-meta">${iv['ধরন']} · আমার শেয়ার: ${pct.toFixed(2)}%</div></div>
+        <span class="badge" style="background:${statusColor};color:#fff;">${iv['অবস্থা']}</span>
+      </div>
+      <div class="li-meta" style="margin-top:4px;">লাভ/ক্ষতিতে আমার ভাগ (বর্তমান হিসাবে): <b style="color:${share>=0?'#2e7d5b':'#b3402a'};">৳${money(share)}</b></div>
+      ${iv['বণ্টন_সম্পন্ন']? `<div class="li-meta" style="color:#2e7d5b;">✓ লভ্যাংশ বণ্টিত হয়ে গেছে — ${fmtDate(iv['বণ্টনের_তারিখ'])}</div>` : `<div class="li-meta" style="color:#a67c2e;">এখনও বণ্টন হয়নি (ইনভেস্টমেন্ট সমাপ্ত হয়ে বণ্টন না হওয়া পর্যন্ত এটা শুধু আনুমানিক হিসাব)</div>`}
+    </div>`;
+  }).join('') || '<div class="empty">এখনো কোনো ইনভেস্টমেন্টে আপনার অংশগ্রহণ নেই</div>';
+
+  const myDividends = cache.dividend.filter(d=>String(d['সদস্য_ID'])===String(myId)).sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ'])));
+  // যে লভ্যাংশ ইতিমধ্যে "চাঁদা" হিসেবে রি-ইনভেস্ট হয়ে গেছে সেটা এখন চাঁদার
+  // হিসাবেই আছে (myContribTotal-এ), তাই এখানে আর গোনা হবে না — নাহলে একই
+  // টাকা দুইবার যোগ হয়ে যাবে। একইভাবে যেটা উত্তোলন হয়ে গেছে (হাতে নগদ
+  // নিয়ে নেওয়া হয়েছে) সেটাও আর সংগঠনের নিট ব্যালেন্সের অংশ না।
+  const dividendCountable = myDividends.filter(d => d['ব্যবস্থা'] !== 'রি-ইনভেস্ট_সম্পন্ন' && d['ব্যবস্থা'] !== 'উত্তোলিত');
+  const dividendTotal = dividendCountable.reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const lossReceived = dividendCountable.filter(d=>Number(d['পরিমাণ']||0)<0).reduce((s,d)=>s+Number(d['পরিমাণ']||0),0); // ঋণাত্মক
+  const profitReceived = dividendCountable.filter(d=>Number(d['পরিমাণ']||0)>=0).reduce((s,d)=>s+Number(d['পরিমাণ']||0),0);
+  const netBalance = myContribTotal + dividendTotal; // চাঁদা + (এখনো চাঁদায় রূপান্তরিত/উত্তোলিত হয়নি এমন) লভ্যাংশ
+  const dividendRowsHtml = myDividends.map(d=>`
+    <div class="list-item">
+      <div class="li-top">
+        <div><div class="li-name">${d['ইনভেস্টমেন্টের_শিরোনাম']||''}</div><div class="li-meta">${d['শতাংশ'].toFixed(2)}% · ${fmtDate(d['তারিখ'])}</div></div>
+        <span style="font-weight:700;color:${d['পরিমাণ']>=0?'#2e7d5b':'#b3402a'};">৳${money(d['পরিমাণ'])}</span>
+      </div>
+    </div>`).join('') || '<div class="empty">এখনো কোনো লভ্যাংশ বণ্টন হয়নি</div>';
 
   main.innerHTML = `
-    <div class="principle-box">📜 সমিতির গঠনতন্ত্র ও নিয়মকানুন — সকল সদস্যের জন্য উন্মুক্ত</div>
-    ${isManager? `
     <div class="card">
-      <h2>নতুন নিয়ম যোগ করুন</h2>
-      <label>বিভাগ</label>
-      <input type="text" id="rCat" placeholder="যেমন: আয়ের উৎস" value="সাধারণ">
-      <label>নিয়মের বিবরণ</label>
-      <textarea id="rBody" rows="3" placeholder="নিয়মের সম্পূর্ণ বিবরণ লিখুন"></textarea>
-      <button class="btn full gold" id="addRuleBtn">যোগ করুন</button>
-      <div class="status-msg" id="rMsg"></div>
-    </div>` : ''}
-    <div id="rulesList">${rules.length? '' : '<div class="empty">কোনো নিয়ম এখনও যোগ করা হয়নি</div>'}</div>`;
-
-  if(isManager){
-    document.getElementById('addRuleBtn').addEventListener('click', async ()=>{
-      const cat = document.getElementById('rCat').value.trim() || 'সাধারণ';
-      const body = document.getElementById('rBody').value.trim();
-      const msg = document.getElementById('rMsg');
-      if(!body){ msg.textContent='নিয়মের বিবরণ লিখুন'; msg.className='status-msg err'; return; }
-      const nextOrder = rules.reduce((m,r)=>Math.max(m, Number(r['ক্রম']||0)), 0) + 1;
-      try{
-        await apiPost('add', {sheet:'নিয়মাবলী', data:{
-          'ক্রম': nextOrder, 'বিভাগ': cat, 'বিষয়বস্তু': body,
-          'সংযোজনকারী': session['নাম'], 'তারিখ': new Date().toISOString().slice(0,10)
-        }});
-        toast('নিয়ম যোগ করা হয়েছে'); withRefreshThen(()=>renderTab());
-      }catch(e){ msg.textContent=e.message; msg.className='status-msg err'; }
-    });
-  }
-
-  const el = document.getElementById('rulesList');
-  order.forEach(cat=>{
-    const catHead = document.createElement('div');
-    catHead.style.cssText = 'font-family:"Baloo Da 2",sans-serif;font-size:14px;color:var(--brass);margin:14px 2px 6px;';
-    catHead.textContent = cat;
-    el.appendChild(catHead);
-    groups[cat].forEach(r=>{
-      const div = document.createElement('div'); div.className='card';
-      div.style.cssText='padding:12px 14px;margin-bottom:8px;';
-      div.innerHTML = `
-        <div style="font-size:13.5px;line-height:1.65;">${r['ক্রম']}. ${r['বিষয়বস্তু']}</div>
-        ${isManager? `<div class="row-actions"><button class="btn small danger" data-act="delRule">মুছে ফেলুন</button></div>`:''}`;
-      if(isManager){
-        div.querySelector('[data-act="delRule"]').addEventListener('click', async ()=>{
-          if(!confirm('এই নিয়মটি মুছে ফেলতে চান?')) return;
-          try{ await apiPost('delete', {sheet:'নিয়মাবলী', id:r['ID']}); toast('নিয়ম মুছে ফেলা হয়েছে'); withRefreshThen(()=>renderTab()); }
-          catch(e){ toast(e.message); }
-        });
-      }
-      el.appendChild(div);
-    });
-  });
+      <h2>আমার হিসাব — সারাংশ</h2>
+      <div class="summary-bar">
+        <div class="summary-chip"><div class="lbl">মোট জমাকৃত চাঁদা</div><div class="val">৳${money(myContribTotal)}</div></div>
+        <div class="summary-chip"><div class="lbl">চলমান ইনভেস্টে আনুমানিক ভাগ</div><div class="val" style="color:${liveShareTotal>=0?'var(--sage)':'var(--terracotta)'}">৳${money(liveShareTotal)}</div></div>
+        <div class="summary-chip"><div class="lbl">মোট প্রাপ্ত লভ্যাংশ</div><div class="val" style="color:${dividendTotal>=0?'var(--sage)':'var(--terracotta)'}">৳${money(dividendTotal)}</div></div>
+      </div>
+      <button class="btn full" id="myReportBtn" style="margin-top:10px;">📄 আমার সম্পূর্ণ রিপোর্ট প্রিন্ট করুন</button>
+    </div>
+    <div class="card" id="netBalanceCard" style="border-color:${netBalance>=0?'var(--sage)':'var(--terracotta)'};cursor:pointer;">
+      <h2>নিট ব্যালেন্স <span class="li-meta">(ক্লিক করে বিস্তারিত ইতিহাস দেখুন)</span></h2>
+      <div style="font-size:26px;font-weight:800;color:${netBalance>=0?'var(--sage)':'var(--terracotta)'};margin:4px 0 10px;">৳${money(netBalance)}</div>
+      <div class="li-meta">= মোট চাঁদা (৳${money(myContribTotal)}) ${dividendTotal>=0? '+ প্রাপ্ত লাভ (৳'+money(profitReceived)+')' : ''}${lossReceived<0? ' − প্রাপ্ত ক্ষতির অংশ (৳'+money(Math.abs(lossReceived))+')' : ''}</div>
+      ${(profitReceived>0 && lossReceived<0)? `<div class="li-meta" style="margin-top:2px;">(এই হিসাবে লাভ ৳${money(profitReceived)} ও ক্ষতি ৳${money(Math.abs(lossReceived))} — দুটোই ধরা হয়েছে)</div>` : ''}
+      <div class="li-meta" style="margin-top:6px;color:#888;">* শুধু নিষ্পন্ন (বণ্টন হয়ে যাওয়া) লভ্যাংশ এখানে ধরা হয়েছে; চলমান ইনভেস্টমেন্টের আনুমানিক ভাগ উপরের কার্ডে আলাদাভাবে দেখানো আছে, সেটা এখনো এই ব্যালেন্সে যোগ হয়নি।</div>
+    </div>
+    <div class="card"><h2>ইনভেস্টমেন্টে আমার অংশগ্রহণ (${participations.length}টি)</h2>${rowsHtml}</div>
+    <div class="card"><h2>লভ্যাংশ পাওয়ার ইতিহাস (${myDividends.length}টি)</h2>${dividendRowsHtml}</div>`;
+  document.getElementById('netBalanceCard').addEventListener('click', showNetBalanceHistoryModal_);
+  document.getElementById('myReportBtn').addEventListener('click', ()=> printMemberReport_(session));
 }
 
-/* ---------------- MEMBER: home ---------------- */
 function renderHome(main){
   const my = cache.contrib.filter(c=>String(c['সদস্য_ID'])===String(session['ID']));
   const myVerified = my.filter(c=>c['স্ট্যাটাস']==='ভেরিফাইড');
@@ -2180,7 +3731,15 @@ function renderHome(main){
   const paidThisMonth = myVerified.some(c=>String(c['মাস']).slice(0,7)===month);
   const history = [...my].sort((a,b)=>String(b['জমার_তারিখ']).localeCompare(String(a['জমার_তারিখ'])));
 
+  const today = new Date();
+  const isReminderPeriod = today.getDate() >= 16; // ১৬ তারিখ থেকে রিমাইন্ডার সক্রিয়
+
   main.innerHTML = `
+    ${(!paidThisMonth && isReminderPeriod) ? `
+    <div class="card" style="border-color:var(--terracotta);background:#fdecea;">
+      <div style="font-weight:700;color:var(--terracotta);">⚠️ রিমাইন্ডার: এই মাসের (${month}) চাঁদা এখনো জমা দেননি</div>
+      <div class="li-meta" style="margin-top:4px;">মাসের ১৫ তারিখ পার হয়ে গেছে — নিচের ফর্ম থেকে যত দ্রুত সম্ভব জমা দিন।</div>
+    </div>` : ''}
     <div class="summary-bar">
       <div class="summary-chip"><div class="lbl">আমার মোট জমা</div><div class="val">৳${money(totalPaid)}</div></div>
       <div class="summary-chip"><div class="lbl">এ মাসের চাঁদা</div><div class="val" style="color:${paidThisMonth?'var(--sage)':'var(--terracotta)'}">${paidThisMonth?'জমা হয়েছে':'বাকি আছে'}</div></div>
@@ -2233,7 +3792,11 @@ function renderHome(main){
           <div class="amt ${isV?'pos':''}">৳${money(c['পরিমাণ'])}</div>
           <span class="badge ${isV?'verified':(isR?'rejected':'pending')}">${c['স্ট্যাটাস']}</span>
         </div>
-      </div>`;
+      </div>
+      ${isV? `<div style="margin-top:6px;text-align:right;"><button class="btn small ghost" data-act="receipt">🧾 রশিদ ডাউনলোড</button></div>` : ''}`;
+    if(isV){
+      row.querySelector('[data-act="receipt"]').addEventListener('click', ()=> printContributionReceipt_(c));
+    }
     el.appendChild(row);
   });
 }
@@ -2241,87 +3804,269 @@ function renderHome(main){
 /* ---------------- SETTINGS ---------------- */
 function renderSettings(main){
   const isManager = session['রোল']===ROLES.MANAGER;
+  const canReport = session['রোল']===ROLES.MANAGER || session['রোল']===ROLES.CASHIER;
+  const canMemberLookup = session['রোল']===ROLES.MANAGER || session['রোল']===ROLES.CASHIER || session['রোল']===ROLES.FIELD;
+  const logQ = (searchQuery.activityLog||'').trim().toLowerCase();
+  let logs = isManager ? [...cache.activityLog].sort((a,b)=>String(b['তারিখ']).localeCompare(String(a['তারিখ']))) : [];
+  if(logQ){
+    logs = logs.filter(l => String(l['কর্তা']||'').toLowerCase().includes(logQ) || String(l['কাজ']||'').toLowerCase().includes(logQ));
+  }
+  const logHadFocus = document.activeElement && document.activeElement.id === 'logSearch';
   main.innerHTML = `
     <div class="principle-box">
       🌿 আমাদের নীতি: সমিতির সব ইনভেস্টমেন্ট সম্পূর্ণ সুদমুক্ত এবং লাভ-ক্ষতির স্বচ্ছ হিসাব সব সদস্যের জন্য উন্মুক্ত।
     </div>
-    <div class="card" id="rulesLinkCard" style="cursor:pointer;">
-      <h2>📜 সংগঠনের নিয়মাবলী</h2>
-      <div class="li-meta">সমিতির গঠনতন্ত্র ও নিয়মকানুন — সকল সদস্যের জন্য উন্মুক্ত${isManager? ' (যোগ/মুছে ফেলার ক্ষমতা আপনার আছে)':''}</div>
+    <div class="card">
+      <h2>থিম</h2>
+      <button class="btn full" id="darkModeToggleBtn">${darkMode ? '☀️ লাইট মোড চালু করুন' : '🌙 ডার্ক মোড চালু করুন'}</button>
     </div>
     <div class="card">
       <h2>প্রোফাইল</h2>
-      <div class="li-meta">নাম: ${session['নাম']}</div>
-      <div class="li-meta">ইউজারনেম: ${session['ইউজারনেম']}</div>
-      <div class="li-meta">ফোন: ${session['ফোন']}</div>
-      <div class="li-meta">রোল: ${ROLE_LABEL[session['রোল']]}</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <img id="pfAvatarPreview" src="${session['ছবি']||'https://api.dicebear.com/7.x/initials/svg?seed='+encodeURIComponent(session['নাম']||'?')}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--brand,#0f4c3a);background:#eee;">
+        <div>
+          <input type="file" id="pfPhotoInput" accept="image/*" style="display:none;">
+          <button class="btn small" id="pfPhotoBtn" type="button">ছবি বদলান</button>
+          <div class="status-msg" id="pfPhotoMsg" style="margin-top:6px;"></div>
+        </div>
+      </div>
+      <div class="li-meta" style="margin-bottom:8px;">ইউজারনেম: ${session['ইউজারনেম']} · রোল: ${ROLE_LABEL[session['রোল']]}</div>
+      <label>নাম</label>
+      <input type="text" id="pfName" value="${session['নাম']||''}">
+      <label>ফোন নম্বর</label>
+      <input type="tel" id="pfPhone" value="${session['ফোন']||''}">
+      <button class="btn full" id="pfSaveBtn">সংরক্ষণ করুন</button>
+      <div class="status-msg" id="pfMsg"></div>
     </div>
     <div class="card">
-      <h2>Google Sheet সংযোগ</h2>
-      <label>Apps Script Web App URL</label>
-      <input type="text" id="urlInput2" value="${API_URL||''}">
-      <button class="btn" id="saveUrl2">সংরক্ষণ করুন</button>
-      <div class="status-msg" id="setMsg2"></div>
+      <h2>পাসওয়ার্ড পরিবর্তন</h2>
+      <label>বর্তমান পাসওয়ার্ড</label>
+      <input type="password" id="pwOld">
+      <label>নতুন পাসওয়ার্ড</label>
+      <input type="password" id="pwNew">
+      <label>নতুন পাসওয়ার্ড আবার লিখুন</label>
+      <input type="password" id="pwNew2">
+      <button class="btn full" id="pwSaveBtn">পাসওয়ার্ড বদলান</button>
+      <div class="status-msg" id="pwMsg"></div>
     </div>
+    <div class="card">
+      <h2>নোটিফিকেশন</h2>
+      <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;">ব্রাউজার খোলা থাকলে (অন্য ট্যাবে থাকলেও) নতুন পেন্ডিং আবেদন/নোটিশ এলে ডেস্কটপ পপ-আপ দেখাবে।</p>
+      <button class="btn full" id="notifyToggleBtn">${notifyEnabled ? '🔕 নোটিফিকেশন বন্ধ করুন' : '🔔 নোটিফিকেশন চালু করুন'}</button>
+      <div class="status-msg" id="notifyMsg"></div>
+    </div>
+    ${canMemberLookup ? `
+    <div class="card">
+      <h2>সদস্যের বিস্তারিত রিপোর্ট</h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">যেকোনো সদস্য বেছে নিয়ে তার সম্পূর্ণ চাঁদা, ইনভেস্টমেন্ট ও লভ্যাংশের রিপোর্ট প্রিন্ট/PDF করুন</p>
+      <label>সদস্য বেছে নিন</label>
+      <select id="memberReportSelect">${cache.users.filter(u=>u['স্ট্যাটাস']==='অনুমোদিত').sort((a,b)=>String(a['নাম']).localeCompare(String(b['নাম']))).map(u=>`<option value="${u['ID']}">${u['নাম']} (@${u['ইউজারনেম']})</option>`).join('')}</select>
+      <button class="btn full gold" id="memberReportBtn" style="margin-top:10px;">📄 রিপোর্ট তৈরি করুন</button>
+    </div>` : ''}
+    ${canReport ? `
+    <div class="card">
+      <h2>রশিদ নম্বর দিয়ে খুঁজুন</h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">কেউ প্রিন্ট করা রশিদ নিয়ে এলে সেই নম্বর দিয়ে সরাসরি এন্ট্রিটা খুঁজে বের করুন</p>
+      <input type="text" id="receiptSearchInput" placeholder="যেমন: JXFUUNVQ" style="text-transform:uppercase;">
+      <button class="btn full" id="receiptSearchBtn">খুঁজুন</button>
+      <div id="receiptSearchResult" style="margin-top:10px;"></div>
+    </div>
+    <div class="card">
+      <h2>রিপোর্ট/এক্সপোর্ট</h2>
+      <button class="btn full" id="expMembers" style="margin-bottom:8px;">📥 সদস্য তালিকা (Excel)</button>
+      <button class="btn full" id="expContrib" style="margin-bottom:8px;">📥 চাঁদার হিসাব (Excel)</button>
+      <button class="btn full" id="expInvest" style="margin-bottom:8px;">📥 ইনভেস্টমেন্ট সামারি (Excel)</button>
+      <button class="btn full" id="expTxn" style="margin-bottom:8px;">📥 লেনদেনের হিসাব (Excel)</button>
+      <button class="btn full gold" id="printReport">🖨️ ফুল রিপোর্ট প্রিন্ট/PDF (সবকিছুসহ)</button>
+    </div>
+    <div class="card">
+      <h2>বার্ষিক প্রতিবেদন</h2>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">নির্দিষ্ট একটা বছরের সম্পূর্ণ আর্থিক চিত্র (মাসভিত্তিক চাঁদা, নতুন ইনভেস্টমেন্ট, লভ্যাংশ বণ্টন, সদস্য বৃদ্ধি)</p>
+      <label>বছর বেছে নিন</label>
+      <select id="annualYearSelect">${getAvailableYears_().map(y=>`<option value="${y}">${y}</option>`).join('')}</select>
+      <button class="btn full gold" id="annualReportBtn" style="margin-top:10px;">📅 বার্ষিক প্রতিবেদন তৈরি করুন</button>
+    </div>` : ''}
+    ${isManager ? `
+    <div class="card">
+      <h2>অ্যাক্টিভিটি লগ <small>(সাম্প্রতিক ${Math.min(logs.length,50)}টি)</small></h2>
+      <input type="text" id="logSearch" placeholder="🔍 নাম বা কাজ দিয়ে খুঁজুন" value="${searchQuery.activityLog||''}" style="margin-bottom:10px;">
+      <div id="activityLogList">${logs.length? '' : '<div class="empty">কোনো লগ নেই</div>'}</div>
+    </div>` : ''}
     <button class="btn danger full" id="logoutBtn2">লগআউট করুন</button>`;
-  document.getElementById('rulesLinkCard').addEventListener('click', ()=>{ activeTab='rules'; renderShell(); });
-  document.getElementById('saveUrl2').addEventListener('click', async ()=>{
-    const url = document.getElementById('urlInput2').value.trim();
-    const msg = document.getElementById('setMsg2');
-    if(!url){ msg.textContent='URL দিন'; msg.className='status-msg err'; return; }
-    await saveApiUrl(url);
-    try{ await refreshAll(); msg.textContent='সংযুক্ত হয়েছে ✓'; msg.className='status-msg ok'; }
-    catch(e){ msg.textContent='সংযোগ ব্যর্থ'; msg.className='status-msg err'; }
+
+  document.getElementById('darkModeToggleBtn').addEventListener('click', async ()=>{
+    darkMode = !darkMode;
+    applyTheme_();
+    await localSet('darkMode', darkMode);
+    renderTab();
   });
+  document.getElementById('pfPhotoBtn').addEventListener('click', ()=> document.getElementById('pfPhotoInput').click());
+  document.getElementById('pfPhotoInput').addEventListener('change', async (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const pmsg = document.getElementById('pfPhotoMsg');
+    pmsg.textContent = 'ছবি প্রস্তুত হচ্ছে...'; pmsg.className='status-msg';
+    try{
+      const dataUrl = await resizeImageToDataUrl_(file, 300, 0.8);
+      document.getElementById('pfAvatarPreview').src = dataUrl;
+      await fbDb.ref(SHEETS.USERS+'/'+session['ID']).update({'ছবি': dataUrl});
+      session['ছবি'] = dataUrl;
+      await saveSession(session);
+      pmsg.textContent = 'ছবি আপডেট হয়েছে ✓'; pmsg.className='status-msg ok';
+      toast('প্রোফাইল ছবি আপডেট হয়েছে');
+    }catch(err){ pmsg.textContent = err.message || 'ছবি আপলোড ব্যর্থ'; pmsg.className='status-msg err'; }
+  });
+
+  document.getElementById('pfSaveBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('pfName').value.trim();
+    const phone = document.getElementById('pfPhone').value.trim();
+    const msg = document.getElementById('pfMsg');
+    if(!name || !phone){ msg.textContent='নাম ও ফোন নম্বর দিন'; msg.className='status-msg err'; return; }
+    msg.textContent='সংরক্ষণ হচ্ছে...'; msg.className='status-msg';
+    try{
+      await fbDb.ref(SHEETS.USERS+'/'+session['ID']).update({'নাম': name, 'ফোন': phone});
+      session['নাম'] = name; session['ফোন'] = phone;
+      await saveSession(session);
+      logActivity_('profileEdit', '', 'নাম/ফোন আপডেট করেছেন');
+      msg.textContent='প্রোফাইল আপডেট হয়েছে ✓'; msg.className='status-msg ok';
+      toast('প্রোফাইল আপডেট হয়েছে');
+    }catch(e){ msg.textContent = e.message; msg.className='status-msg err'; }
+  });
+
+  document.getElementById('pwSaveBtn').addEventListener('click', async ()=>{
+    const oldPass = document.getElementById('pwOld').value;
+    const newPass = document.getElementById('pwNew').value;
+    const newPass2 = document.getElementById('pwNew2').value;
+    const msg = document.getElementById('pwMsg');
+    if(!oldPass || !newPass || !newPass2){ msg.textContent='সব ঘর পূরণ করুন'; msg.className='status-msg err'; return; }
+    if(newPass.length < 6){ msg.textContent='নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে'; msg.className='status-msg err'; return; }
+    if(newPass !== newPass2){ msg.textContent='নতুন পাসওয়ার্ড দুটো মিলছে না'; msg.className='status-msg err'; return; }
+    msg.textContent='পরিবর্তন হচ্ছে...'; msg.className='status-msg';
+    try{
+      const user = fbAuth.currentUser;
+      const cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+      await user.reauthenticateWithCredential(cred);
+      await user.updatePassword(newPass);
+      logActivity_('passwordChange', '', 'নিজে পাসওয়ার্ড বদলেছেন');
+      msg.textContent='পাসওয়ার্ড বদলানো হয়েছে ✓'; msg.className='status-msg ok';
+      toast('পাসওয়ার্ড বদলানো হয়েছে');
+      document.getElementById('pwOld').value=''; document.getElementById('pwNew').value=''; document.getElementById('pwNew2').value='';
+    }catch(e){
+      let m = e.message || 'পরিবর্তন ব্যর্থ';
+      if(e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') m = 'বর্তমান পাসওয়ার্ড ভুল';
+      msg.textContent = m; msg.className='status-msg err';
+    }
+  });
+
+  document.getElementById('notifyToggleBtn').addEventListener('click', async ()=>{
+    const nmsg = document.getElementById('notifyMsg');
+    if(notifyEnabled){
+      notifyEnabled = false;
+      await localSet('notifyEnabled', false);
+      renderTab();
+      return;
+    }
+    if(typeof Notification === 'undefined'){
+      nmsg.textContent = 'এই ব্রাউজার নোটিফিকেশন সমর্থন করে না'; nmsg.className='status-msg err';
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted'){
+      nmsg.textContent = 'অনুমতি দেওয়া হয়নি — ব্রাউজার সেটিংস থেকে অনুমতি দিন'; nmsg.className='status-msg err';
+      return;
+    }
+    notifyEnabled = true;
+    await localSet('notifyEnabled', true);
+    new Notification('নোটিফিকেশন চালু হয়েছে ✓', {body:'এখন থেকে নতুন আবেদন এলে জানানো হবে'});
+    renderTab();
+  });
+
+  if(canMemberLookup){
+    document.getElementById('memberReportBtn').addEventListener('click', ()=>{
+      const uid = document.getElementById('memberReportSelect').value;
+      const u = cache.users.find(x=>String(x['ID'])===String(uid));
+      if(!u){ toast('সদস্য পাওয়া যায়নি'); return; }
+      printMemberReport_(u);
+    });
+  }
+
+  if(canReport){
+    document.getElementById('expMembers').addEventListener('click', exportMembersExcel_);
+    document.getElementById('expContrib').addEventListener('click', exportContribExcel_);
+    document.getElementById('expInvest').addEventListener('click', exportInvestExcel_);
+    document.getElementById('expTxn').addEventListener('click', exportTransactionExcel_);
+    document.getElementById('printReport').addEventListener('click', printSummaryReport_);
+    document.getElementById('annualReportBtn').addEventListener('click', ()=>{
+      const year = document.getElementById('annualYearSelect').value;
+      printAnnualReport_(year);
+    });
+
+    const doReceiptSearch = ()=>{
+      const q = document.getElementById('receiptSearchInput').value.trim();
+      const resultEl = document.getElementById('receiptSearchResult');
+      if(!q){ resultEl.innerHTML = ''; return; }
+      const c = findContributionByReceiptNo_(q);
+      if(!c){
+        resultEl.innerHTML = '<div class="empty">এই নম্বরে কোনো রশিদ পাওয়া যায়নি</div>';
+        return;
+      }
+      const isV = c['স্ট্যাটাস']==='ভেরিফাইড';
+      const isR = c['স্ট্যাটাস']==='বাতিল';
+      resultEl.innerHTML = `
+        <div class="list-item">
+          <div class="li-top">
+            <div><div class="li-name">${c['সদস্যের_নাম']}</div><div class="li-meta">${c['মাস']} · ${c['মাধ্যম']||''} · ${fmtDate(c['জমার_তারিখ'])}</div></div>
+            <div style="text-align:right;">
+              <div class="amt ${isV?'pos':''}">৳${money(c['পরিমাণ'])}</div>
+              <span class="badge ${isV?'verified':(isR?'rejected':'pending')}">${c['স্ট্যাটাস']}</span>
+            </div>
+          </div>
+          ${isV? `<div class="li-meta" style="margin-top:4px;">যাচাইকারী: ${c['যাচাইকারী']||''} · ${fmtDate(c['যাচাইয়ের_তারিখ'])}</div>
+          <div style="margin-top:8px;"><button class="btn small ghost" id="receiptViewBtn">🧾 রশিদ আবার দেখুন</button></div>` : ''}
+        </div>`;
+      if(isV){
+        document.getElementById('receiptViewBtn').addEventListener('click', ()=> printContributionReceipt_(c));
+      }
+    };
+    document.getElementById('receiptSearchBtn').addEventListener('click', doReceiptSearch);
+    document.getElementById('receiptSearchInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doReceiptSearch(); });
+  }
+
+  if(isManager){
+    document.getElementById('logSearch').addEventListener('input', (e)=>{ searchQuery.activityLog = e.target.value; renderTab(); });
+    if(logHadFocus){ const ls = document.getElementById('logSearch'); ls.focus(); ls.selectionStart = ls.selectionEnd = ls.value.length; }
+    const logEl = document.getElementById('activityLogList');
+    logs.slice(0,50).forEach(l=>{
+      const row = document.createElement('div'); row.className='list-item';
+      row.innerHTML = `
+        <div class="li-top">
+          <div><div class="li-name">${l['কর্তা']} <span class="role-pill">${ROLE_LABEL[l['রোল']]||l['রোল']}</span></div>
+          <div class="li-meta">${l['কাজ']}${l['বিস্তারিত']? ' — '+l['বিস্তারিত'] : ''}</div></div>
+        </div>
+        <div class="li-meta" style="margin-top:2px;">${fmtDate(l['তারিখ'])}</div>`;
+      logEl.appendChild(row);
+    });
+  }
+
   document.getElementById('logoutBtn2').addEventListener('click', async ()=>{ await clearSession(); render(); });
 }
 
 /* ---------------- INIT ---------------- */
-
-/* ---------------- গ্লোবাল ক্লিক গার্ড ----------------
-   সাইটের সব বাটন (.btn) ও ভোটের অপশনে (.poll-opt) একসাথে প্রযোজ্য —
-   আলাদা করে প্রতিটা বাটনের কোডে হাত দেওয়ার দরকার নেই।
-   ১) ক্লিক করলে সাথে সাথে একটা ছোট প্রেস ইফেক্ট দেখা যায় (CSS :active দিয়ে)।
-   ২) একই বাটনে/অপশনে দ্রুত বারবার ক্লিক করলে (ডাবল-ট্যাপ, ধীর নেটওয়ার্কে
-      বিরক্ত হয়ে আবার চাপ দেওয়া ইত্যাদি কারণে) — একই সাবমিট/অ্যাকশন
-      একাধিকবার না হয়ে যায়, তার জন্য ক্লিকের সাথে সাথেই বাটন/অপশনটা
-      সাময়িকভাবে (দেড় সেকেন্ড) নিষ্ক্রিয় করে দেওয়া হয়। সফল অ্যাকশনের
-      ক্ষেত্রে সাধারণত পুরো তালিকা renderTab() দিয়ে নতুন করে আঁকা হয় বলে
-      পুরনো বাটনটাই DOM থেকে বদলে যায়; ভ্যালিডেশন এরর বা ব্যর্থ হলে
-      নির্দিষ্ট সময় পর বাটনটা নিজে থেকেই আবার সচল হয়ে যায়।
-      এটা ভোটে একাধিকবার ক্লিক করে একাধিক ভোট পাঠানো ঠেকাতেও সাহায্য করে —
-      চূড়ান্তভাবে একবারের বেশি ভোট গ্রহণ না করাটা অবশ্য সার্ভার সাইডেও
-      (castVote_ ফাংশনে) নিশ্চিত করা আছে। */
-const CLICK_GUARD_COOLDOWN_MS = 1500;
-document.addEventListener('click', function(ev){
-  const el = ev.target.closest('.btn, .poll-opt');
-  if(!el) return;
-  if(el.disabled || el.classList.contains('busy')){
-    ev.preventDefault();
-    ev.stopImmediatePropagation();
-    return;
-  }
-  if('disabled' in el) el.disabled = true;
-  el.classList.add('busy');
-  setTimeout(()=>{
-    if('disabled' in el) el.disabled = false;
-    el.classList.remove('busy');
-  }, CLICK_GUARD_COOLDOWN_MS);
-}, true);
-
-/* PWA: সার্ভিস ওয়ার্কার রেজিস্টার করলেই ব্রাউজার অ্যাপটাকে "ইনস্টলযোগ্য" ধরে
-   এবং ফোনে "Add to Home Screen" অপশন দেখায়। HTTPS ছাড়া (বা localhost ছাড়া)
-   সার্ভিস ওয়ার্কার কাজ করে না — তাই index.html-টা অবশ্যই কোনো HTTPS হোস্টিং
-   থেকে খুলতে হবে (নিচের রিডমি নোট দ্রষ্টব্য)। */
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
-  });
-}
-
 (async function init(){
-  await loadConfig();
-  if(API_URL){ try{ await refreshAll(); }catch(e){} }
+  session = await localGet('session', null);
+  notifyEnabled = await localGet('notifyEnabled', false);
+  darkMode = await localGet('darkMode', false);
+  applyTheme_();
+  if(session){
+    if(isOffline){
+      await loadCacheSnapshot_();
+    } else {
+      try{ await refreshAll(); lastSyncAt = Date.now(); saveCacheSnapshot_(); }
+      catch(e){ await loadCacheSnapshot_(); }
+    }
+    startRealtimeSync();
+    checkDuePaymentReminder_();
+  }
   render();
 })();
 </script>
