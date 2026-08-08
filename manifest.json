@@ -1,32 +1,17 @@
 {
   "name": "বন্ধু ঐক্য সমবায় সমিতি",
-  "short_name": "বন্ধু ঐক্য",
-  "description": "বন্ধু ঐক্য সমবায় সমিতির সদস্য, চাঁদা, ইনভেস্টমেন্ট ও হিসাবরক্ষণ অ্যাপ",
+  "short_name": "ব ঐ স",
+  "description": "একতা, সমৃদ্ধি ও সুদমুক্ত সমবায় ব্যবস্থা",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F7F3EA",
+  "background_color": "#F3EFE1",
   "theme_color": "#0B3D3B",
-  "lang": "bn",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
