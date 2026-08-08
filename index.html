@@ -233,6 +233,13 @@ nav.tabs button.active{color:var(--brass-soft);}
 <body>
 <div class="app" id="app"></div>
 <div class="toast" id="toast"></div>
+<div id="installBanner" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:9998;background:#0B3D3B;color:#F3EFE1;padding:12px 16px;display:none;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 -4px 14px rgba(0,0,0,.25);font-family:'Hind Siliguri',sans-serif;">
+  <span style="font-size:13.5px;">📲 এই অ্যাপটা মোবাইলে ইনস্টল করে নিন — দ্রুত খোলার জন্য</span>
+  <div style="display:flex;gap:8px;flex-shrink:0;">
+    <button id="installBannerBtn" style="background:#C9A24B;color:#2B1B0F;border:none;border-radius:6px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;">ইনস্টল করুন</button>
+    <button id="installBannerClose" style="background:transparent;color:#F3EFE1;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:8px 10px;font-size:13px;cursor:pointer;">✕</button>
+  </div>
+</div>
 
 <!-- ===== Firebase SDK (compat ভার্সন — সাধারণ <script> ট্যাগ দিয়ে ব্যবহারযোগ্য) ===== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -4057,6 +4064,46 @@ function renderSettings(main){
 
   document.getElementById('logoutBtn2').addEventListener('click', async ()=>{ await clearSession(); render(); });
 }
+
+/* ---------------- PWA: ইনস্টল বাটন (নিজে থেকেই দেখা যাবে, ব্রাউজার মেনু ঘাঁটতে হবে না) ---------------- */
+let deferredInstallPrompt = null;
+const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if(!isStandaloneMode){
+    const b = document.getElementById('installBanner');
+    if(b) b.style.display = 'flex';
+  }
+});
+window.addEventListener('appinstalled', ()=>{
+  deferredInstallPrompt = null;
+  const b = document.getElementById('installBanner');
+  if(b) b.style.display = 'none';
+  toast('অ্যাপ ইনস্টল হয়েছে ✓');
+});
+// iOS Safari-তে beforeinstallprompt আসে না (Apple-এর নিয়ম), তাই আলাদাভাবে ইঙ্গিত দেওয়া হয়
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+if(isIOS && !isStandaloneMode){
+  const b = document.getElementById('installBanner');
+  if(b){
+    b.querySelector('span').textContent = '📲 ইনস্টল করতে নিচের Share বাটনে চেপে "Add to Home Screen" বেছে নিন';
+    b.querySelector('#installBannerBtn').style.display = 'none';
+    b.style.display = 'flex';
+  }
+}
+document.getElementById('installBannerBtn').addEventListener('click', async ()=>{
+  const b = document.getElementById('installBanner');
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  if(b) b.style.display = 'none';
+});
+document.getElementById('installBannerClose').addEventListener('click', ()=>{
+  document.getElementById('installBanner').style.display = 'none';
+});
 
 /* ---------------- PWA: সার্ভিস ওয়ার্কার রেজিস্ট্রেশন (ইনস্টল-অপশন চালু করার জন্য প্রয়োজনীয়) ---------------- */
 if('serviceWorker' in navigator){
