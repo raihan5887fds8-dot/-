@@ -1684,26 +1684,63 @@ function renderShell(){
 /* সংগঠনের নিয়মাবলী — হেডারের ট্যাগলাইনে ট্যাপ করলে ঠিক নিচেই এই প্যানেলটা খোলে/বন্ধ হয়
    (headerRulesPanel-এর ভেতরটা renderShell()-এর বাইরে আলাদাভাবে আঁকা হয় যাতে
    কোডটা ছোট ও পুনর্ব্যবহারযোগ্য থাকে) */
+/* নিয়মের ক্রম নির্ণয়ের চাবি: 'ক্রম' ফিল্ড থাকলে সেটা, না থাকলে (পুরোনো এন্ট্রির জন্য)
+   তারিখ অনুযায়ী পেছনে রাখা হয় — যতক্ষণ না ম্যানেজার একবার সাজান, ততক্ষণ যোগ করার ক্রমেই দেখাবে */
+function ruleOrderKey_(r){
+  return (typeof r['ক্রম']==='number' && !isNaN(r['ক্রম'])) ? r['ক্রম'] : (1e15 + Number(r['তারিখ']||0));
+}
+function sortedRulesForDisplay_(){
+  return [...cache.rules].sort((a,b)=> ruleOrderKey_(a) - ruleOrderKey_(b));
+}
+let ruleReorderBusy_ = false;
+async function moveRule_(fromIdx, dir){
+  if(ruleReorderBusy_) return;
+  const list = sortedRulesForDisplay_();
+  const toIdx = fromIdx + dir;
+  if(toIdx < 0 || toIdx >= list.length) return;
+  ruleReorderBusy_ = true;
+  try{
+    const tmp = list[fromIdx]; list[fromIdx] = list[toIdx]; list[toIdx] = tmp;
+    // পুরো তালিকা ১, ২, ৩... নতুন করে নাম্বার করে সব কটাতে 'ক্রম' বসিয়ে দেওয়া হয় —
+    // এতে পুরোনো (ক্রম-বিহীন) এন্ট্রিগুলোও একবারে ঠিক হয়ে যায়
+    await Promise.all(list.map((r, i)=> apiPost('edit', {sheet: SHEETS.RULES, id:r['ID'], data:{'ক্রম': i+1}})));
+    await refreshAll();
+    paintHeaderRules_();
+  }catch(e){ toast(e.message); }
+  finally{ ruleReorderBusy_ = false; }
+}
 function paintHeaderRules_(){
   const isManager = session['রোল']===ROLES.MANAGER;
   const listEl = document.getElementById('headerRulesList');
   if(!listEl) return;
   listEl.innerHTML='';
-  const rulesSorted = [...cache.rules].sort((a,b)=>String(a['তারিখ']).localeCompare(String(b['তারিখ'])));
+  const rulesSorted = sortedRulesForDisplay_();
   if(!rulesSorted.length){
     listEl.innerHTML = '<div style="font-size:12.5px;color:var(--brass-soft);opacity:.8;">এখনো কোনো নিয়ম যোগ করা হয়নি</div>';
   } else {
-    rulesSorted.forEach(r=>{
+    rulesSorted.forEach((r, idx)=>{
       const row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.15);font-size:12.5px;line-height:1.6;color:#F3EFE1;';
       row.innerHTML = `
+        <span style="flex:none;font-weight:700;color:var(--brass-soft);min-width:20px;">${money(idx+1)}.</span>
         <span style="flex:1;">${r['বিবরণ']||''}</span>
-        ${isManager? `<button data-rule-del="${r['ID']}" style="flex:none;border:none;background:none;color:var(--terracotta);font-size:11.5px;cursor:pointer;text-decoration:underline;">মুছুন</button>` : ''}`;
+        ${isManager? `
+        <span style="flex:none;display:flex;flex-direction:column;gap:2px;">
+          <button data-rule-up="${idx}" ${idx===0?'disabled':''} style="border:none;background:none;color:${idx===0?'rgba(255,255,255,.25)':'#F3EFE1'};font-size:12px;cursor:${idx===0?'default':'pointer'};line-height:1;padding:1px 4px;">▲</button>
+          <button data-rule-down="${idx}" ${idx===rulesSorted.length-1?'disabled':''} style="border:none;background:none;color:${idx===rulesSorted.length-1?'rgba(255,255,255,.25)':'#F3EFE1'};font-size:12px;cursor:${idx===rulesSorted.length-1?'default':'pointer'};line-height:1;padding:1px 4px;">▼</button>
+        </span>
+        <button data-rule-del="${r['ID']}" style="flex:none;border:none;background:none;color:var(--terracotta);font-size:11.5px;cursor:pointer;text-decoration:underline;align-self:center;">মুছুন</button>` : ''}`;
       listEl.appendChild(row);
     });
     if(isManager){
+      listEl.querySelectorAll('[data-rule-up]').forEach(btn=>{
+        btn.onclick = ()=> moveRule_(Number(btn.dataset.ruleUp), -1);
+      });
+      listEl.querySelectorAll('[data-rule-down]').forEach(btn=>{
+        btn.onclick = ()=> moveRule_(Number(btn.dataset.ruleDown), 1);
+      });
       listEl.querySelectorAll('[data-rule-del]').forEach(btn=>{
-        btn.addEventListener('click', async ()=>{
+        btn.onclick = async ()=>{
           if(!confirm('এই নিয়মটা মুছে ফেলতে চান?')) return;
           try{
             await apiPost('delete', {sheet: SHEETS.RULES, id: btn.dataset.ruleDel});
@@ -1711,25 +1748,33 @@ function paintHeaderRules_(){
             await refreshAll();
             paintHeaderRules_();
           }catch(e){ toast(e.message); }
-        });
+        };
       });
     }
   }
   if(isManager){
     const addBtn = document.getElementById('addRuleBtn');
-    if(addBtn) addBtn.addEventListener('click', async ()=>{
+    // addEventListener নয়, onclick ব্যবহার করা হচ্ছে ইচ্ছাকৃতভাবে — এই ফাংশনটা প্যানেল খোলা
+    // অবস্থায় একাধিকবার (রিয়েল-টাইম সিঙ্ক, রিফ্রেশ ইত্যাদি কারণে) চলতে পারে, addEventListener
+    // ব্যবহার করলে বাটনে একের পর এক হ্যান্ডলার জমে গিয়ে একটা ক্লিকে একই নিয়ম বহুবার যোগ হয়ে
+    // যাচ্ছিল — onclick= সবসময় আগেরটা প্রতিস্থাপন করে, তাই সবসময় ঠিক একটাই হ্যান্ডলার থাকে
+    if(addBtn) addBtn.onclick = async ()=>{
+      if(addBtn.disabled) return; // ডাবল-ক্লিকে দুইবার যোগ হওয়া ঠেকাতে
       const input = document.getElementById('newRuleInput');
       const ruleMsg = document.getElementById('ruleMsg');
       const text = input.value.trim();
       if(!text){ ruleMsg.textContent='নিয়মের বিবরণ লিখুন'; ruleMsg.className='status-msg err'; return; }
+      addBtn.disabled = true;
       try{
-        await apiPost('add', {sheet: SHEETS.RULES, data:{'বিবরণ': text}});
+        const nextOrder = sortedRulesForDisplay_().length + 1;
+        await apiPost('add', {sheet: SHEETS.RULES, data:{'বিবরণ': text, 'ক্রম': nextOrder}});
         input.value=''; ruleMsg.textContent=''; ruleMsg.className='status-msg';
         toast('নিয়ম যোগ করা হয়েছে');
         await refreshAll();
         paintHeaderRules_();
       }catch(e){ ruleMsg.textContent=e.message; ruleMsg.className='status-msg err'; }
-    });
+      finally{ addBtn.disabled = false; }
+    };
   }
 }
 
