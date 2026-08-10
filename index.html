@@ -275,11 +275,12 @@ const ROLES = { MANAGER:'ম্যানেজার', CASHIER:'ক্যাশ�
 const ROLE_LABEL = { 'ম্যানেজার':'ম্যানেজার', 'ক্যাশিয়ার':'ক্যাশিয়ার', 'ফিল্ড_পরিচালক':'ফিল্ড পরিচালক', 'সদস্য':'সদস্য' };
 
 let session = null; // logged-in user object
-let cache = { users:[], contrib:[], invest:[], investUpdate:[], investInstallment:[], custodians:[], babies:[], babyUpdate:[], expense:[], notice:[], poll:[], votes:[], transaction:[], resetReq:[], activityLog:[], dividend:[], withdrawal:[] };
+let cache = { users:[], contrib:[], invest:[], investUpdate:[], investInstallment:[], custodians:[], babies:[], babyUpdate:[], expense:[], notice:[], poll:[], votes:[], transaction:[], resetReq:[], activityLog:[], dividend:[], withdrawal:[], rules:[] };
 let searchQuery = { members:'', invest:'', transaction:'', activityLog:'' };
 let sortOrder = { members:'status', invest:'updated', transaction:'date_desc' };
 let notifyEnabled = false;
 let darkMode = false;
+let rulesOpen = false; // হেডারের ট্যাগলাইনে ট্যাপ করে নিয়মাবলী প্যানেল খোলা/বন্ধ রাখার অবস্থা
 function applyTheme_(){
   document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
 }
@@ -448,7 +449,7 @@ const SHEETS = {
   DIVIDEND:'লভ্যাংশ', WITHDRAWAL:'উত্তোলন_আবেদন',
   CONTRIB:'চাঁদা', INVEST:'ইনভেস্টমেন্ট', INVEST_UPDATE:'ইনভেস্টমেন্ট_আপডেট',
   INVEST_INSTALLMENT:'ইনভেস্টমেন্ট_কিস্তি', CUSTODIAN:'আদাল', BABY:'বাচ্চা', BABY_UPDATE:'বাচ্চা_আপডেট',
-  EXPENSE:'খরচ', NOTICE:'নোটিশ', POLL:'ভোট', VOTES:'ভোট_ফলাফল', TRANSACTION:'লেনদেন'
+  EXPENSE:'খরচ', NOTICE:'নোটিশ', POLL:'ভোট', VOTES:'ভোট_ফলাফল', TRANSACTION:'লেনদেন', RULES:'নিয়মাবলী'
 };
 
 /* ---------------- অ্যাক্টিভিটি লগ (অডিট ট্রেইল) ---------------- */
@@ -555,8 +556,8 @@ async function apiPost(action, opts){
 }
 
 async function refreshAll(){
-  const sheets = ['ইউজার','চাঁদা','ইনভেস্টমেন্ট','ইনভেস্টমেন্ট_আপডেট','ইনভেস্টমেন্ট_কিস্তি','আদাল','বাচ্চা','বাচ্চা_আপডেট','খরচ','নোটিশ','ভোট','ভোট_ফলাফল','লেনদেন', SHEETS.RESET_REQ, SHEETS.ACTIVITY_LOG, SHEETS.DIVIDEND, SHEETS.WITHDRAWAL];
-  const keys = ['users','contrib','invest','investUpdate','investInstallment','custodians','babies','babyUpdate','expense','notice','poll','votes','transaction','resetReq','activityLog','dividend','withdrawal'];
+  const sheets = ['ইউজার','চাঁদা','ইনভেস্টমেন্ট','ইনভেস্টমেন্ট_আপডেট','ইনভেস্টমেন্ট_কিস্তি','আদাল','বাচ্চা','বাচ্চা_আপডেট','খরচ','নোটিশ','ভোট','ভোট_ফলাফল','লেনদেন', SHEETS.RESET_REQ, SHEETS.ACTIVITY_LOG, SHEETS.DIVIDEND, SHEETS.WITHDRAWAL, SHEETS.RULES];
+  const keys = ['users','contrib','invest','investUpdate','investInstallment','custodians','babies','babyUpdate','expense','notice','poll','votes','transaction','resetReq','activityLog','dividend','withdrawal','rules'];
   const results = await Promise.allSettled(sheets.map(apiGet));
   results.forEach((r,i)=>{ if(r.status==='fulfilled') cache[keys[i]] = r.value; });
 }
@@ -693,6 +694,7 @@ ROLE_GUARD[SHEETS.BABY] = [ROLES.MANAGER, ROLES.FIELD];
 ROLE_GUARD[SHEETS.EXPENSE] = [ROLES.MANAGER, ROLES.CASHIER];
 ROLE_GUARD[SHEETS.NOTICE] = [ROLES.MANAGER];
 ROLE_GUARD[SHEETS.POLL] = [ROLES.MANAGER];
+ROLE_GUARD[SHEETS.RULES] = [ROLES.MANAGER];
 function checkGuard_(sheetName, actorRole){
   const allowed = ROLE_GUARD[sheetName];
   if(!allowed) return true;
@@ -1640,8 +1642,18 @@ function renderShell(){
         <div class="seal">ব ঐ স</div>
         <div class="header-title">
           <h1>${ORG_NAME}</h1>
-          <p>${TAGLINE}</p>
+          <p id="taglineToggle" style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;">${TAGLINE} <span id="taglineArrow" style="font-size:9px;">${rulesOpen?'▴':'▾'}</span></p>
         </div>
+      </div>
+      <div id="headerRulesPanel" style="display:${rulesOpen?'block':'none'};margin-top:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:10px 12px;position:relative;">
+        <div style="font-size:12px;font-weight:700;color:var(--brass-soft);margin-bottom:6px;">📜 সংগঠনের নিয়মাবলী</div>
+        <div id="headerRulesList"></div>
+        ${session['রোল']===ROLES.MANAGER? `
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <input type="text" id="newRuleInput" placeholder="নতুন নিয়ম লিখুন" style="flex:1;min-width:0;font-size:12.5px;padding:8px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.92);">
+          <button id="addRuleBtn" class="btn small gold" style="flex:none;">যোগ করুন</button>
+        </div>
+        <div class="status-msg" id="ruleMsg" style="margin-top:4px;"></div>` : ''}
       </div>
       <div class="header-user">
         <span style="display:flex;align-items:center;gap:8px;">
@@ -1660,11 +1672,65 @@ function renderShell(){
       }).join('')}
     </nav>`;
   document.getElementById('logoutBtn').addEventListener('click', async ()=>{ await clearSession(); render(); });
+  document.getElementById('taglineToggle').addEventListener('click', ()=>{ rulesOpen = !rulesOpen; renderShell(); });
+  if(rulesOpen) paintHeaderRules_();
   document.getElementById('tabs').addEventListener('click', e=>{
     const btn = e.target.closest('button'); if(!btn) return;
     activeTab = btn.dataset.tab; renderShell();
   });
   renderTab();
+}
+
+/* সংগঠনের নিয়মাবলী — হেডারের ট্যাগলাইনে ট্যাপ করলে ঠিক নিচেই এই প্যানেলটা খোলে/বন্ধ হয়
+   (headerRulesPanel-এর ভেতরটা renderShell()-এর বাইরে আলাদাভাবে আঁকা হয় যাতে
+   কোডটা ছোট ও পুনর্ব্যবহারযোগ্য থাকে) */
+function paintHeaderRules_(){
+  const isManager = session['রোল']===ROLES.MANAGER;
+  const listEl = document.getElementById('headerRulesList');
+  if(!listEl) return;
+  listEl.innerHTML='';
+  const rulesSorted = [...cache.rules].sort((a,b)=>String(a['তারিখ']).localeCompare(String(b['তারিখ'])));
+  if(!rulesSorted.length){
+    listEl.innerHTML = '<div style="font-size:12.5px;color:var(--brass-soft);opacity:.8;">এখনো কোনো নিয়ম যোগ করা হয়নি</div>';
+  } else {
+    rulesSorted.forEach(r=>{
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.15);font-size:12.5px;line-height:1.6;color:#F3EFE1;';
+      row.innerHTML = `
+        <span style="flex:1;">${r['বিবরণ']||''}</span>
+        ${isManager? `<button data-rule-del="${r['ID']}" style="flex:none;border:none;background:none;color:var(--terracotta);font-size:11.5px;cursor:pointer;text-decoration:underline;">মুছুন</button>` : ''}`;
+      listEl.appendChild(row);
+    });
+    if(isManager){
+      listEl.querySelectorAll('[data-rule-del]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          if(!confirm('এই নিয়মটা মুছে ফেলতে চান?')) return;
+          try{
+            await apiPost('delete', {sheet: SHEETS.RULES, id: btn.dataset.ruleDel});
+            toast('নিয়ম মুছে ফেলা হয়েছে');
+            await refreshAll();
+            paintHeaderRules_();
+          }catch(e){ toast(e.message); }
+        });
+      });
+    }
+  }
+  if(isManager){
+    const addBtn = document.getElementById('addRuleBtn');
+    if(addBtn) addBtn.addEventListener('click', async ()=>{
+      const input = document.getElementById('newRuleInput');
+      const ruleMsg = document.getElementById('ruleMsg');
+      const text = input.value.trim();
+      if(!text){ ruleMsg.textContent='নিয়মের বিবরণ লিখুন'; ruleMsg.className='status-msg err'; return; }
+      try{
+        await apiPost('add', {sheet: SHEETS.RULES, data:{'বিবরণ': text}});
+        input.value=''; ruleMsg.textContent=''; ruleMsg.className='status-msg';
+        toast('নিয়ম যোগ করা হয়েছে');
+        await refreshAll();
+        paintHeaderRules_();
+      }catch(e){ ruleMsg.textContent=e.message; ruleMsg.className='status-msg err'; }
+    });
+  }
 }
 
 function renderTab(){
@@ -1707,7 +1773,7 @@ function scheduleTabRerender(){
     // কেউ যদি ঠিক এই মুহূর্তে কোনো ফর্মে টাইপ করছে, তাহলে এখনই রি-রেন্ডার করে
     // তার লেখা মুছে দেওয়া হবে না — একটু পরে আবার চেষ্টা করবে
     if(isTyping){ scheduleTabRerender(); return; }
-    if(session){ try{ renderTab(); updateTabBadges_(); lastSyncAt = Date.now(); saveCacheSnapshot_(); }catch(e){} }
+    if(session){ try{ renderTab(); updateTabBadges_(); if(rulesOpen) paintHeaderRules_(); lastSyncAt = Date.now(); saveCacheSnapshot_(); }catch(e){} }
   }, 600);
 }
 function updateTabBadges_(){
